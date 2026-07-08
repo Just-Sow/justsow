@@ -44,6 +44,7 @@ The intended root developer workflow is:
 - `pnpm install`
 - copy `.env.example` to `.env`
 - `pnpm db:up` to start local PostgreSQL
+- `pnpm db:setup` to create dev/test databases and apply migrations
 - `pnpm test:setup` for first-time browser test setup
 - `pnpm dev`
 - `pnpm build`
@@ -71,5 +72,7 @@ This keeps history readable while still allowing concurrent work across larger s
 Development is expected to run against local PostgreSQL via `docker compose`, not a shared live dev database.
 
 - `pnpm db:up`
+- `pnpm db:prepare`
+- `pnpm db:setup`
 - `pnpm db:down`
 - `pnpm db:logs`

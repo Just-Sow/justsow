@@ -13,7 +13,9 @@
     "check": "pnpm lint && pnpm typecheck && pnpm test",
     "db:up": "docker compose up -d postgres",
     "db:down": "docker compose down",
-    "db:logs": "docker compose logs -f postgres"
+    "db:logs": "docker compose logs -f postgres",
+    "db:prepare": "pnpm --dir apps/api run db:prepare",
+    "db:setup": "pnpm --dir apps/api run db:setup"
   },
   "devDependencies": {
     "turbo": "^2.5.5"

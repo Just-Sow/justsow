@@ -57,10 +57,11 @@ Completed:
 - role assignment and audit event service helpers added for later auth and admin flows
 - sower profile and claim-linkage schema plus service helpers defined for manual record claiming
 - app-facing auth API endpoints added for current identity, role management, and sower claim workflows
+- TOTP-based 2FA backend support configured with Better Auth and matching schema migration generated
+- local database prepare/setup scripts added for dev and test auth workflows
 
 Next:
 
-- decide the MVP 2FA path in Better Auth terms
 - wire the web app to the current auth API surface
-- choose the MVP 2FA method
+- run a live Docker-backed database setup and auth smoke test once Docker is running
 - design the actual sign-up, sign-in, verification, reset, and claiming flows

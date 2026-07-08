@@ -20,12 +20,16 @@ Use root workspace commands where possible:
 Database workflow:
 
 - `pnpm db:up` from the repo root to start local Postgres
+- `pnpm db:prepare` from the repo root to ensure dev and test databases exist
+- `pnpm db:setup` from the repo root to prepare databases and apply migrations
 - `pnpm --filter @justsow/api db:generate` to generate Drizzle migrations
 - `pnpm --filter @justsow/api db:migrate` to apply migrations
+- `pnpm --filter @justsow/api db:migrate:test` to apply migrations to the test database
 
 Current auth API surface:
 
 - Better Auth endpoints under `/api/auth/*`
+- Better Auth 2FA endpoints under `/api/auth/two-factor/*`
 - `GET /auth/capabilities`
 - `GET /auth/setup`
 - `GET /auth/me`
@@ -39,3 +43,10 @@ Current auth API surface:
 - `GET /auth/admin/users/:userId/roles`
 - `POST /auth/admin/users/:userId/roles`
 - `DELETE /auth/admin/users/:userId/roles/:role`
+
+Current 2FA direction:
+
+- Better Auth TOTP plugin
+- authenticator app flow for MVP
+- backup codes enabled
+- email/SMS OTP not used as the primary second factor for MVP
