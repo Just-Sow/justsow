@@ -34,6 +34,10 @@ export const createManualSowerProfile = async (input: CreateManualSowerProfileIn
     })
     .returning();
 
+  if (!profile) {
+    throw new Error('Failed to create sower profile');
+  }
+
   return profile;
 };
 
@@ -54,6 +58,10 @@ export const createSowerClaim = async (input: CreateSowerClaimInput) => {
       notes: input.notes,
     })
     .returning();
+
+  if (!claim) {
+    throw new Error('Failed to create sower claim');
+  }
 
   return claim;
 };

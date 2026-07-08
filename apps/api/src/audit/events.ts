@@ -6,6 +6,7 @@ export type AuditActorType = 'user' | 'system';
 export type AuditTargetType =
   | 'user'
   | 'user_role_assignment'
+  | 'sower_profile'
   | 'sower_claim'
   | 'project'
   | 'seed'

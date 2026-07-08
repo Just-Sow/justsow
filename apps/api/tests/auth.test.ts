@@ -31,3 +31,38 @@ test('GET /api/auth/get-session is handled by Better Auth', async () => {
 
   await app.close();
 });
+
+test('GET /auth/me requires authentication', async () => {
+  const app = buildApp();
+
+  const response = await app.inject({
+    method: 'GET',
+    url: '/auth/me',
+  });
+
+  assert.equal(response.statusCode, 401);
+  assert.deepEqual(response.json(), {
+    error: 'UNAUTHORIZED',
+  });
+
+  await app.close();
+});
+
+test('POST /auth/admin/sower-profiles requires authentication', async () => {
+  const app = buildApp();
+
+  const response = await app.inject({
+    method: 'POST',
+    url: '/auth/admin/sower-profiles',
+    payload: {
+      displayName: 'Example Sower',
+    },
+  });
+
+  assert.equal(response.statusCode, 401);
+  assert.deepEqual(response.json(), {
+    error: 'UNAUTHORIZED',
+  });
+
+  await app.close();
+});
