@@ -4,7 +4,7 @@ JustSow is evolving into a single product with:
 
 - a public website
 - donor accounts and payments
-- project owner application and content management
+- Creative Evangelist application and content management
 - employee approval and publishing workflows
 
 This repository contains the current JustSow codebase and planning material. The current code lives in:

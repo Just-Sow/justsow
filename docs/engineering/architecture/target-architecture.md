@@ -7,7 +7,7 @@ The system should be treated as one product with multiple user capabilities rath
 Primary capability areas:
 
 - public site
-- project owner workflows
+- Creative Evangelist workflows
 - sower account workflows
 - employee review and publishing workflows
 
@@ -31,7 +31,7 @@ docs/
 The web app should contain:
 
 - public pages and project discovery
-- authenticated project owner flows
+- authenticated Creative Evangelist flows
 - authenticated sower flows
 - authenticated employee flows
 
@@ -79,7 +79,7 @@ That can be implemented either through:
 - versioned snapshots
 - change-set records
 
-Whatever approach is chosen, direct in-place mutation of live published project content by project owners is the wrong model.
+Whatever approach is chosen, direct in-place mutation of live published project content by Creative Evangelists is the wrong model.
 
 ## Identity And Authorization
 

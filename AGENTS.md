@@ -113,7 +113,7 @@ The product is expected to support:
 
 - public project discovery and marketing pages
 - donor authentication and payments
-- project owner self-service editing and management
+- Creative Evangelist self-service editing and management
 - employee approval, publishing, and oversight workflows
 
 Operational workflows outside the site may continue to live in Notion. The site should focus on product-critical workflow steps rather than becoming a full internal ops platform.

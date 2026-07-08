@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed
+Accepted
 
 ## Decision
 
@@ -23,16 +23,15 @@ The intended sign-in sequence is:
 
 2FA should be:
 
-- strongly recommended for sowers and project owners
-- required for privileged roles such as admins and gatekeepers
-- likely required for seed allocators as well, subject to final approval
+- strongly recommended for sowers and Creative Evangelists
+- required for all other roles
 
 ## Why
 
 - TOTP provides a strong second factor without adding SMS delivery risk or cost
 - backup codes provide a practical recovery path for MVP
 - trusted-device support improves usability for repeat logins
-- privileged roles handle approvals, publishing, and access-sensitive actions, so they need stronger account protection
+- most authenticated roles handle approvals, publishing, assignment, or other access-sensitive actions, so they need stronger account protection
 
 ## Constraints
 

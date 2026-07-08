@@ -2,7 +2,7 @@
 
 ## MVP
 
-- project owner applications and managed edits
+- Creative Evangelist applications and managed edits
 - sower accounts and seed history
 - manual sower creation with later account claiming
 - employee approval and publishing workflows
