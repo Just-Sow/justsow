@@ -53,10 +53,11 @@ Completed:
 - accepted auth stack direction: Better Auth + PostgreSQL + Drizzle
 - local development database workflow scaffolded with root `docker compose`
 - Better Auth and Drizzle dependencies installed and API scaffold validated with build and tests
+- persisted role assignment and audit event table shapes defined for the API schema
 
 Next:
 
-- define persisted user, role assignment, and audit event shapes
-- mount the Better Auth request handler in the API
+- define the account-claim linkage model for manually created sower records
+- add the first Drizzle migration for auth and identity tables
 - choose the MVP 2FA method
 - design the actual sign-up, sign-in, verification, reset, and claiming flows

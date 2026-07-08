@@ -17,15 +17,6 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: true,
   },
-  user: {
-    additionalFields: {
-      roles: {
-        type: 'string',
-        required: false,
-        input: false,
-      },
-    },
-  },
   advanced: {
     database: {
       generateId: false,
