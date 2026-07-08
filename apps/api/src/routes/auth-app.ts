@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import type { FastifyPluginAsync } from 'fastify';
+import type { FastifyPluginAsync, FastifyReply } from 'fastify';
+import type { UserRole } from '../../../../packages/shared/src/index.js';
 import {
   assignUserRole,
   listActiveRolesForUser,
@@ -40,6 +41,21 @@ const assignRoleSchema = z.object({
 const adminRoles = ['admin'] as const;
 const sowerReviewRoles = ['admin', 'seed_allocator', 'stewardship_staff'] as const;
 
+const rejectMissingRequiredTwoFactor = (
+  identity: NonNullable<Awaited<ReturnType<typeof getRequestIdentity>>>,
+  reply: FastifyReply,
+  requiredRoles: readonly UserRole[]
+) => {
+  if (!hasRequiredRole(identity.roles, requiredRoles) || identity.twoFactor.satisfied) {
+    return null;
+  }
+
+  return reply.code(403).send({
+    error: 'TWO_FACTOR_REQUIRED',
+    requiredForRoles: identity.twoFactor.requiredForRoles,
+  });
+};
+
 export const authAppRoutes: FastifyPluginAsync = async (app) => {
   app.get('/auth/me', async (request, reply) => {
     const identity = await getRequestIdentity(request);
@@ -56,6 +72,9 @@ export const authAppRoutes: FastifyPluginAsync = async (app) => {
       session: identity.session,
       user: identity.user,
       roles: identity.roles,
+      security: {
+        twoFactor: identity.twoFactor,
+      },
       sowerProfile,
     };
   });
@@ -71,6 +90,34 @@ export const authAppRoutes: FastifyPluginAsync = async (app) => {
 
     return {
       roles: identity.roles,
+      security: {
+        twoFactor: identity.twoFactor,
+      },
+    };
+  });
+
+  app.get('/auth/security', async (request, reply) => {
+    const identity = await getRequestIdentity(request);
+
+    if (!identity) {
+      return reply.code(401).send({
+        error: 'UNAUTHORIZED',
+      });
+    }
+
+    return {
+      twoFactor: identity.twoFactor,
+      routes: {
+        basePath: '/api/auth',
+        manage: {
+          enable: '/api/auth/two-factor/enable',
+          disable: '/api/auth/two-factor/disable',
+          getTotpUri: '/api/auth/two-factor/get-totp-uri',
+          verifyTotp: '/api/auth/two-factor/verify-totp',
+          verifyBackupCode: '/api/auth/two-factor/verify-backup-code',
+          generateBackupCodes: '/api/auth/two-factor/generate-backup-codes',
+        },
+      },
     };
   });
 
@@ -137,6 +184,12 @@ export const authAppRoutes: FastifyPluginAsync = async (app) => {
       });
     }
 
+    const twoFactorResponse = rejectMissingRequiredTwoFactor(identity, reply, sowerReviewRoles);
+
+    if (twoFactorResponse) {
+      return twoFactorResponse;
+    }
+
     const body = createSowerProfileSchema.parse(request.body);
     const profile = await createManualSowerProfile({
       displayName: body.displayName,
@@ -175,6 +228,12 @@ export const authAppRoutes: FastifyPluginAsync = async (app) => {
       });
     }
 
+    const twoFactorResponse = rejectMissingRequiredTwoFactor(identity, reply, sowerReviewRoles);
+
+    if (twoFactorResponse) {
+      return twoFactorResponse;
+    }
+
     const params = z.object({ profileId: z.uuid() }).parse(request.params);
     const claims = await listSowerClaimsForProfile(params.profileId);
 
@@ -196,6 +255,12 @@ export const authAppRoutes: FastifyPluginAsync = async (app) => {
       return reply.code(403).send({
         error: 'FORBIDDEN',
       });
+    }
+
+    const twoFactorResponse = rejectMissingRequiredTwoFactor(identity, reply, sowerReviewRoles);
+
+    if (twoFactorResponse) {
+      return twoFactorResponse;
     }
 
     const params = z.object({ claimId: z.uuid() }).parse(request.params);
@@ -247,6 +312,12 @@ export const authAppRoutes: FastifyPluginAsync = async (app) => {
       });
     }
 
+    const twoFactorResponse = rejectMissingRequiredTwoFactor(identity, reply, sowerReviewRoles);
+
+    if (twoFactorResponse) {
+      return twoFactorResponse;
+    }
+
     const params = z.object({ claimId: z.uuid() }).parse(request.params);
     const body = resolveSowerClaimSchema.parse(request.body);
     const claim = await rejectSowerClaim({
@@ -293,6 +364,12 @@ export const authAppRoutes: FastifyPluginAsync = async (app) => {
       return reply.code(403).send({
         error: 'FORBIDDEN',
       });
+    }
+
+    const twoFactorResponse = rejectMissingRequiredTwoFactor(identity, reply, adminRoles);
+
+    if (twoFactorResponse) {
+      return twoFactorResponse;
     }
 
     const params = z.object({ userId: z.string().min(1) }).parse(request.params);
@@ -342,6 +419,12 @@ export const authAppRoutes: FastifyPluginAsync = async (app) => {
       return reply.code(403).send({
         error: 'FORBIDDEN',
       });
+    }
+
+    const twoFactorResponse = rejectMissingRequiredTwoFactor(identity, reply, adminRoles);
+
+    if (twoFactorResponse) {
+      return twoFactorResponse;
     }
 
     const params = z
@@ -396,6 +479,12 @@ export const authAppRoutes: FastifyPluginAsync = async (app) => {
       return reply.code(403).send({
         error: 'FORBIDDEN',
       });
+    }
+
+    const twoFactorResponse = rejectMissingRequiredTwoFactor(identity, reply, adminRoles);
+
+    if (twoFactorResponse) {
+      return twoFactorResponse;
     }
 
     const params = z.object({ userId: z.string().min(1) }).parse(request.params);

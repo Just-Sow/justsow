@@ -6,6 +6,37 @@ import { authCapabilities } from '../../../../packages/shared/src/index.js';
 import { env } from '../config/env.js';
 import { db } from '../db/client.js';
 import * as schema from '../db/schema/auth.js';
+import { queueDevelopmentEmail } from '../dev/email-outbox.js';
+
+const queueVerificationEmail = async (data: {
+  user: {
+    email: string;
+  };
+  url: string;
+  token: string;
+}) => {
+  await queueDevelopmentEmail({
+    kind: 'verification',
+    email: data.user.email,
+    url: data.url,
+    token: data.token,
+  });
+};
+
+const queuePasswordResetEmail = async (data: {
+  user: {
+    email: string;
+  };
+  url: string;
+  token: string;
+}) => {
+  await queueDevelopmentEmail({
+    kind: 'password_reset',
+    email: data.user.email,
+    url: data.url,
+    token: data.token,
+  });
+};
 
 export const auth = betterAuth({
   appName: 'JustSow',
@@ -18,6 +49,12 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
+    sendResetPassword: queuePasswordResetEmail,
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    sendOnSignIn: true,
+    sendVerificationEmail: queueVerificationEmail,
   },
   advanced: {
     database: {
@@ -43,6 +80,9 @@ export const authSetupSummary = {
   provider: 'better-auth',
   basePath: authBasePath,
   supportsEmailPassword: true,
+  supportsEmailVerification: true,
+  supportsPasswordReset: true,
   supportsSowerClaiming: authCapabilities.sowerClaiming.enabled,
   twoFactor: 'totp_with_backup_codes',
+  usesDevelopmentEmailOutbox: env.NODE_ENV !== 'production',
 };

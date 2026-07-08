@@ -59,9 +59,12 @@ Completed:
 - app-facing auth API endpoints added for current identity, role management, and sower claim workflows
 - TOTP-based 2FA backend support configured with Better Auth and matching schema migration generated
 - local database prepare/setup scripts added for dev and test auth workflows
+- shared contract updated to use the Creative Evangelist role name
+- shared 2FA policy contract now defines recommended and required role sets
+- app-facing auth responses now expose per-user 2FA requirement state for the UI
+- privileged auth app routes now enforce required-role 2FA before allowing staff/admin actions
 
 Next:
 
 - wire the web app to the current auth API surface
-- run a live Docker-backed database setup and auth smoke test once Docker is running
-- design the actual sign-up, sign-in, verification, reset, and claiming flows
+- design the actual sign-up, sign-in, verification, reset, and claiming flows in the web app

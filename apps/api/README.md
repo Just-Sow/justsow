@@ -32,7 +32,10 @@ Current auth API surface:
 - Better Auth 2FA endpoints under `/api/auth/two-factor/*`
 - `GET /auth/capabilities`
 - `GET /auth/setup`
+- `GET /auth/dev/emails`
+- `DELETE /auth/dev/emails`
 - `GET /auth/me`
+- `GET /auth/security`
 - `GET /auth/roles`
 - `GET /auth/sower-profile`
 - `POST /auth/sower-claims`
@@ -49,4 +52,15 @@ Current 2FA direction:
 - Better Auth TOTP plugin
 - authenticator app flow for MVP
 - backup codes enabled
+- trusted devices enabled
+- required for `gatekeeper`, `seed_allocator`, `stewardship_staff`, and `admin`
+- recommended for `creative_evangelist` and `sower`
+- privileged app routes reject role-required users until 2FA is enabled
 - email/SMS OTP not used as the primary second factor for MVP
+
+Current email lifecycle direction:
+
+- Better Auth sign-up, verification, reset, and email change flows are mounted under `/api/auth/*`
+- development uses a file-backed outbox at `apps/api/.data/dev-email-outbox.json`
+- use `GET /auth/dev/emails` to inspect the latest verification and reset links during local UI work
+- use `DELETE /auth/dev/emails` to clear the local outbox between test runs

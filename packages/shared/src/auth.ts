@@ -9,6 +9,15 @@ export const userRoles = [
 
 export type UserRole = (typeof userRoles)[number];
 
+export const twoFactorRecommendedRoles = ['creative_evangelist', 'sower'] as const;
+
+export const twoFactorRequiredRoles = [
+  'gatekeeper',
+  'seed_allocator',
+  'stewardship_staff',
+  'admin',
+] as const satisfies readonly UserRole[];
+
 export const accountLifecycleStages = [
   'pending_email_verification',
   'active',
@@ -32,6 +41,14 @@ export const authFlowKeys = [
 export type AuthFlowKey = (typeof authFlowKeys)[number];
 
 export type RoleCapabilityMap = Record<UserRole, readonly string[]>;
+
+export const roleRequiresTwoFactor = (role: UserRole) => {
+  return (twoFactorRequiredRoles as readonly UserRole[]).includes(role);
+};
+
+export const rolesRequireTwoFactor = (roles: readonly UserRole[]) => {
+  return roles.some(roleRequiresTwoFactor);
+};
 
 export const roleCapabilities: RoleCapabilityMap = {
   creative_evangelist: [
@@ -81,7 +98,13 @@ export interface AuthCapabilities {
     readonly emailVerificationRequired: boolean;
     readonly passwordResetEnabled: boolean;
     readonly emailUpdateEnabled: boolean;
-    readonly twoFactorAuthentication: 'totp_for_mvp_evaluation';
+    readonly twoFactorAuthentication: 'totp_with_backup_codes';
+    readonly twoFactorPolicy: {
+      readonly recommendedRoles: readonly UserRole[];
+      readonly requiredRoles: readonly UserRole[];
+      readonly trustedDevicesEnabled: boolean;
+      readonly backupCodesEnabled: boolean;
+    };
     readonly auditSensitiveActions: boolean;
   };
   readonly sowerClaiming: {
@@ -101,7 +124,13 @@ export const authCapabilities: AuthCapabilities = {
     emailVerificationRequired: true,
     passwordResetEnabled: true,
     emailUpdateEnabled: true,
-    twoFactorAuthentication: 'totp_for_mvp_evaluation',
+    twoFactorAuthentication: 'totp_with_backup_codes',
+    twoFactorPolicy: {
+      recommendedRoles: twoFactorRecommendedRoles,
+      requiredRoles: twoFactorRequiredRoles,
+      trustedDevicesEnabled: true,
+      backupCodesEnabled: true,
+    },
     auditSensitiveActions: true,
   },
   sowerClaiming: {
