@@ -1,5 +1,5 @@
 export const userRoles = [
-  'project_owner',
+  'creative_evangelist',
   'sower',
   'gatekeeper',
   'seed_allocator',
@@ -34,7 +34,7 @@ export type AuthFlowKey = (typeof authFlowKeys)[number];
 export type RoleCapabilityMap = Record<UserRole, readonly string[]>;
 
 export const roleCapabilities: RoleCapabilityMap = {
-  project_owner: [
+  creative_evangelist: [
     'create draft projects',
     'submit projects for review',
     'respond to revision requests',

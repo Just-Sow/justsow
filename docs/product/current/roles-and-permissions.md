@@ -6,7 +6,7 @@ Users may hold multiple roles at the same time. Permissions should be additive u
 
 ## Roles
 
-### Project owner
+### Creative Evangelist
 
 - create draft projects
 - submit projects for review
@@ -14,7 +14,7 @@ Users may hold multiple roles at the same time. Permissions should be additive u
 - propose edits to their own existing projects
 - view their own project history and approval outcomes
 
-Project owners cannot publish their own changes directly.
+Creative Evangelists cannot publish their own changes directly.
 
 ### Sower
 
@@ -29,7 +29,7 @@ Project owners cannot publish their own changes directly.
 - control project status, visibility, and publishing
 - mark completed projects as case studies
 
-Gatekeepers should not silently rewrite project-owner content. Material changes should flow through explicit approval decisions.
+Gatekeepers should not silently rewrite Creative Evangelist content. Material changes should flow through explicit approval decisions.
 
 ### Seed allocator
 
