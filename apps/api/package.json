@@ -9,10 +9,10 @@
     "start": "node dist/server.js",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
-    "db:prepare": "tsx scripts/prepare-databases.ts",
+    "db:prepare": "node --import tsx scripts/prepare-databases.ts",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:migrate:test": "DATABASE_URL=$DATABASE_TEST_URL drizzle-kit migrate",
+    "db:migrate": "drizzle-kit migrate --config=drizzle.config.ts",
+    "db:migrate:test": "node --import tsx scripts/migrate-test-database.ts",
     "db:setup": "pnpm run db:prepare && pnpm run db:migrate && pnpm run db:migrate:test",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test tests/*.test.ts"

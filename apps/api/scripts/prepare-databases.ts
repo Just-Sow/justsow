@@ -1,7 +1,12 @@
 import { config as loadEnv } from 'dotenv';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { Client } from 'pg';
 
-loadEnv();
+const currentDirectory = dirname(fileURLToPath(import.meta.url));
+
+loadEnv({ path: resolve(currentDirectory, '../../../.env') });
+loadEnv({ path: resolve(currentDirectory, '../.env'), override: false });
 
 const connectionString =
   process.env.DATABASE_URL ?? 'postgres://justsow:justsow@127.0.0.1:5432/justsow_dev';

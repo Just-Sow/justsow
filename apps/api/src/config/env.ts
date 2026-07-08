@@ -1,7 +1,12 @@
 import { config as loadEnv } from 'dotenv';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 
-loadEnv();
+const currentDirectory = dirname(fileURLToPath(import.meta.url));
+
+loadEnv({ path: resolve(currentDirectory, '../../../.env') });
+loadEnv({ path: resolve(currentDirectory, '../../.env'), override: false });
 
 const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3000),
