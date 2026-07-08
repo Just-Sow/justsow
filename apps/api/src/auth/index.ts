@@ -1,8 +1,14 @@
 import { drizzleAdapter } from '@better-auth/drizzle-adapter';
+import { APIError, createAuthMiddleware } from 'better-auth/api';
 import { betterAuth } from 'better-auth';
 import { toNodeHandler } from 'better-auth/node';
 import { twoFactor } from 'better-auth/plugins/two-factor';
-import { authCapabilities } from '../../../../packages/shared/src/index.js';
+import {
+  authCapabilities,
+  authValidation,
+  isValidAccountName,
+  normalizePersonName,
+} from '../../../../packages/shared/src/index.js';
 import { env } from '../config/env.js';
 import { db } from '../db/client.js';
 import * as schema from '../db/schema/auth.js';
@@ -55,6 +61,8 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    minPasswordLength: authValidation.passwordMinLength,
+    maxPasswordLength: authValidation.passwordMaxLength,
     requireEmailVerification: true,
     sendResetPassword: queuePasswordResetEmail,
   },
@@ -73,6 +81,31 @@ export const auth = betterAuth({
       },
     }),
   ],
+  hooks: {
+    before: createAuthMiddleware(async (ctx) => {
+      if (ctx.path !== '/sign-up/email') {
+        return;
+      }
+
+      if (typeof ctx.body.name !== 'string') {
+        throw APIError.from('BAD_REQUEST', {
+          code: 'INVALID_NAME',
+          message: 'A full name is required.',
+        });
+      }
+
+      const normalizedName = normalizePersonName(ctx.body.name);
+
+      if (!isValidAccountName(normalizedName)) {
+        throw APIError.from('BAD_REQUEST', {
+          code: 'INVALID_NAME',
+          message: `Name must include at least ${authValidation.nameMinWords} words.`,
+        });
+      }
+
+      ctx.body.name = normalizedName;
+    }),
+  },
 });
 
 export const authBasePath = '/api/auth';

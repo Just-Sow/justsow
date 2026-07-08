@@ -9,6 +9,36 @@ export const userRoles = [
 
 export type UserRole = (typeof userRoles)[number];
 
+export const authValidation = {
+  passwordMinLength: 8,
+  passwordMaxLength: 32,
+  nameMinWords: 2,
+} as const;
+
+const emailAddressPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export const normalizePersonName = (value: string) => {
+  return value.trim().replace(/\s+/g, ' ');
+};
+
+export const countNameWords = (value: string) => {
+  const normalized = normalizePersonName(value);
+
+  if (!normalized) {
+    return 0;
+  }
+
+  return normalized.split(' ').length;
+};
+
+export const isValidAccountName = (value: string) => {
+  return countNameWords(value) >= authValidation.nameMinWords;
+};
+
+export const isValidEmailAddress = (value: string) => {
+  return emailAddressPattern.test(value.trim());
+};
+
 export const twoFactorRecommendedRoles = ['creative_evangelist', 'sower'] as const;
 
 export const twoFactorRequiredRoles = [
@@ -107,6 +137,11 @@ export interface AuthCapabilities {
     };
     readonly auditSensitiveActions: boolean;
   };
+  readonly validation: {
+    readonly passwordMinLength: number;
+    readonly passwordMaxLength: number;
+    readonly nameMinWords: number;
+  };
   readonly sowerClaiming: {
     readonly enabled: boolean;
     readonly preservesHistory: boolean;
@@ -133,6 +168,7 @@ export const authCapabilities: AuthCapabilities = {
     },
     auditSensitiveActions: true,
   },
+  validation: authValidation,
   sowerClaiming: {
     enabled: true,
     preservesHistory: true,

@@ -81,6 +81,29 @@ test('sign-up queues verification email and dev outbox endpoints expose it', asy
   }
 });
 
+test('sign-up rejects names without at least two words', async () => {
+  const server = await startServer();
+
+  try {
+    const signUp = await fetch(`${server.baseUrl}/api/auth/sign-up/email`, {
+      method: 'POST',
+      headers: authRequestHeaders,
+      body: JSON.stringify({
+        name: 'Singleword',
+        email: 'invalid-name@example.com',
+        password: 'test-password-123',
+      }),
+    });
+
+    assert.equal(signUp.status, 400);
+    const payload = await signUp.json();
+    assert.equal(payload.code, 'INVALID_NAME');
+    assert.match(payload.message, /at least 2 words/i);
+  } finally {
+    await server.close();
+  }
+});
+
 test('email verification gates sign-in until verified, then exposes authenticated auth state', async () => {
   const server = await startServer();
 
