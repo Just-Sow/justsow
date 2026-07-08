@@ -1,9 +1,14 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { authCapabilities } from '../../../../packages/shared/src/index.js';
-import { authSetupSummary } from '../auth/index.js';
+import { authBasePath, authNodeHandler, authSetupSummary } from '../auth/index.js';
 import { env } from '../config/env.js';
 
 export const authRoutes: FastifyPluginAsync = async (app) => {
+  app.all(`${authBasePath}/*`, async (request, reply) => {
+    reply.hijack();
+    await authNodeHandler(request.raw, reply.raw);
+  });
+
   app.get('/auth/capabilities', async () => {
     return authCapabilities;
   });

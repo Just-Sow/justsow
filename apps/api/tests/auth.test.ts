@@ -16,3 +16,18 @@ test('GET /auth/capabilities returns shared auth contract', async () => {
 
   await app.close();
 });
+
+test('GET /api/auth/get-session is handled by Better Auth', async () => {
+  const app = buildApp();
+
+  const response = await app.inject({
+    method: 'GET',
+    url: '/api/auth/get-session',
+  });
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(response.headers['content-type'], 'application/json');
+  assert.equal(response.body, 'null');
+
+  await app.close();
+});
