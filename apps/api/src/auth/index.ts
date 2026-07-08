@@ -8,6 +8,12 @@ import { db } from '../db/client.js';
 import * as schema from '../db/schema/auth.js';
 import { queueDevelopmentEmail } from '../dev/email-outbox.js';
 
+const trustedOrigins = [
+  new URL(env.BETTER_AUTH_URL).origin,
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+];
+
 const queueVerificationEmail = async (data: {
   user: {
     email: string;
@@ -42,6 +48,7 @@ export const auth = betterAuth({
   appName: 'JustSow',
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
+  trustedOrigins,
   database: drizzleAdapter(db, {
     provider: 'pg',
     schema,
@@ -55,11 +62,6 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     sendOnSignIn: true,
     sendVerificationEmail: queueVerificationEmail,
-  },
-  advanced: {
-    database: {
-      generateId: false,
-    },
   },
   plugins: [
     twoFactor({
@@ -85,4 +87,5 @@ export const authSetupSummary = {
   supportsSowerClaiming: authCapabilities.sowerClaiming.enabled,
   twoFactor: 'totp_with_backup_codes',
   usesDevelopmentEmailOutbox: env.NODE_ENV !== 'production',
+  trustedOrigins,
 };

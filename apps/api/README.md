@@ -17,6 +17,11 @@ Use root workspace commands where possible:
 - `pnpm test`
 - `pnpm typecheck`
 
+Automated test coverage:
+
+- `pnpm test` runs the API suite against `DATABASE_TEST_URL`
+- auth lifecycle coverage includes sign-up, verification, password reset, session-backed identity, and required-role 2FA enforcement
+
 Database workflow:
 
 - `pnpm db:up` from the repo root to start local Postgres

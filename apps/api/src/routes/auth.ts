@@ -10,7 +10,16 @@ import {
 export const authRoutes: FastifyPluginAsync = async (app) => {
   app.all(`${authBasePath}/*`, async (request, reply) => {
     reply.hijack();
-    await authNodeHandler(request.raw, reply.raw);
+    const rawRequest = request.raw as typeof request.raw & {
+      body?: unknown;
+      originalUrl?: string;
+    };
+
+    Object.assign(rawRequest, {
+      body: request.body,
+      originalUrl: rawRequest.originalUrl ?? request.url,
+    });
+    await authNodeHandler(rawRequest, reply.raw);
   });
 
   app.get('/auth/capabilities', async () => {

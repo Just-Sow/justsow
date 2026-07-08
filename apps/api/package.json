@@ -15,7 +15,7 @@
     "db:migrate:test": "node --import tsx scripts/migrate-test-database.ts",
     "db:setup": "pnpm run db:prepare && pnpm run db:migrate && pnpm run db:migrate:test",
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --test tests/*.test.ts"
+    "test": "node --import tsx scripts/run-tests.ts"
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "^1.6.0",
