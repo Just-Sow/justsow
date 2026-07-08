@@ -7,6 +7,8 @@ import {
   listDevelopmentEmails,
 } from '../dev/email-outbox.js';
 
+const isDevelopmentEmailOutboxEnabled = env.NODE_ENV === 'development' || env.NODE_ENV === 'test';
+
 export const authRoutes: FastifyPluginAsync = async (app) => {
   app.all(`${authBasePath}/*`, async (request, reply) => {
     reply.hijack();
@@ -30,9 +32,8 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
     return {
       ...authSetupSummary,
       configured: {
-        databaseUrl: env.DATABASE_URL,
         authUrl: env.BETTER_AUTH_URL,
-        devEmailOutboxPath: env.DEV_EMAIL_OUTBOX_PATH,
+        developmentEmailOutboxEnabled: isDevelopmentEmailOutboxEnabled,
         usesDevelopmentSecret:
           env.BETTER_AUTH_SECRET === 'replace-this-with-a-real-development-secret',
       },
@@ -40,7 +41,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
   });
 
   app.get('/auth/dev/emails', async (request, reply) => {
-    if (env.NODE_ENV === 'production') {
+    if (!isDevelopmentEmailOutboxEnabled) {
       return reply.code(404).send({
         error: 'NOT_FOUND',
       });
@@ -52,7 +53,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
   });
 
   app.delete('/auth/dev/emails', async (request, reply) => {
-    if (env.NODE_ENV === 'production') {
+    if (!isDevelopmentEmailOutboxEnabled) {
       return reply.code(404).send({
         error: 'NOT_FOUND',
       });
