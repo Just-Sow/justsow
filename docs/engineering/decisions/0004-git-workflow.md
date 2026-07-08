@@ -13,6 +13,9 @@ JustSow will use:
 - merges back to the mainline only after the branch stays internally consistent
 - commits on epic or other non-`main` branches may be made without per-commit user approval
 - merges into `main` and direct commits to `main` require explicit user approval
+- work may continue across multiple tasks and commits in one turn when the user intent is clear
+- the agent should only stop for user input when a meaningful decision needs approval or when user intent is unclear
+- any amendment to an accepted decision must be re-approved by the user before it returns to `Accepted`
 
 Epic branches should hold related work for a single larger stream, while individual commits should stay narrow enough to preserve readable history and safe rollback points.
 

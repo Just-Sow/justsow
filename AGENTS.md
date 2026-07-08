@@ -53,6 +53,7 @@ Decision statuses must follow this rule:
 
 - new or amended decision notes should default to `Proposed`
 - only the user may authorize changing a decision status to `Accepted`
+- any amendment to a previously accepted decision must be re-approved by the user before it returns to `Accepted`
 - if a decision needs revision after discussion, update the note and keep it `Proposed` until the user explicitly approves it
 
 Git approval rules must follow this rule:
@@ -60,6 +61,12 @@ Git approval rules must follow this rule:
 - commits on an epic or other non-`main` branch do not require per-commit user approval
 - merges into `main` require explicit user approval
 - direct commits to `main` require explicit user approval
+
+Turn execution rules must follow this rule:
+
+- work should continue across multiple tasks in the same turn when the user intent is clear
+- multiple commits in the same turn are allowed when they reflect coherent task boundaries on the current epic branch
+- only stop for user input when a meaningful decision needs explicit approval or when the user's intent is genuinely unclear
 
 Keep decision notes short. Record:
 
