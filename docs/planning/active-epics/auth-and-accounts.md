@@ -55,10 +55,10 @@ Completed:
 - Better Auth and Drizzle dependencies installed and API scaffold validated with build and tests
 - persisted role assignment and audit event table shapes defined for the API schema
 - role assignment and audit event service helpers added for later auth and admin flows
+- sower profile and claim-linkage schema plus service helpers defined for manual record claiming
 
 Next:
 
-- define the account-claim linkage model for manually created sower records
-- add the first Drizzle migration for auth and identity tables
+- generate the migration for sower profile and claim-linkage tables
 - choose the MVP 2FA method
 - design the actual sign-up, sign-in, verification, reset, and claiming flows
