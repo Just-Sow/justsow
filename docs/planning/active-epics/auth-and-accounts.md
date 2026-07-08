@@ -63,8 +63,11 @@ Completed:
 - shared 2FA policy contract now defines recommended and required role sets
 - app-facing auth responses now expose per-user 2FA requirement state for the UI
 - privileged auth app routes now enforce required-role 2FA before allowing staff/admin actions
+- web auth pages now cover sign-up, sign-in, forgot password, reset password, email verification, and 2FA challenge
+- web dev server now proxies auth requests to the API so cookie-based auth can be exercised locally without cross-origin setup
+- shared auth validation constraints now define 8-32 character passwords and require sign-up names to contain at least two words, with API enforcement on sign-up
 
 Next:
 
-- wire the web app to the current auth API surface
-- design the actual sign-up, sign-in, verification, reset, and claiming flows in the web app
+- connect authenticated UI state and route guards to the current auth session API
+- design and implement the account claiming and profile-management flows in the web app

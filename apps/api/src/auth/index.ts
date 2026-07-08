@@ -6,8 +6,11 @@ import { twoFactor } from 'better-auth/plugins/two-factor';
 import {
   authCapabilities,
   authValidation,
-  isValidAccountName,
-  normalizePersonName,
+  buildFullName,
+  hasRequiredPasswordSymbols,
+  isValidFirstName,
+  isValidLastName,
+  normalizeNamePart,
 } from '../../../../packages/shared/src/index.js';
 import { env } from '../config/env.js';
 import { db } from '../db/client.js';
@@ -35,6 +38,19 @@ const queueVerificationEmail = async (data: {
   });
 };
 
+const validatePasswordStrength = (password: unknown) => {
+  if (typeof password !== 'string') {
+    return;
+  }
+
+  if (!hasRequiredPasswordSymbols(password)) {
+    throw APIError.from('BAD_REQUEST', {
+      code: 'WEAK_PASSWORD',
+      message: `Password must include at least ${authValidation.passwordMinSymbols} symbol.`,
+    });
+  }
+};
+
 const queuePasswordResetEmail = async (data: {
   user: {
     email: string;
@@ -59,6 +75,18 @@ export const auth = betterAuth({
     provider: 'pg',
     schema,
   }),
+  user: {
+    additionalFields: {
+      firstName: {
+        type: 'string',
+        required: true,
+      },
+      lastName: {
+        type: 'string',
+        required: true,
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
     minPasswordLength: authValidation.passwordMinLength,
@@ -83,27 +111,34 @@ export const auth = betterAuth({
   ],
   hooks: {
     before: createAuthMiddleware(async (ctx) => {
-      if (ctx.path !== '/sign-up/email') {
+      if (ctx.path === '/sign-up/email') {
+        if (typeof ctx.body.firstName !== 'string' || !isValidFirstName(ctx.body.firstName)) {
+          throw APIError.from('BAD_REQUEST', {
+            code: 'INVALID_FIRST_NAME',
+            message: 'Please enter your first name.',
+          });
+        }
+
+        if (typeof ctx.body.lastName !== 'string' || !isValidLastName(ctx.body.lastName)) {
+          throw APIError.from('BAD_REQUEST', {
+            code: 'INVALID_LAST_NAME',
+            message: 'Please enter your last name.',
+          });
+        }
+
+        const normalizedFirstName = normalizeNamePart(ctx.body.firstName);
+        const normalizedLastName = normalizeNamePart(ctx.body.lastName);
+
+        ctx.body.firstName = normalizedFirstName;
+        ctx.body.lastName = normalizedLastName;
+        ctx.body.name = buildFullName(normalizedFirstName, normalizedLastName);
+        validatePasswordStrength(ctx.body.password);
         return;
       }
 
-      if (typeof ctx.body.name !== 'string') {
-        throw APIError.from('BAD_REQUEST', {
-          code: 'INVALID_NAME',
-          message: 'A full name is required.',
-        });
+      if (ctx.path === '/reset-password' || ctx.path === '/change-password' || ctx.path === '/set-password') {
+        validatePasswordStrength(ctx.body.newPassword);
       }
-
-      const normalizedName = normalizePersonName(ctx.body.name);
-
-      if (!isValidAccountName(normalizedName)) {
-        throw APIError.from('BAD_REQUEST', {
-          code: 'INVALID_NAME',
-          message: `Name must include at least ${authValidation.nameMinWords} words.`,
-        });
-      }
-
-      ctx.body.name = normalizedName;
     }),
   },
 });

@@ -79,7 +79,7 @@
 						<img
 							src={project.image}
 							alt={project.title}
-							class="h-64 w-full rounded-t-2xl object-cover"
+							class="h-64 w-full object-cover"
 						/>
 						<div
 							class="absolute top-4 left-4 flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground"

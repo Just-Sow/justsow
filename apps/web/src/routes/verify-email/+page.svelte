@@ -1,0 +1,69 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+	import { page } from '$app/state';
+	import AuthShell from '$lib/components/auth/AuthShell.svelte';
+	import { authRequest } from '$lib/auth/client.js';
+	import { Button } from '$lib/components/ui/button';
+	import * as Card from '$lib/components/ui/card';
+
+	type VerificationState = 'checking' | 'success' | 'error';
+
+	let verificationState = $state('checking' as VerificationState);
+	let message = $state('Verifying your email now...');
+
+	const token = page.url.searchParams.get('token');
+
+	const verifyEmail = async () => {
+		if (!token) {
+			verificationState = 'error';
+			message = 'That verification link is missing its token.';
+			return;
+		}
+
+		const result = await authRequest<{ status: boolean }>(
+			`/api/auth/verify-email?token=${encodeURIComponent(token)}&callbackURL=%2Flogin`,
+			{
+				method: 'GET'
+			}
+		);
+
+		if (!result.ok && result.status !== 200 && result.status !== 302) {
+			verificationState = 'error';
+			message = result.error?.message ?? 'This verification link could not be completed.';
+			return;
+		}
+
+		verificationState = 'success';
+		message = 'Your email has been verified. You can now sign in.';
+	};
+
+	onMount(() => {
+		void verifyEmail();
+	});
+</script>
+
+<AuthShell
+	eyebrow="Account Verification"
+	title="Confirming your email"
+	description="We’re validating the verification token from your email before activating sign-in."
+>
+	<Card.Content class="space-y-5 py-8">
+		<p
+			class={`rounded-md border px-4 py-3 text-sm ${
+				verificationState === 'error'
+					? 'border-destructive/20 bg-destructive/5 text-destructive'
+					: verificationState === 'success'
+						? 'border-primary/20 bg-primary/5 text-foreground'
+						: 'border-border bg-muted/40 text-muted-foreground'
+			}`}
+		>
+			{message}
+		</p>
+
+		<div class="flex justify-center">
+			<Button href="/login">
+				{verificationState === 'success' ? 'Continue to login' : 'Back to login'}
+			</Button>
+		</div>
+	</Card.Content>
+</AuthShell>

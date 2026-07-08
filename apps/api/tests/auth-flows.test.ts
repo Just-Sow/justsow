@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { eq } from 'drizzle-orm';
 import { buildApp } from '../src/app.js';
 import { db } from '../src/db/client.js';
+import { user } from '../src/db/schema/auth.js';
 import { userRoleAssignment } from '../src/db/schema/app.js';
 import { extractTokenFromUrl, resetTestState } from './helpers.js';
 
@@ -59,6 +60,8 @@ test('sign-up queues verification email and dev outbox endpoints expose it', asy
       headers: authRequestHeaders,
       body: JSON.stringify({
         name: 'Auth Test User',
+        firstName: 'Auth',
+        lastName: 'User',
         email: 'auth-flow@example.com',
         password: 'test-password-123',
       }),
@@ -81,7 +84,7 @@ test('sign-up queues verification email and dev outbox endpoints expose it', asy
   }
 });
 
-test('sign-up rejects names without at least two words', async () => {
+test('sign-up requires both first and last names', async () => {
   const server = await startServer();
 
   try {
@@ -89,7 +92,9 @@ test('sign-up rejects names without at least two words', async () => {
       method: 'POST',
       headers: authRequestHeaders,
       body: JSON.stringify({
-        name: 'Singleword',
+        name: 'Singleword Placeholder',
+        firstName: 'Singleword',
+        lastName: '',
         email: 'invalid-name@example.com',
         password: 'test-password-123',
       }),
@@ -97,8 +102,79 @@ test('sign-up rejects names without at least two words', async () => {
 
     assert.equal(signUp.status, 400);
     const payload = await signUp.json();
-    assert.equal(payload.code, 'INVALID_NAME');
-    assert.match(payload.message, /at least 2 words/i);
+    assert.equal(payload.code, 'INVALID_LAST_NAME');
+    assert.match(payload.message, /last name/i);
+  } finally {
+    await server.close();
+  }
+});
+
+test('sign-up does not create a second account for a duplicate email address', async () => {
+  const server = await startServer();
+
+  try {
+    const firstSignUp = await fetch(`${server.baseUrl}/api/auth/sign-up/email`, {
+      method: 'POST',
+      headers: authRequestHeaders,
+      body: JSON.stringify({
+        name: 'Duplicate User',
+        firstName: 'Duplicate',
+        lastName: 'User',
+        email: 'duplicate-user@example.com',
+        password: 'test-password-123!',
+      }),
+    });
+
+    assert.equal(firstSignUp.status, 200);
+
+    const secondSignUp = await fetch(`${server.baseUrl}/api/auth/sign-up/email`, {
+      method: 'POST',
+      headers: authRequestHeaders,
+      body: JSON.stringify({
+        name: 'Another User',
+        firstName: 'Another',
+        lastName: 'User',
+        email: 'duplicate-user@example.com',
+        password: 'test-password-123!',
+      }),
+    });
+
+    assert.equal(secondSignUp.status, 200);
+
+    const users = await db.select().from(user).where(eq(user.email, 'duplicate-user@example.com'));
+
+    assert.equal(users.length, 1);
+    const existingUser = users[0];
+
+    assert.ok(existingUser);
+    assert.equal(existingUser.firstName, 'Duplicate');
+    assert.equal(existingUser.lastName, 'User');
+    assert.equal(existingUser.name, 'Duplicate User');
+  } finally {
+    await server.close();
+  }
+});
+
+test('sign-up rejects passwords without a symbol', async () => {
+  const server = await startServer();
+
+  try {
+    const signUp = await fetch(`${server.baseUrl}/api/auth/sign-up/email`, {
+      method: 'POST',
+      headers: authRequestHeaders,
+      body: JSON.stringify({
+        name: 'Symbol Missing',
+        firstName: 'Symbol',
+        lastName: 'Missing',
+        email: 'weak-password@example.com',
+        password: 'testpassword123',
+      }),
+    });
+
+    assert.equal(signUp.status, 400);
+    const payload = await signUp.json();
+    assert.equal(payload.code, 'WEAK_PASSWORD');
+    assert.match(payload.message, /symbol/i);
   } finally {
     await server.close();
   }
@@ -113,6 +189,8 @@ test('email verification gates sign-in until verified, then exposes authenticate
       headers: authRequestHeaders,
       body: JSON.stringify({
         name: 'Verified User',
+        firstName: 'Verified',
+        lastName: 'User',
         email: 'verified-user@example.com',
         password: 'test-password-123',
       }),
@@ -205,6 +283,8 @@ test('password reset queues a reset email and the new password becomes usable', 
       headers: authRequestHeaders,
       body: JSON.stringify({
         name: 'Reset User',
+        firstName: 'Reset',
+        lastName: 'User',
         email: 'reset-user@example.com',
         password: 'original-password-123',
       }),
@@ -285,6 +365,8 @@ test('required-role users are blocked from privileged routes until two-factor is
       headers: authRequestHeaders,
       body: JSON.stringify({
         name: 'Admin User',
+        firstName: 'Admin',
+        lastName: 'User',
         email: 'admin-user@example.com',
         password: 'admin-password-123',
       }),
