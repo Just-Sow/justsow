@@ -54,6 +54,7 @@ Completed:
 - local development database workflow scaffolded with root `docker compose`
 - Better Auth and Drizzle dependencies installed and API scaffold validated with build and tests
 - persisted role assignment and audit event table shapes defined for the API schema
+- role assignment and audit event service helpers added for later auth and admin flows
 
 Next:
 
