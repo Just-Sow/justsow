@@ -55,6 +55,8 @@ Expected domain areas:
 - media
 - audit
 
+Auth and session management should live here as well, with the API acting as the source of truth for account lifecycle and role-aware authorization.
+
 ### Shared Package
 
 The first shared package should likely hold:
@@ -92,5 +94,7 @@ Initial direction:
 
 - likely EC2 + RDS for early production due to cost and simplicity
 - revisit infrastructure only when traffic, latency, or operational constraints justify it
+
+For local development, PostgreSQL should run on the developer machine via `docker compose` rather than relying on a shared live environment.
 
 This is a direction, not a final infrastructure commitment.

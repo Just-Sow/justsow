@@ -10,7 +10,10 @@
     "test:setup": "pnpm --filter @justsow/web run test:setup",
     "typecheck": "turbo run typecheck",
     "format": "turbo run format",
-    "check": "pnpm lint && pnpm typecheck && pnpm test"
+    "check": "pnpm lint && pnpm typecheck && pnpm test",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f postgres"
   },
   "devDependencies": {
     "turbo": "^2.5.5"

@@ -11,6 +11,8 @@ JustSow will use:
 - one branch per epic or parallel workstream
 - small commits scoped to one task or coherent change
 - merges back to the mainline only after the branch stays internally consistent
+- commits on epic or other non-`main` branches may be made without per-commit user approval
+- merges into `main` and direct commits to `main` require explicit user approval
 
 Epic branches should hold related work for a single larger stream, while individual commits should stay narrow enough to preserve readable history and safe rollback points.
 

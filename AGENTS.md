@@ -49,6 +49,18 @@ Use `docs/engineering/decisions/` for decisions that are expected to matter over
 
 Do not create a decision note for routine implementation details, obvious bug fixes, naming tweaks, or short-lived experiments.
 
+Decision statuses must follow this rule:
+
+- new or amended decision notes should default to `Proposed`
+- only the user may authorize changing a decision status to `Accepted`
+- if a decision needs revision after discussion, update the note and keep it `Proposed` until the user explicitly approves it
+
+Git approval rules must follow this rule:
+
+- commits on an epic or other non-`main` branch do not require per-commit user approval
+- merges into `main` require explicit user approval
+- direct commits to `main` require explicit user approval
+
 Keep decision notes short. Record:
 
 - the decision

@@ -41,4 +41,22 @@ Define and implement the account system for multi-role users, including secure a
 
 ## Status
 
-Planned
+In Progress
+
+## Progress
+
+Completed:
+
+- shared identity and auth contract definitions in `packages/shared`
+- initial API auth capabilities route for cross-app contract consumption
+- proposed decision note for additive multi-role accounts and claimable sower records
+- accepted auth stack direction: Better Auth + PostgreSQL + Drizzle
+- local development database workflow scaffolded with root `docker compose`
+- Better Auth and Drizzle dependencies installed and API scaffold validated with build and tests
+
+Next:
+
+- define persisted user, role assignment, and audit event shapes
+- mount the Better Auth request handler in the API
+- choose the MVP 2FA method
+- design the actual sign-up, sign-in, verification, reset, and claiming flows
