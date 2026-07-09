@@ -107,6 +107,13 @@ Typically this means checking whether updates are needed in:
 
 Do not create busywork documentation updates for trivial code changes. The standard is: if future sessions or other agents would benefit from the state change being recorded, update the docs in the same turn.
 
+## UX Copy And Design Guardrails
+
+- UI copy should be user-facing and functional, not commentary about the app's design, architecture, implementation choices, or product philosophy.
+- Do not add explanatory lines such as references to "control panels", "built on Better Auth", "security baseline", or similar internal framing unless the user explicitly asks for that context.
+- Prefer short, direct labels and descriptions that help the user complete the task on screen.
+- When extending or adding new screens, match the visual language of the existing product and avoid introducing new layout or tone patterns without checking nearby pages first.
+
 ## Product Shape
 
 The product is expected to support:

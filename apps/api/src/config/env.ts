@@ -24,6 +24,7 @@ const envSchema = z.object({
     .min(32)
     .default('replace-this-with-a-real-development-secret'),
   BETTER_AUTH_URL: z.url().default('http://localhost:3000'),
+  JUSTSOW_APP_ORIGIN: z.url().default('http://127.0.0.1:5173'),
   DEV_EMAIL_OUTBOX_PATH: z.string().default('apps/api/.data/dev-email-outbox.json'),
 });
 

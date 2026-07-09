@@ -8,13 +8,13 @@
 		variants: {
 			variant: {
 				default:
-					'bg-primary text-primary-foreground shadow-xs hover:bg-[color-mix(in_oklab,var(--color-primary)_92%,black)] hover:text-[color-mix(in_oklab,var(--color-primary-foreground)_97%,black)] hover:shadow-sm active:translate-y-px',
+					'bg-primary text-primary-foreground shadow-xs hover:bg-[color-mix(in_oklab,var(--color-primary)_92%,var(--color-foreground))] hover:text-[color-mix(in_oklab,var(--color-primary-foreground)_97%,var(--color-foreground))] hover:shadow-sm active:translate-y-px',
 				destructive:
-					'bg-destructive text-white shadow-xs hover:bg-[color-mix(in_oklab,var(--color-destructive)_88%,black)] hover:text-white hover:shadow-sm active:translate-y-px focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40',
+					'bg-destructive text-destructive-foreground shadow-xs hover:bg-[color-mix(in_oklab,var(--color-destructive)_88%,var(--color-foreground))] hover:text-destructive-foreground hover:shadow-sm active:translate-y-px focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40',
 				outline:
 					'border-1 border-border bg-background text-muted-foreground shadow-xs hover:border-primary hover:shadow-xs dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
 				secondary:
-					'bg-secondary text-secondary-foreground shadow-xs hover:bg-[color-mix(in_oklab,var(--color-secondary)_92%,black)] hover:text-[color-mix(in_oklab,var(--color-secondary-foreground)_97%,black)] hover:shadow-sm active:translate-y-px',
+					'bg-secondary text-secondary-foreground shadow-xs hover:bg-[color-mix(in_oklab,var(--color-secondary)_92%,var(--color-foreground))] hover:text-[color-mix(in_oklab,var(--color-secondary-foreground)_97%,var(--color-foreground))] hover:shadow-sm active:translate-y-px',
 				ghost: 'text-muted-foreground hover:bg-muted/60 hover:text-foreground dark:hover:bg-muted/40',
 				link: 'text-primary underline-offset-4 hover:underline'
 			},

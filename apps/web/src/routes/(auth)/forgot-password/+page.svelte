@@ -47,24 +47,18 @@
 			return;
 		}
 
-		successMessage = result.data.message;
+		successMessage = 'If an account matches that email, we’ve sent a link to reset your password.';
 		isSubmitting = false;
 	};
 </script>
 
-<AuthShell
-	eyebrow="Account Access"
-	title="Reset your password"
-	description="Enter the email on your account and we’ll send a secure reset link."
->
-	<Card.Header class="space-y-2">
-		<Card.Title>Forgot password</Card.Title>
-		<Card.Description>
-			For development, the reset link will be available through the local auth outbox.
-		</Card.Description>
+<AuthShell centered title="Reset your password">
+	<Card.Header class="gap-2 px-6 pt-6 pb-4 text-center">
+		<Card.Title class="text-2xl">Reset your password</Card.Title>
+		<Card.Description>Enter your email and we’ll send a reset link.</Card.Description>
 	</Card.Header>
 
-	<Card.Content>
+	<Card.Content class="pb-4">
 		<form class="space-y-5" onsubmit={handleSubmit}>
 			<div class="space-y-2">
 				<Label for="forgot-email">Email</Label>
@@ -108,7 +102,8 @@
 		</form>
 	</Card.Content>
 
-	<Card.Footer class="justify-center text-sm text-muted-foreground">
-		<a href="/login" class="hover:text-primary">Back to login</a>
+	<Card.Footer class="justify-center gap-1 pt-0 pb-6 text-sm text-muted-foreground">
+		<span>Remembered it?</span>
+		<a href="/login" class="font-medium text-primary hover:underline">Back to login</a>
 	</Card.Footer>
 </AuthShell>

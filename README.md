@@ -55,6 +55,8 @@ The intended root developer workflow is:
 
 Turborepo is used as a thin orchestration layer over the workspace.
 
+For local development, the web app and API may run on separate origins. The intended production deployment is to serve both from the same public address.
+
 ## Git Workflow
 
 The intended git workflow is:

@@ -54,21 +54,17 @@
 			{#if isAuthenticated}
 				<Popover.Root bind:open={accountOpen}>
 					<Popover.Trigger>
-						<button
-							type="button"
-							class="inline-flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-foreground/85 transition-colors hover:bg-muted/50"
-							aria-label="Open account menu"
-						>
+						<Button type="button" variant="ghost" class="gap-3 text-foreground/85" aria-label="Open account menu">
 							<UserRound class="size-4 text-foreground/85" />
 							<span>{displayName}</span>
 							<ChevronDown
 								strokeWidth={2.5}
 								class={`size-4 text-foreground/85 transition-transform duration-200 ${accountOpen ? 'rotate-180' : 'rotate-0'}`}
 							/>
-						</button>
+						</Button>
 					</Popover.Trigger>
 
-					<Popover.Content align="end" class="w-72 bg-white p-2">
+					<Popover.Content align="end" class="w-72 p-2">
 						<div class="rounded-md px-3 py-3">
 							<p class="text-sm font-semibold text-foreground">My Profile</p>
 							<p class="mt-1 text-sm text-muted-foreground">{email}</p>
@@ -84,15 +80,16 @@
 								<span>Account settings</span>
 							</a>
 
-							<button
+							<Button
 								type="button"
-								class="flex w-full cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-medium text-foreground/80 transition-colors hover:bg-muted/60 hover:text-foreground disabled:cursor-default disabled:opacity-50"
+								variant="ghost"
+								class="w-full justify-start px-3 text-foreground/80 hover:bg-muted/60 hover:text-foreground"
 								onclick={signOut}
 								disabled={isSigningOut}
 							>
 								<LogOut class="size-4" />
 								<span>{isSigningOut ? 'Logging out...' : 'Log out'}</span>
-							</button>
+							</Button>
 						</div>
 					</Popover.Content>
 				</Popover.Root>
@@ -109,14 +106,14 @@
 >
 	<Popover.Root bind:open>
 		<Popover.Trigger>
-			<button class="flex items-center gap-2 rounded-md p-2 text-foreground/85">
+			<Button variant="ghost" class="gap-2 px-2 text-foreground/85">
 				{#if open}
 					<MdiClose class="h-6 w-6" />
 				{:else}
 					<MdiMenu class="h-6 w-6" />
 				{/if}
 				<span class="text-lg font-medium">Menu</span>
-			</button>
+			</Button>
 		</Popover.Trigger>
 
 		<Popover.Content
@@ -151,15 +148,16 @@
 								<span>Account settings</span>
 							</a>
 
-							<button
+							<Button
 								type="button"
-								class="flex w-full cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-medium text-foreground/80 transition-colors hover:bg-muted/60 hover:text-foreground disabled:cursor-default disabled:opacity-50"
+								variant="ghost"
+								class="w-full justify-start px-3 text-foreground/80 hover:bg-muted/60 hover:text-foreground"
 								onclick={signOut}
 								disabled={isSigningOut}
 							>
 								<LogOut class="size-4" />
 								<span>{isSigningOut ? 'Logging out...' : 'Log out'}</span>
-							</button>
+							</Button>
 						</div>
 					</div>
 				{:else}

@@ -10,8 +10,10 @@
 
 	let verificationState = $state('checking' as VerificationState);
 	let message = $state('Verifying your email now...');
+	let continueHref = $state('/login');
 
 	const token = page.url.searchParams.get('token');
+	const callbackURL = page.url.searchParams.get('callbackURL') || '/login';
 
 	const verifyEmail = async () => {
 		if (!token) {
@@ -21,7 +23,7 @@
 		}
 
 		const result = await authRequest<{ status: boolean }>(
-			`/api/auth/verify-email?token=${encodeURIComponent(token)}&callbackURL=%2Flogin`,
+			`/api/auth/verify-email?token=${encodeURIComponent(token)}&callbackURL=${encodeURIComponent(callbackURL)}`,
 			{
 				method: 'GET'
 			}
@@ -34,7 +36,11 @@
 		}
 
 		verificationState = 'success';
-		message = 'Your email has been verified. You can now sign in.';
+		message =
+			callbackURL === '/login'
+				? 'Your email has been verified. You can now sign in.'
+				: 'Your email has been verified.';
+		continueHref = callbackURL;
 	};
 
 	onMount(() => {
@@ -61,8 +67,12 @@
 		</p>
 
 		<div class="flex justify-center">
-			<Button href="/login">
-				{verificationState === 'success' ? 'Continue to login' : 'Back to login'}
+			<Button href={continueHref}>
+				{verificationState === 'success'
+					? callbackURL === '/login'
+						? 'Continue to login'
+						: 'Continue'
+					: 'Back to login'}
 			</Button>
 		</div>
 	</Card.Content>
