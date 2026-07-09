@@ -14,8 +14,67 @@ import {
 const isDevelopmentEmailOutboxEnabled =
   env.NODE_ENV === 'development' || env.NODE_ENV === 'test';
 
+const authRouteRateLimitWindowMs = 60_000;
+const authRouteRateLimitMaxRequests = 120;
+
+type AuthRouteRateLimitBucket = {
+  count: number;
+  resetAt: number;
+};
+
+const authRouteRateLimits = new Map<string, AuthRouteRateLimitBucket>();
+
+const getAuthRouteRateLimitKey = (request: {
+  ip?: string;
+  socket: { remoteAddress?: string | null };
+}) => {
+  return request.ip ?? request.socket.remoteAddress ?? 'unknown';
+};
+
+const consumeAuthRouteRateLimit = (request: {
+  ip?: string;
+  socket: { remoteAddress?: string | null };
+}) => {
+  const key = getAuthRouteRateLimitKey(request);
+  const now = Date.now();
+  const bucket = authRouteRateLimits.get(key);
+
+  if (!bucket || bucket.resetAt <= now) {
+    authRouteRateLimits.set(key, {
+      count: 1,
+      resetAt: now + authRouteRateLimitWindowMs,
+    });
+
+    return {
+      allowed: true,
+    };
+  }
+
+  if (bucket.count >= authRouteRateLimitMaxRequests) {
+    return {
+      allowed: false,
+      retryAfterSeconds: Math.max(1, Math.ceil((bucket.resetAt - now) / 1000)),
+    };
+  }
+
+  bucket.count += 1;
+
+  return {
+    allowed: true,
+  };
+};
+
 export const authRoutes: FastifyPluginAsync = async (app) => {
   app.all(`${authBasePath}/*`, async (request, reply) => {
+    const rateLimit = consumeAuthRouteRateLimit(request);
+
+    if (!rateLimit.allowed) {
+      reply.header('retry-after', String(rateLimit.retryAfterSeconds));
+      return reply.code(429).send({
+        error: 'RATE_LIMITED',
+      });
+    }
+
     reply.hijack();
     const rawRequest = request.raw as typeof request.raw & {
       body?: unknown;
