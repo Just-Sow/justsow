@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import logo from '$lib/assets/logo.svg';
 	import { Button } from '$lib/components/ui/button';
 	import * as Popover from '$lib/components/ui/popover';

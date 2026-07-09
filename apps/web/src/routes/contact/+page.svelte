@@ -3,7 +3,6 @@
 	import * as Card from '$lib/components/ui/card';
 	import MdiEmail from '~icons/mdi/email';
 	import MdiPhone from '~icons/mdi/phone';
-	import MdiMapMarker from '~icons/mdi/map-marker';
 </script>
 
 <!-- Contact Page -->

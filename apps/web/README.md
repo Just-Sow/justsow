@@ -13,6 +13,7 @@ This is the SvelteKit web app for JustSow.
   All components live in `src/lib/components/ui`
 - **Build & Dev Tools:** Vite (bundler included with SvelteKit)
 - **Linting/Formatting:** ESLint, Prettier
+
 ## Scripts
 
 Use root workspace commands where possible:

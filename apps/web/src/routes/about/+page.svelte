@@ -35,11 +35,11 @@
 				root.
 				<br />
 				<br />
-				Our approach is simple but powerful: scatter resources widely, trusting God to bring growth.
-				By supporting a wide range of projects—big or small, experimental or traditional—we multiply
-				the impact of each investment for the Kingdom. Every seed grant, every piece of encouragement,
-				and every act of collaboration contributes to a growing network of creative evangelists who are
-				boldly sharing the gospel in new and transformative ways.
+				Our approach is simple but powerful: scatter resources widely, trusting God to bring growth. By
+				supporting a wide range of projects—big or small, experimental or traditional—we multiply the
+				impact of each investment for the Kingdom. Every seed grant, every piece of encouragement, and
+				every act of collaboration contributes to a growing network of creative evangelists who are boldly
+				sharing the gospel in new and transformative ways.
 			</p>
 		</div>
 
