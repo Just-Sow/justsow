@@ -13,7 +13,7 @@
 		"typecheck": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint .",
-		"test:setup": "playwright install chromium",
+		"test:setup": "playwright install chromium chromium-headless-shell",
 		"test:unit": "vitest",
 		"test": "pnpm run test:unit -- --run"
 	},
