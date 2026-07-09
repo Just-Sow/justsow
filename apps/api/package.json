@@ -9,23 +9,36 @@
     "start": "node dist/server.js",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
+    "db:prepare": "node --import tsx scripts/prepare-databases.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate --config=drizzle.config.ts",
+    "db:migrate:test": "node --import tsx scripts/migrate-test-database.ts",
+    "db:setup": "pnpm run db:prepare && pnpm run db:migrate && pnpm run db:migrate:test",
+    "db:reset:dev": "node --import tsx scripts/reset-and-seed-dev-database.ts",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test tests/**/*.test.ts"
+    "test": "node --import tsx scripts/run-tests.ts"
   },
   "dependencies": {
+    "@better-auth/drizzle-adapter": "^1.6.0",
+    "@fastify/rate-limit": "^11.1.0",
+    "better-auth": "^1.6.0",
     "dotenv": "^17.2.2",
+    "drizzle-orm": "^0.45.2",
     "fastify": "^5.6.0",
+    "pg": "^8.16.3",
     "zod": "^4.1.5"
   },
   "devDependencies": {
-    "@eslint/js": "^9.36.0",
+    "@eslint/js": "^10.0.1",
     "@types/node": "^26.1.1",
+    "@types/pg": "^8.15.4",
+    "drizzle-kit": "^0.31.4",
     "eslint": "^10.6.0",
     "eslint-config-prettier": "^10.1.8",
-    "globals": "^16.4.0",
+    "globals": "^17.7.0",
     "prettier": "^3.6.2",
     "tsx": "^4.20.5",
-    "typescript": "^5.9.2",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.44.0"
   }
 }

@@ -25,7 +25,6 @@ pnpm-debug.log*
 .DS_Store
 .idea/
 .vscode/
-
 # Vitest browser failure screenshots
 apps/web/src/tests/**/__screenshots__/
 

@@ -17,7 +17,7 @@ The project workflow must support both initial applications and later owner-subm
 
 ## Change Approval Rule
 
-After a project has been submitted, project owners should not edit the live record directly.
+After a project has been submitted, Creative Evangelists should not edit the live record directly.
 
 Instead:
 
@@ -38,7 +38,7 @@ This simplifies both public messaging and internal workflow for MVP.
 
 ## Visibility
 
-- draft and in-review items are private to relevant internal users and the project owner
+- draft and in-review items are private to relevant internal users and the Creative Evangelist
 - published projects are public
 - archived non-case-study items are internal only
 - case studies are public

@@ -3,16 +3,22 @@
   "private": true,
   "packageManager": "pnpm@11.10.0",
   "scripts": {
-    "dev": "turbo run dev --parallel",
+    "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "test:setup": "pnpm --filter @justsow/web run test:setup",
     "typecheck": "turbo run typecheck",
     "format": "turbo run format",
-    "check": "pnpm lint && pnpm typecheck && pnpm test"
+    "check": "pnpm lint && pnpm typecheck && pnpm test",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f postgres",
+    "db:prepare": "pnpm --dir apps/api run db:prepare",
+    "db:setup": "pnpm --dir apps/api run db:setup",
+    "db:reset:dev": "pnpm --dir apps/api run db:reset:dev"
   },
   "devDependencies": {
-    "turbo": "^2.5.5"
+    "turbo": "^2.10.4"
   }
 }

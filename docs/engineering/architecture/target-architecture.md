@@ -7,7 +7,7 @@ The system should be treated as one product with multiple user capabilities rath
 Primary capability areas:
 
 - public site
-- project owner workflows
+- Creative Evangelist workflows
 - sower account workflows
 - employee review and publishing workflows
 
@@ -31,7 +31,7 @@ docs/
 The web app should contain:
 
 - public pages and project discovery
-- authenticated project owner flows
+- authenticated Creative Evangelist flows
 - authenticated sower flows
 - authenticated employee flows
 
@@ -55,6 +55,8 @@ Expected domain areas:
 - media
 - audit
 
+Auth and session management should live here as well, with the API acting as the source of truth for account lifecycle and role-aware authorization.
+
 ### Shared Package
 
 The first shared package should likely hold:
@@ -77,7 +79,7 @@ That can be implemented either through:
 - versioned snapshots
 - change-set records
 
-Whatever approach is chosen, direct in-place mutation of live published project content by project owners is the wrong model.
+Whatever approach is chosen, direct in-place mutation of live published project content by Creative Evangelists is the wrong model.
 
 ## Identity And Authorization
 
@@ -92,5 +94,7 @@ Initial direction:
 
 - likely EC2 + RDS for early production due to cost and simplicity
 - revisit infrastructure only when traffic, latency, or operational constraints justify it
+
+For local development, PostgreSQL should run on the developer machine via `docker compose` rather than relying on a shared live environment.
 
 This is a direction, not a final infrastructure commitment.

@@ -13,9 +13,9 @@ This document defines the current functional and non-functional requirements for
 
 The MVP will:
 
-- allow project owners to create and submit structured project applications with images and a one-minute video
+- allow Creative Evangelists to create and submit structured project applications with images and a one-minute video
 - allow gatekeepers to approve, reject, request revision, publish, archive, and curate case studies
-- allow project owners to propose edits to existing projects, with all edits requiring gatekeeper approval before going live
+- allow Creative Evangelists to propose edits to existing projects, with all edits requiring gatekeeper approval before going live
 - allow sowers to have accounts and view their seed history
 - allow staff to create manual sower records that a sower can later claim as an account
 - allow seed allocators to link a single seed to a single project
@@ -29,7 +29,7 @@ Broader internal operations remain in Notion and are out of scope for the websit
 - **Project owner**: A user who submits and manages their own project applications.
 - **Sower**: An individual or organisation associated with a seed and able to view their own seed history if they have or claim an account.
 - **Seed**: A funding record associated with one project in the MVP.
-- **Project**: A proposal submitted by a project owner seeking support.
+- **Project**: A proposal submitted by a Creative Evangelist seeking support.
 - **Gatekeeper**: A user role with authority to control project approvals, revisions, status, visibility, and case study selection.
 - **Stewardship staff**: Users who can view records and support stewardship processes.
 - **Seed allocator**: A user role responsible for creating sower records and assigning a seed to a project.

@@ -59,6 +59,20 @@ jobs:
   test:
     name: Unit tests
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: justsow_dev
+          POSTGRES_USER: justsow
+          POSTGRES_PASSWORD: justsow
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U justsow -d justsow_dev"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -77,7 +91,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Prepare databases
+        env:
+          DATABASE_URL: postgres://justsow:justsow@127.0.0.1:5432/justsow_dev
+          DATABASE_TEST_URL: postgres://justsow:justsow@127.0.0.1:5432/justsow_test
+          POSTGRES_TEST_DB: justsow_test
+        run: pnpm db:setup
+
       - name: Run tests
+        env:
+          DATABASE_URL: postgres://justsow:justsow@127.0.0.1:5432/justsow_dev
+          DATABASE_TEST_URL: postgres://justsow:justsow@127.0.0.1:5432/justsow_test
         run: pnpm test
 
   browser-tests:

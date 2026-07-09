@@ -4,7 +4,7 @@
 
 JustSow is a web platform for:
 
-- project owners submitting and managing projects
+- Creative Evangelists submitting and managing projects
 - gatekeepers and staff reviewing, approving, and publishing those projects
 - sowers creating accounts, viewing their own giving history, and participating in the funding story of the platform
 
@@ -62,7 +62,7 @@ For MVP, a sower may also exist without a self-created account. Staff can create
 
 - on-site donor payments
 - richer donor account capabilities
-- broader project owner self-service
+- broader Creative Evangelist self-service
 - more mature regional support if operationally required
 
 ## Non-Goals

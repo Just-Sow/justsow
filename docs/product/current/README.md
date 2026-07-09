@@ -7,7 +7,7 @@ This folder contains the latest agreed product direction for JustSow.
 JustSow is being built as a product with three main user groups:
 
 - donors who can create accounts and eventually make payments on-site
-- project owners who submit projects and manage their own content
+- Creative Evangelists who submit projects and manage their own content
 - employees who manage approvals, publishing, and site oversight
 
 ## Internal Workflow Boundary
