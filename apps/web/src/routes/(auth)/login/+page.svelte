@@ -5,7 +5,6 @@
 	import { validateEmail, validateRequired } from '$lib/auth/validation.js';
 	import AuthShell from '$lib/components/auth/AuthShell.svelte';
 	import { Button } from '$lib/components/ui/button';
-	import * as Card from '$lib/components/ui/card';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
 
@@ -110,85 +109,76 @@
 	};
 </script>
 
-<AuthShell centered title="Welcome back">
-	<Card.Header class="gap-2 px-6 pt-6 pb-4 text-center">
-		<Card.Title class="text-2xl">Welcome back</Card.Title>
-		<Card.Description>Login to your account.</Card.Description>
-	</Card.Header>
+<AuthShell title="Welcome back" description="Login to your account">
+	<form class="space-y-5" onsubmit={handleSubmit}>
+		<div class="space-y-2">
+			<Label for="login-email">Email</Label>
+			<Input
+				id="login-email"
+				type="email"
+				bind:value={email}
+				placeholder="you@example.com"
+				aria-invalid={fieldErrors.email ? 'true' : undefined}
+				onblur={() => touchField('email')}
+				oninput={() => handleFieldInput('email')}
+				required
+			/>
+			{#if fieldErrors.email}
+				<p class="text-sm text-destructive">{fieldErrors.email}</p>
+			{/if}
+		</div>
 
-	<Card.Content class="pb-4">
-		<form class="space-y-5" onsubmit={handleSubmit}>
-			<div class="space-y-2">
-				<Label for="login-email">Email</Label>
-				<Input
-					id="login-email"
-					type="email"
-					bind:value={email}
-					placeholder="you@example.com"
-					aria-invalid={fieldErrors.email ? 'true' : undefined}
-					onblur={() => touchField('email')}
-					oninput={() => handleFieldInput('email')}
-					required
-				/>
-				{#if fieldErrors.email}
-					<p class="text-sm text-destructive">{fieldErrors.email}</p>
+		<div class="space-y-2">
+			<div class="flex items-center justify-between gap-3">
+				<Label for="login-password">Password</Label>
+				<a
+					href={resolve('/forgot-password')}
+					class="text-sm text-muted-foreground hover:text-primary"
+				>
+					Forgot password?
+				</a>
+			</div>
+			<Input
+				id="login-password"
+				type="password"
+				bind:value={password}
+				placeholder="Enter your password"
+				aria-invalid={fieldErrors.password ? 'true' : undefined}
+				onblur={() => touchField('password')}
+				oninput={() => handleFieldInput('password')}
+				required
+			/>
+			{#if fieldErrors.password}
+				<p class="text-sm text-destructive">{fieldErrors.password}</p>
+			{/if}
+		</div>
+
+		{#if errorMessage}
+			<div
+				class="space-y-3 rounded-md border border-destructive/20 bg-destructive/5 px-3 py-3 text-sm"
+			>
+				<p class="text-destructive">{errorMessage}</p>
+				{#if errorMessage.toLowerCase().includes('verification')}
+					<Button type="button" variant="outline" size="sm" onclick={resendVerificationEmail}>
+						Resend verification email
+					</Button>
 				{/if}
 			</div>
+		{/if}
 
-			<div class="space-y-2">
-				<div class="flex items-center justify-between gap-3">
-					<Label for="login-password">Password</Label>
-					<a
-						href={resolve('/forgot-password')}
-						class="text-sm text-muted-foreground hover:text-primary"
-					>
-						Forgot password?
-					</a>
-				</div>
-				<Input
-					id="login-password"
-					type="password"
-					bind:value={password}
-					placeholder="Enter your password"
-					aria-invalid={fieldErrors.password ? 'true' : undefined}
-					onblur={() => touchField('password')}
-					oninput={() => handleFieldInput('password')}
-					required
-				/>
-				{#if fieldErrors.password}
-					<p class="text-sm text-destructive">{fieldErrors.password}</p>
-				{/if}
-			</div>
+		{#if verificationMessage}
+			<p class="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-foreground">
+				{verificationMessage}
+			</p>
+		{/if}
 
-			{#if errorMessage}
-				<div
-					class="space-y-3 rounded-md border border-destructive/20 bg-destructive/5 px-3 py-3 text-sm"
-				>
-					<p class="text-destructive">{errorMessage}</p>
-					{#if errorMessage.toLowerCase().includes('verification')}
-						<Button type="button" variant="outline" size="sm" onclick={resendVerificationEmail}>
-							Resend verification email
-						</Button>
-					{/if}
-				</div>
-			{/if}
+		<Button type="submit" class="w-full" disabled={isSubmitting}>
+			{isSubmitting ? 'Signing in...' : 'Sign in'}
+		</Button>
+	</form>
 
-			{#if verificationMessage}
-				<p
-					class="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-foreground"
-				>
-					{verificationMessage}
-				</p>
-			{/if}
-
-			<Button type="submit" class="w-full" disabled={isSubmitting}>
-				{isSubmitting ? 'Signing in...' : 'Sign in'}
-			</Button>
-		</form>
-	</Card.Content>
-
-	<Card.Footer class="justify-center gap-1 pt-0 pb-6 text-sm text-muted-foreground">
+	{#snippet footer()}
 		<span>Don’t have an account?</span>
 		<a href={resolve('/signup')} class="font-medium text-primary hover:underline">Create one</a>
-	</Card.Footer>
+	{/snippet}
 </AuthShell>

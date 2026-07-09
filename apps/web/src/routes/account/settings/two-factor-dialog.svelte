@@ -530,7 +530,7 @@
 						</Dialog.Footer>
 					</div>
 				{:else if stage === 'verify'}
-					<form class="space-y-5" onsubmit={finishSetup}>
+					<form class="space-y-4" onsubmit={finishSetup}>
 						<div class="space-y-1">
 							<p class="text-sm font-semibold text-foreground">Step 2 of 3</p>
 							<p class="text-sm text-muted-foreground">
@@ -538,7 +538,7 @@
 							</p>
 						</div>
 
-						<div class="space-y-2">
+						<div class="space-y-1.5">
 							<Label for="two-factor-verification-code">Verification code</Label>
 							<InputOTP.Root
 								id="two-factor-verification-code"

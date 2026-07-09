@@ -13,7 +13,6 @@
 		validatePasswordConfirmation
 	} from '$lib/auth/validation.js';
 	import { Button } from '$lib/components/ui/button';
-	import * as Card from '$lib/components/ui/card';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import * as InputGroup from '$lib/components/ui/input-group';
 	import Label from '$lib/components/ui/label/label.svelte';
@@ -134,165 +133,154 @@
 	};
 </script>
 
-<AuthShell centered title="Create your account">
-	<Card.Header class="gap-2 px-6 pt-6 pb-4 text-center">
-		<Card.Title class="text-2xl">Create your account</Card.Title>
-		<Card.Description
-			>Sign up to get started or claim an existing sower record with the same email.</Card.Description
-		>
-	</Card.Header>
-
-	<Card.Content class="pb-4">
-		<form class="space-y-5" onsubmit={handleSubmit}>
-			<div class="grid gap-5 sm:grid-cols-2">
-				<div class="space-y-2">
-					<Label for="signup-first-name">First name</Label>
-					<Input
-						id="signup-first-name"
-						bind:value={firstName}
-						placeholder="First name"
-						aria-invalid={fieldErrors.firstName ? 'true' : undefined}
-						onblur={() => touchField('firstName')}
-						oninput={() => handleFieldInput('firstName')}
-						required
-					/>
-					{#if fieldErrors.firstName}
-						<p class="text-sm text-destructive">{fieldErrors.firstName}</p>
-					{/if}
-				</div>
-
-				<div class="space-y-2">
-					<Label for="signup-last-name">Last name</Label>
-					<Input
-						id="signup-last-name"
-						bind:value={lastName}
-						placeholder="Last name"
-						aria-invalid={fieldErrors.lastName ? 'true' : undefined}
-						onblur={() => touchField('lastName')}
-						oninput={() => handleFieldInput('lastName')}
-						required
-					/>
-					{#if fieldErrors.lastName}
-						<p class="text-sm text-destructive">{fieldErrors.lastName}</p>
-					{/if}
-				</div>
-			</div>
-
+<AuthShell title="Create your account" description="Sign up to get started">
+	<form class="space-y-5" onsubmit={handleSubmit}>
+		<div class="grid gap-5 sm:grid-cols-2">
 			<div class="space-y-2">
-				<Label for="signup-email">Email</Label>
+				<Label for="signup-first-name">First name</Label>
 				<Input
-					id="signup-email"
-					type="email"
-					bind:value={email}
-					placeholder="you@example.com"
-					aria-invalid={fieldErrors.email ? 'true' : undefined}
-					onblur={() => touchField('email')}
-					oninput={() => handleFieldInput('email')}
+					id="signup-first-name"
+					bind:value={firstName}
+					placeholder="First name"
+					aria-invalid={fieldErrors.firstName ? 'true' : undefined}
+					onblur={() => touchField('firstName')}
+					oninput={() => handleFieldInput('firstName')}
 					required
 				/>
-				{#if fieldErrors.email}
-					<p class="text-sm text-destructive">{fieldErrors.email}</p>
+				{#if fieldErrors.firstName}
+					<p class="text-sm text-destructive">{fieldErrors.firstName}</p>
 				{/if}
 			</div>
 
-			<div class="space-y-5">
-				<div class="space-y-2">
-					<Label for="signup-password">Password</Label>
-					<InputGroup.Root>
-						<InputGroup.Input
-							id="signup-password"
-							type={showPassword ? 'text' : 'password'}
-							bind:value={password}
-							placeholder="Create a password"
-							aria-invalid={fieldErrors.password ? 'true' : undefined}
-							onblur={() => touchField('password')}
-							oninput={() => handleFieldInput('password')}
-							required
-						/>
-						<InputGroup.Addon align="inline-end">
-							<InputGroup.Button
-								size="icon-xs"
-								variant="ghost"
-								aria-label={showPassword ? 'Hide password' : 'Show password'}
-								aria-pressed={showPassword}
-								class="rounded-full"
-								onclick={() => (showPassword = !showPassword)}
-							>
-								{#if showPassword}
-									<EyeOff />
-								{:else}
-									<Eye />
-								{/if}
-							</InputGroup.Button>
-						</InputGroup.Addon>
-					</InputGroup.Root>
-					{#if fieldErrors.password}
-						<p class="text-sm text-destructive">{fieldErrors.password}</p>
-					{/if}
-				</div>
+			<div class="space-y-2">
+				<Label for="signup-last-name">Last name</Label>
+				<Input
+					id="signup-last-name"
+					bind:value={lastName}
+					placeholder="Last name"
+					aria-invalid={fieldErrors.lastName ? 'true' : undefined}
+					onblur={() => touchField('lastName')}
+					oninput={() => handleFieldInput('lastName')}
+					required
+				/>
+				{#if fieldErrors.lastName}
+					<p class="text-sm text-destructive">{fieldErrors.lastName}</p>
+				{/if}
+			</div>
+		</div>
 
-				<div class="space-y-2">
-					<Label for="signup-confirm">Confirm password</Label>
-					<InputGroup.Root>
-						<InputGroup.Input
-							id="signup-confirm"
-							type={showConfirmPassword ? 'text' : 'password'}
-							bind:value={confirmPassword}
-							placeholder="Repeat password"
-							aria-invalid={fieldErrors.confirmPassword ? 'true' : undefined}
-							onblur={() => touchField('confirmPassword')}
-							oninput={() => handleFieldInput('confirmPassword')}
-							required
-						/>
-						<InputGroup.Addon align="inline-end">
-							<InputGroup.Button
-								size="icon-xs"
-								variant="ghost"
-								aria-label={showConfirmPassword
-									? 'Hide password confirmation'
-									: 'Show password confirmation'}
-								aria-pressed={showConfirmPassword}
-								class="rounded-full"
-								onclick={() => (showConfirmPassword = !showConfirmPassword)}
-							>
-								{#if showConfirmPassword}
-									<EyeOff />
-								{:else}
-									<Eye />
-								{/if}
-							</InputGroup.Button>
-						</InputGroup.Addon>
-					</InputGroup.Root>
-					{#if fieldErrors.confirmPassword}
-						<p class="text-sm text-destructive">{fieldErrors.confirmPassword}</p>
-					{/if}
-				</div>
+		<div class="space-y-2">
+			<Label for="signup-email">Email</Label>
+			<Input
+				id="signup-email"
+				type="email"
+				bind:value={email}
+				placeholder="you@example.com"
+				aria-invalid={fieldErrors.email ? 'true' : undefined}
+				onblur={() => touchField('email')}
+				oninput={() => handleFieldInput('email')}
+				required
+			/>
+			{#if fieldErrors.email}
+				<p class="text-sm text-destructive">{fieldErrors.email}</p>
+			{/if}
+		</div>
+
+		<div class="space-y-5">
+			<div class="space-y-2">
+				<Label for="signup-password">Password</Label>
+				<InputGroup.Root>
+					<InputGroup.Input
+						id="signup-password"
+						type={showPassword ? 'text' : 'password'}
+						bind:value={password}
+						placeholder="Create a password"
+						aria-invalid={fieldErrors.password ? 'true' : undefined}
+						onblur={() => touchField('password')}
+						oninput={() => handleFieldInput('password')}
+						required
+					/>
+					<InputGroup.Addon align="inline-end">
+						<InputGroup.Button
+							size="icon-xs"
+							variant="ghost"
+							aria-label={showPassword ? 'Hide password' : 'Show password'}
+							aria-pressed={showPassword}
+							class="rounded-full"
+							onclick={() => (showPassword = !showPassword)}
+						>
+							{#if showPassword}
+								<EyeOff />
+							{:else}
+								<Eye />
+							{/if}
+						</InputGroup.Button>
+					</InputGroup.Addon>
+				</InputGroup.Root>
+				{#if fieldErrors.password}
+					<p class="text-sm text-destructive">{fieldErrors.password}</p>
+				{/if}
 			</div>
 
-			{#if errorMessage}
-				<p
-					class="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive"
-				>
-					{errorMessage}
-				</p>
-			{/if}
+			<div class="space-y-2">
+				<Label for="signup-confirm">Confirm password</Label>
+				<InputGroup.Root>
+					<InputGroup.Input
+						id="signup-confirm"
+						type={showConfirmPassword ? 'text' : 'password'}
+						bind:value={confirmPassword}
+						placeholder="Repeat password"
+						aria-invalid={fieldErrors.confirmPassword ? 'true' : undefined}
+						onblur={() => touchField('confirmPassword')}
+						oninput={() => handleFieldInput('confirmPassword')}
+						required
+					/>
+					<InputGroup.Addon align="inline-end">
+						<InputGroup.Button
+							size="icon-xs"
+							variant="ghost"
+							aria-label={showConfirmPassword
+								? 'Hide password confirmation'
+								: 'Show password confirmation'}
+							aria-pressed={showConfirmPassword}
+							class="rounded-full"
+							onclick={() => (showConfirmPassword = !showConfirmPassword)}
+						>
+							{#if showConfirmPassword}
+								<EyeOff />
+							{:else}
+								<Eye />
+							{/if}
+						</InputGroup.Button>
+					</InputGroup.Addon>
+				</InputGroup.Root>
+				{#if fieldErrors.confirmPassword}
+					<p class="text-sm text-destructive">{fieldErrors.confirmPassword}</p>
+				{/if}
+			</div>
+		</div>
 
-			{#if successMessage}
-				<p
-					class="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-foreground"
-				>
-					{successMessage}
-				</p>
-			{/if}
+		{#if errorMessage}
+			<p
+				class="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive"
+			>
+				{errorMessage}
+			</p>
+		{/if}
 
-			<Button type="submit" class="w-full" disabled={isSubmitting}>
-				{isSubmitting ? 'Creating account...' : 'Create account'}
-			</Button>
-		</form>
-	</Card.Content>
+		{#if successMessage}
+			<p class="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-foreground">
+				{successMessage}
+			</p>
+		{/if}
 
-	<Card.Footer class="justify-center gap-1 pt-0 pb-6 text-sm text-muted-foreground">
+		<Button type="submit" class="w-full" disabled={isSubmitting}>
+			{isSubmitting ? 'Creating account...' : 'Create account'}
+		</Button>
+	</form>
+
+	{#snippet footer()}
 		<span>Already have an account?</span>
 		<a href={resolve('/login')} class="font-medium text-primary hover:underline">Sign in</a>
-	</Card.Footer>
+	{/snippet}
 </AuthShell>

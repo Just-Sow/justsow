@@ -97,16 +97,9 @@
 </script>
 
 <AuthShell
-	eyebrow="Account Access"
-	title="Set a new password"
-	description="Choose a new password for your account using the secure reset token from your email."
+	title="Reset password"
+	description="Your new password will replace the previous one immediately"
 >
-	<Card.Header class="space-y-2">
-		<Card.Title>Reset password</Card.Title>
-		<Card.Description>Your new password will replace the previous one immediately.</Card.Description
-		>
-	</Card.Header>
-
 	<Card.Content>
 		<form class="space-y-5" onsubmit={handleSubmit}>
 			<div class="space-y-2">

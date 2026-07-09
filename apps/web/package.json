@@ -15,6 +15,8 @@
 		"lint": "prettier --check . && eslint .",
 		"test:setup": "playwright install chromium",
 		"test:unit": "vitest",
+		"test:browser": "vitest --project client --run",
+		"test:browser:ci": "vitest --project client --run",
 		"test": "pnpm run test:unit -- --run"
 	},
 	"devDependencies": {

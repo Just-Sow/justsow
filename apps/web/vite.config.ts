@@ -6,6 +6,8 @@ import Icons from 'unplugin-icons/vite';
 export default defineConfig(({ mode }) => {
 	const env = loadEnv(mode, process.cwd(), '');
 	const apiProxyTarget = env.JUSTSOW_API_ORIGIN || 'http://127.0.0.1:3000';
+	const isCI =
+		process.env.CI === 'true' || process.env.CI === '1' || env.CI === 'true' || env.CI === '1';
 
 	return {
 		plugins: [tailwindcss(), sveltekit(), Icons({ compiler: 'svelte', autoInstall: true })],
@@ -32,6 +34,7 @@ export default defineConfig(({ mode }) => {
 						environment: 'browser',
 						browser: {
 							enabled: true,
+							headless: isCI,
 							provider: 'playwright',
 							api: {
 								host: '127.0.0.1'

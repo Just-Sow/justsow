@@ -72,3 +72,4 @@ Completed:
 - password changes now record a timestamp and account settings show the latest password and two-factor security status metadata
 - local reset-and-seed tooling now prepares a known admin account and an unclaimed sower profile for auth testing
 - normal sign-up now auto-claims an existing unlinked sower profile when the email matches
+

@@ -23,6 +23,8 @@ Do not use this area for:
 - `roadmap.md` for major phases and sequencing
 - `backlog.md` for prioritized work items
 - `active-epics/` for larger workstreams that need durable shared context
+- `completed-epics/` for finished workstreams kept for reference
+- `inactive-epics/` for workstreams that are paused or deferred
 
 ## Planning Rule
 

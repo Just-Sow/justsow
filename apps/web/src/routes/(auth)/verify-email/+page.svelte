@@ -4,7 +4,6 @@
 	import AuthShell from '$lib/components/auth/AuthShell.svelte';
 	import { authRequest } from '$lib/auth/client.js';
 	import { Button } from '$lib/components/ui/button';
-	import * as Card from '$lib/components/ui/card';
 
 	type VerificationState = 'checking' | 'success' | 'error';
 
@@ -48,12 +47,8 @@
 	});
 </script>
 
-<AuthShell
-	eyebrow="Account Verification"
-	title="Confirming your email"
-	description="We’re validating the verification token from your email before activating sign-in."
->
-	<Card.Content class="space-y-5 py-8">
+<AuthShell title="Email verification">
+	<div class="flex flex-col space-y-5">
 		<p
 			class={`rounded-md border px-4 py-3 text-sm ${
 				verificationState === 'error'
@@ -66,14 +61,12 @@
 			{message}
 		</p>
 
-		<div class="flex justify-center">
-			<Button href={continueHref}>
-				{verificationState === 'success'
-					? callbackURL === '/login'
-						? 'Continue to login'
-						: 'Continue'
-					: 'Back to login'}
-			</Button>
-		</div>
-	</Card.Content>
+		<Button href={continueHref}>
+			{verificationState === 'success'
+				? callbackURL === '/login'
+					? 'Continue to login'
+					: 'Continue'
+				: 'Back to login'}
+		</Button>
+	</div>
 </AuthShell>
