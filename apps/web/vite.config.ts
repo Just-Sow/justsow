@@ -1,13 +1,12 @@
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig, loadEnv } from 'vite';
+import { playwright } from '@vitest/browser-playwright';
 import Icons from 'unplugin-icons/vite';
 
 export default defineConfig(({ mode }) => {
 	const env = loadEnv(mode, process.cwd(), '');
 	const apiProxyTarget = env.JUSTSOW_API_ORIGIN || 'http://127.0.0.1:3000';
-	const isCI =
-		process.env.CI === 'true' || process.env.CI === '1' || env.CI === 'true' || env.CI === '1';
 
 	return {
 		plugins: [tailwindcss(), sveltekit(), Icons({ compiler: 'svelte', autoInstall: true })],
@@ -31,11 +30,9 @@ export default defineConfig(({ mode }) => {
 					extends: './vite.config.ts',
 					test: {
 						name: 'client',
-						environment: 'browser',
 						browser: {
 							enabled: true,
-							headless: isCI,
-							provider: 'playwright',
+							provider: playwright(),
 							api: {
 								host: '127.0.0.1'
 							},

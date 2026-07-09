@@ -8,6 +8,7 @@ Redesign and implement the public contact page so it has a clear user experience
 
 - contact page information architecture
 - updated visual design and layout
+- cleanup icon libraries and standardize the contact page icon set
 - working contact form flow
 - validation, success, and failure states
 - integration with the chosen delivery or notification path

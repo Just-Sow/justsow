@@ -27,3 +27,6 @@ pnpm-debug.log*
 .vscode/
 # Vitest browser failure screenshots
 apps/web/src/tests/**/__screenshots__/
+
+# Local dev mail outbox
+apps/api/apps/api/.data/dev-email-outbox.json
