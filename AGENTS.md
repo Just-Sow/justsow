@@ -18,17 +18,7 @@ Current directories:
 
 Do not assume that planning docs reflect the current implementation unless the code matches them.
 
-## Scoped Reference Docs
-
-Before changing a scoped area, check the matching docs first and keep the code aligned with them unless the user explicitly asks to revise the decision:
-
-- git workflow and commit style: `docs/engineering/decisions/0004-git-workflow.md`
-- auth, identity, and role model: `docs/engineering/decisions/0002-identity-and-role-model.md`, `docs/engineering/decisions/0003-auth-and-dev-database.md`, `docs/engineering/decisions/0005-sign-in-and-two-factor-flow.md`
-- GitHub security and workflow setup: `docs/engineering/decisions/0007-github-security-workflows.md`
-- active workstreams: `docs/planning/active-epics/`
-- durable product direction: `docs/product/current/`
-
-If a scoped doc and the code disagree, treat that as a signal to inspect both before making changes. For accepted decisions, any revision still needs explicit user approval.
+Before changing a task area, read `docs/engineering/decisions/` and any other repo docs that appear relevant to the work. Treat those docs as dynamic guidance: use them to locate the current decision or context, then confirm the code still matches before making changes.
 
 ## Expected Target Structure
 
