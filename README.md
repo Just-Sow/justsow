@@ -1,61 +1,39 @@
 # JustSow
 
-JustSow is evolving into a single product with:
+JustSow is a monorepo for the JustSow web and API applications.
 
-- a public website
-- donor accounts and payments
-- project owner application and content management
-- employee approval and publishing workflows
+It currently contains:
 
-This repository contains the current JustSow codebase and planning material. The current code lives in:
+- `apps/web/` for the SvelteKit web app
+- `apps/api/` for the Fastify API
+- `docs/` for product and engineering documentation
 
-- `apps/web/`
-- `apps/api/`
-- `docs/`
+## Development Commands
 
-## Current Direction
-
-The target structure is:
-
-```text
-apps/
-  web/
-  api/
-packages/
-  shared/
-docs/
-```
-
-The monorepo foundation is in place with a single root git repo, root `pnpm` workspace management, and a thin Turborepo task layer.
-
-## Source of Truth
-
-- `docs/product/current/` contains the latest agreed product direction.
-- `docs/product/planned/` contains draft or future-looking planning material.
-- Application code is the source of truth for implemented behavior.
-- `docs/` is the canonical documentation directory.
-
-## Root Workflow
-
-The intended root developer workflow is:
+Run these from the repository root:
 
 - `pnpm install`
-- `pnpm test:setup` for first-time browser test setup
 - `pnpm dev`
 - `pnpm build`
 - `pnpm lint`
 - `pnpm test`
 - `pnpm typecheck`
 - `pnpm format`
+- `pnpm test:setup`
+- `pnpm check`
 
-Turborepo is used as a thin orchestration layer over the workspace.
+Package-specific commands:
 
-## Git Workflow
-
-The intended git workflow is:
-
-- create one branch per epic or parallel workstream
-- make small commits per task or coherent change
-- keep local env files and machine-specific artifacts out of git
-
-This keeps history readable while still allowing concurrent work across larger streams.
+- `pnpm --filter @justsow/web dev`
+- `pnpm --filter @justsow/web build`
+- `pnpm --filter @justsow/web lint`
+- `pnpm --filter @justsow/web test`
+- `pnpm --filter @justsow/web typecheck`
+- `pnpm --filter @justsow/web format`
+- `pnpm --filter @justsow/web test:setup`
+- `pnpm --filter @justsow/api dev`
+- `pnpm --filter @justsow/api build`
+- `pnpm --filter @justsow/api lint`
+- `pnpm --filter @justsow/api test`
+- `pnpm --filter @justsow/api typecheck`
+- `pnpm --filter @justsow/api format`
