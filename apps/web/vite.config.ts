@@ -33,6 +33,9 @@ export default defineConfig(({ mode }) => {
 						browser: {
 							enabled: true,
 							provider: 'playwright',
+							api: {
+								host: '127.0.0.1'
+							},
 							instances: [{ browser: 'chromium' }]
 						},
 						include: ['src/**/*.svelte.{test,spec}.{js,ts}'],
