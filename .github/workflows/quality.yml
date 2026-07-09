@@ -2,9 +2,6 @@ name: Quality
 
 on:
   pull_request:
-  push:
-    branches:
-      - main
 
 concurrency:
   group: quality-${{ github.workflow }}-${{ github.ref }}
