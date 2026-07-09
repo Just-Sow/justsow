@@ -7,6 +7,7 @@ It currently contains:
 - `apps/web/` for the SvelteKit web app
 - `apps/api/` for the Fastify API
 - `docs/` for product and engineering documentation
+- `LICENSE` for the proprietary license terms
 
 ## Development Commands
 
