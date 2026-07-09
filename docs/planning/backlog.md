@@ -11,7 +11,6 @@
 - create shared package for role, status, and API contract definitions
 - define employee workflow boundaries in the web app
 - define media storage and thumbnail strategy for MVP
-- add initial CI task setup for the monorepo
 - add a branded 404 page and fallback navigation treatment for placeholder public routes
 - redesign and implement the public contact page with a working enquiry flow
 

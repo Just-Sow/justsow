@@ -41,7 +41,8 @@ docs/
 
 ## Workflow Intent
 
-- Prefer root-level commands as the monorepo structure is introduced.
+- Prefer root-level commands as the default entrypoint now that the monorepo and Turbo workflow are in place.
+- Use package-level scripts only when a task is intentionally scoped to one workspace.
 - Standardize on one package manager for the final repo.
 - Keep Turborepo usage minimal: root orchestration, not a complex package graph.
 
@@ -116,6 +117,7 @@ Typically this means checking whether updates are needed in:
 - `docs/planning/roadmap.md`
 - `docs/planning/backlog.md`
 - the relevant file in `docs/planning/active-epics/`
+- the relevant file in `docs/planning/completed-epics/`
 
 Do not create busywork documentation updates for trivial code changes. The standard is: if future sessions or other agents would benefit from the state change being recorded, update the docs in the same turn.
 

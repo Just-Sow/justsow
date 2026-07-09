@@ -4,11 +4,13 @@ This directory is the canonical documentation area for JustSow.
 
 ## Structure
 
+- `planning/` for durable roadmap, backlog, and epic context
 - `product/current/` for the latest agreed product scope and behavior
 - `product/planned/` for draft or future-looking planning material
 - `engineering/decisions/` for architectural decisions that have been made
 - `engineering/architecture/` for system structure and boundaries
 - `engineering/runbooks/` for operational setup and deployment procedures
+- `engineering/` subdirectory READMEs as indexes for their sections
 
 ## Source of Truth
 

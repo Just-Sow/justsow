@@ -2,6 +2,8 @@
 
 ## Phase 1: Repo Foundation
 
+Completed as part of the monorepo and Turbo workflow rollout.
+
 - root monorepo structure
 - standardized workspace tooling
 - root developer workflow

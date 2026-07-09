@@ -6,8 +6,11 @@ It currently contains:
 
 - `apps/web/` for the SvelteKit web app
 - `apps/api/` for the Fastify API
+- `packages/shared/` for shared contracts and domain helpers
 - `docs/` for product and engineering documentation
 - `LICENSE` for the proprietary license terms
+
+The root workspace uses `pnpm` with `turbo` as the task orchestrator.
 
 ## Development Commands
 
@@ -22,6 +25,12 @@ Run these from the repository root:
 - `pnpm format`
 - `pnpm test:setup`
 - `pnpm check`
+- `pnpm db:up`
+- `pnpm db:down`
+- `pnpm db:logs`
+- `pnpm db:prepare`
+- `pnpm db:setup`
+- `pnpm db:reset:dev`
 
 Package-specific commands:
 
