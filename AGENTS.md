@@ -61,6 +61,8 @@ Git approval rules must follow this rule:
 - commits on an epic or other non-`main` branch do not require per-commit user approval
 - merges into `main` require explicit user approval
 - direct commits to `main` require explicit user approval
+- do not run `git push` or any other command that updates the remote; the user will handle pushes
+- `git fetch`, `git pull`, and local inspection commands are allowed
 
 Turn execution rules must follow this rule:
 
