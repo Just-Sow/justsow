@@ -19,12 +19,59 @@ export const authValidation = {
   phoneMaxDigits: 15,
 } as const;
 
-const emailAddressPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const passwordSymbolPattern = /[^A-Za-z0-9\s]/g;
-const phoneNumberPattern = /^\+?[0-9()\-\s]+$/;
-
 export const normalizeNamePart = (value: string) => {
-  return value.trim().replace(/\s+/g, " ");
+  const trimmedValue = value.trim();
+  let result = "";
+  let previousWasWhitespace = false;
+
+  for (const character of trimmedValue) {
+    const isWhitespace = character.trim() === "";
+
+    if (isWhitespace) {
+      previousWasWhitespace = true;
+      continue;
+    }
+
+    if (previousWasWhitespace && result) {
+      result += " ";
+    }
+
+    result += character;
+    previousWasWhitespace = false;
+  }
+
+  return result;
+};
+
+const isAllowedEmailCharacter = (character: string) => {
+  const codePoint = character.codePointAt(0);
+
+  if (codePoint === undefined) {
+    return false;
+  }
+
+  const isLowercaseLetter = codePoint >= 97 && codePoint <= 122;
+  const isUppercaseLetter = codePoint >= 65 && codePoint <= 90;
+  const isDigit = codePoint >= 48 && codePoint <= 57;
+
+  return (
+    isLowercaseLetter ||
+    isUppercaseLetter ||
+    isDigit ||
+    "!#$%&'*+/=?^_`{|}~-.".includes(character)
+  );
+};
+
+const isAllowedPhoneCharacter = (character: string) => {
+  const codePoint = character.codePointAt(0);
+
+  if (codePoint === undefined) {
+    return false;
+  }
+
+  const isDigit = codePoint >= 48 && codePoint <= 57;
+
+  return isDigit || character === "+" || character === "(" || character === ")" || character === "-" || character === " ";
 };
 
 export const buildFullName = (firstName: string, lastName: string) => {
@@ -42,21 +89,104 @@ export const isValidLastName = (value: string) => {
 };
 
 export const isValidEmailAddress = (value: string) => {
-  return emailAddressPattern.test(value.trim());
+  const normalizedValue = value.trim();
+
+  if (!normalizedValue || normalizedValue.includes(" ")) {
+    return false;
+  }
+
+  const atIndex = normalizedValue.indexOf("@");
+  if (atIndex <= 0 || atIndex !== normalizedValue.lastIndexOf("@")) {
+    return false;
+  }
+
+  const localPart = normalizedValue.slice(0, atIndex);
+  const domainPart = normalizedValue.slice(atIndex + 1);
+
+  if (!localPart || !domainPart || domainPart.startsWith(".") || domainPart.endsWith(".")) {
+    return false;
+  }
+
+  if (!localPart.split("").every(isAllowedEmailCharacter)) {
+    return false;
+  }
+
+  const domainLabels = domainPart.split(".");
+  if (domainLabels.length < 2) {
+    return false;
+  }
+
+  if (domainLabels.some((label) => !label)) {
+    return false;
+  }
+
+  return domainLabels.every((label) =>
+    label.split("").every((character) => {
+      const codePoint = character.codePointAt(0);
+
+      if (codePoint === undefined) {
+        return false;
+      }
+
+      const isLowercaseLetter = codePoint >= 97 && codePoint <= 122;
+      const isUppercaseLetter = codePoint >= 65 && codePoint <= 90;
+      const isDigit = codePoint >= 48 && codePoint <= 57;
+
+      return isLowercaseLetter || isUppercaseLetter || isDigit || character === "-";
+    })
+  );
 };
 
 export const normalizePhoneNumber = (value: string) => {
-  return value.trim().replace(/\s+/g, " ");
+  const trimmedValue = value.trim();
+  let result = "";
+  let previousWasWhitespace = false;
+
+  for (const character of trimmedValue) {
+    const isWhitespace = character.trim() === "";
+
+    if (isWhitespace) {
+      previousWasWhitespace = true;
+      continue;
+    }
+
+    if (previousWasWhitespace && result) {
+      result += " ";
+    }
+
+    result += character;
+    previousWasWhitespace = false;
+  }
+
+  return result;
 };
 
 export const isValidPhoneNumber = (value: string) => {
   const normalizedValue = normalizePhoneNumber(value);
 
-  if (!normalizedValue || !phoneNumberPattern.test(normalizedValue)) {
+  if (!normalizedValue) {
     return false;
   }
 
-  const digitCount = normalizedValue.replace(/\D/g, "").length;
+  let digitCount = 0;
+  let hasLeadingPlus = false;
+
+  for (const character of normalizedValue) {
+    if (character === "+" && digitCount === 0 && !hasLeadingPlus) {
+      hasLeadingPlus = true;
+      continue;
+    }
+
+    if (character === " " || character === "(" || character === ")" || character === "-") {
+      continue;
+    }
+
+    if (!isAllowedPhoneCharacter(character)) {
+      return false;
+    }
+
+    digitCount += 1;
+  }
 
   return (
     digitCount >= authValidation.phoneMinDigits &&
@@ -65,7 +195,28 @@ export const isValidPhoneNumber = (value: string) => {
 };
 
 export const countPasswordSymbols = (value: string) => {
-  return value.match(passwordSymbolPattern)?.length ?? 0;
+  let count = 0;
+
+  for (const character of value) {
+    const codePoint = character.codePointAt(0);
+
+    if (codePoint === undefined) {
+      continue;
+    }
+
+    const isLowercaseLetter = codePoint >= 97 && codePoint <= 122;
+    const isUppercaseLetter = codePoint >= 65 && codePoint <= 90;
+    const isDigit = codePoint >= 48 && codePoint <= 57;
+    const isWhitespace = character.trim() === "";
+
+    if (isLowercaseLetter || isUppercaseLetter || isDigit || isWhitespace) {
+      continue;
+    }
+
+    count += 1;
+  }
+
+  return count;
 };
 
 export const hasRequiredPasswordSymbols = (value: string) => {
