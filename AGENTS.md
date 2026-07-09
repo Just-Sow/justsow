@@ -10,6 +10,8 @@ Current directories:
 - `apps/api/` is the Fastify app.
 - `docs/` is the canonical documentation directory.
 
+The product currently centers on donors, Creative Evangelists, and employees, with the website covering authentication, project workflows, approval/publishing, auditability, and eventual payments.
+
 ## Source-of-Truth Rules
 
 - Code is the source of truth for implemented behavior.
@@ -18,7 +20,13 @@ Current directories:
 
 Do not assume that planning docs reflect the current implementation unless the code matches them.
 
-Before changing a task area, read `docs/engineering/decisions/` and any other repo docs that appear relevant to the work. Treat those docs as dynamic guidance: use them to locate the current decision or context, then confirm the code still matches before making changes.
+## Documentation Navigation
+
+Treat each `README.md` under `docs/` as an index page for that directory. Start with `docs/README.md`, then read the relevant subtree README, then inspect the specific decision, planning, product, architecture, or runbook docs that match the task.
+
+For implementation work, inspect `docs/engineering/decisions/` first when a change could affect repo structure, workflow, auth, data model, deployment, or other durable behavior. For product direction, inspect `docs/product/current/` and then any relevant supporting doc under that folder. For active workstreams, inspect `docs/planning/active-epics/`.
+
+Treat these docs as dynamic guidance: use the directory indexes to locate the current context, then confirm the code still matches before changing behavior.
 
 ## Expected Target Structure
 
