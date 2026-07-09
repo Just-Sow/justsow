@@ -66,8 +66,13 @@ Completed:
 - web auth pages now cover sign-up, sign-in, forgot password, reset password, email verification, and 2FA challenge
 - web dev server now proxies auth requests to the API so cookie-based auth can be exercised locally without cross-origin setup
 - shared auth validation constraints now define 8-32 character passwords and require sign-up names to contain at least two words, with API enforcement on sign-up
+- authenticated web UI state now loads from the current auth session API and guards account settings
+- account settings now support self-service name, email, phone number, password, and two-factor management
+- auth profile data now includes phone number, password-changed timestamp, and two-factor enabled timestamp for account settings
+- password changes now record a timestamp and account settings show the latest password and two-factor security status metadata
+- manual sower records can now be created through a development-only API route for local claim-flow testing
+- normal sign-up now auto-claims an existing unlinked sower profile when the email matches
 
 Next:
 
-- connect authenticated UI state and route guards to the current auth session API
-- design and implement the account claiming and profile-management flows in the web app
+- refine and verify the account claiming flow in the web app around normal sign-up and verification

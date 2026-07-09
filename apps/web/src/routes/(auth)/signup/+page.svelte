@@ -126,7 +126,7 @@
 		}
 
 		successMessage =
-			'Your account has been created. Check your email to verify it before signing in.';
+			'Check your inbox for verification instructions. If this email matches an existing sower record, we will link that history to your new account.';
 		password = '';
 		confirmPassword = '';
 		isSubmitting = false;
@@ -136,7 +136,7 @@
 <AuthShell centered title="Create your account">
 	<Card.Header class="gap-2 px-6 pt-6 pb-4 text-center">
 		<Card.Title class="text-2xl">Create your account</Card.Title>
-		<Card.Description>Sign up to get started.</Card.Description>
+		<Card.Description>Sign up to get started or claim an existing sower record with the same email.</Card.Description>
 	</Card.Header>
 
 	<Card.Content class="pb-4">

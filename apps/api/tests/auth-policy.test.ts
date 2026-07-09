@@ -8,7 +8,10 @@ import {
 import { getIdentityTwoFactorState } from '../src/auth/session.js';
 
 test('shared auth capabilities expose accepted two-factor policy', () => {
-  assert.equal(authCapabilities.security.twoFactorAuthentication, 'totp_with_backup_codes');
+  assert.equal(
+    authCapabilities.security.twoFactorAuthentication,
+    'totp_with_backup_codes'
+  );
   assert.deepEqual(authCapabilities.security.twoFactorPolicy.recommendedRoles, [
     'creative_evangelist',
     'sower',
@@ -33,9 +36,12 @@ test('roleRequiresTwoFactor matches the accepted role policy', () => {
 
 test('identity two-factor state reflects mixed-role requirements', () => {
   assert.deepEqual(
-    getIdentityTwoFactorState(['creative_evangelist'], { twoFactorEnabled: false }),
+    getIdentityTwoFactorState(['creative_evangelist'], {
+      twoFactorEnabled: false,
+    }),
     {
       enabled: false,
+      enabledAt: null,
       required: false,
       requiredForRoles: [],
       satisfied: true,
@@ -46,6 +52,7 @@ test('identity two-factor state reflects mixed-role requirements', () => {
     getIdentityTwoFactorState(['admin'], { twoFactorEnabled: false }),
     {
       enabled: false,
+      enabledAt: null,
       required: true,
       requiredForRoles: ['admin'],
       satisfied: false,
@@ -53,9 +60,13 @@ test('identity two-factor state reflects mixed-role requirements', () => {
   );
 
   assert.deepEqual(
-    getIdentityTwoFactorState(['creative_evangelist', 'gatekeeper'], { twoFactorEnabled: true }),
+    getIdentityTwoFactorState(['creative_evangelist', 'gatekeeper'], {
+      twoFactorEnabled: true,
+      twoFactorEnabledAt: '2026-07-09T00:00:00.000Z',
+    }),
     {
       enabled: true,
+      enabledAt: '2026-07-09T00:00:00.000Z',
       required: true,
       requiredForRoles: ['gatekeeper'],
       satisfied: true,

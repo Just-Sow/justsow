@@ -84,6 +84,92 @@ test('sign-up queues verification email and dev outbox endpoints expose it', asy
   }
 });
 
+test('development sower profiles can be created and are auto-claimed on sign-up by matching email', async () => {
+  const server = await startServer();
+
+  try {
+    const createProfile = await fetch(
+      `${server.baseUrl}/auth/dev/sower-profiles`,
+      {
+        method: 'POST',
+        headers: jsonHeaders,
+        body: JSON.stringify({
+          displayName: 'Claimable Sower',
+          contactEmail: 'claimable-sower@example.com',
+          notes: 'Created in development for claim flow testing.',
+        }),
+      }
+    );
+
+    assert.equal(createProfile.status, 201);
+    const createProfilePayload = await createProfile.json();
+    assert.equal(
+      createProfilePayload.profile.contactEmail,
+      'claimable-sower@example.com'
+    );
+    assert.equal(createProfilePayload.profile.linkedUserId, null);
+
+    const signUp = await fetch(`${server.baseUrl}/api/auth/sign-up/email`, {
+      method: 'POST',
+      headers: authRequestHeaders,
+      body: JSON.stringify({
+        name: 'Claimable Sower',
+        firstName: 'Claimable',
+        lastName: 'Sower',
+        email: 'claimable-sower@example.com',
+        password: 'claimable-password-123!',
+      }),
+    });
+
+    assert.equal(signUp.status, 200);
+
+    const queuedEmails = await fetch(`${server.baseUrl}/auth/dev/emails`);
+    const emailPayload = await queuedEmails.json();
+    const verificationToken = extractTokenFromUrl(emailPayload.emails[0].url);
+
+    assert.ok(verificationToken);
+
+    await fetch(
+      `${server.baseUrl}/api/auth/verify-email?token=${verificationToken}&callbackURL=%2F`,
+      {
+        redirect: 'manual',
+      }
+    );
+
+    const signIn = await fetch(`${server.baseUrl}/api/auth/sign-in/email`, {
+      method: 'POST',
+      headers: authRequestHeaders,
+      body: JSON.stringify({
+        email: 'claimable-sower@example.com',
+        password: 'claimable-password-123!',
+      }),
+    });
+
+    assert.equal(signIn.status, 200);
+    const cookieHeader = getCookieHeader(signIn);
+
+    const me = await fetch(`${server.baseUrl}/auth/me`, {
+      headers: {
+        cookie: cookieHeader,
+      },
+    });
+
+    assert.equal(me.status, 200);
+    const mePayload = await me.json();
+
+    assert.equal(mePayload.sowerProfile.displayName, 'Claimable Sower');
+    assert.equal(
+      mePayload.sowerProfile.contactEmail,
+      'claimable-sower@example.com'
+    );
+    assert.equal(mePayload.sowerProfile.linkedUserId, mePayload.user.id);
+    assert.ok(mePayload.sowerProfile.claimedAt);
+    assert.deepEqual(mePayload.roles, ['sower']);
+  } finally {
+    await server.close();
+  }
+});
+
 test('sign-up requires both first and last names', async () => {
   const server = await startServer();
 
@@ -113,35 +199,44 @@ test('sign-up does not create a second account for a duplicate email address', a
   const server = await startServer();
 
   try {
-    const firstSignUp = await fetch(`${server.baseUrl}/api/auth/sign-up/email`, {
-      method: 'POST',
-      headers: authRequestHeaders,
-      body: JSON.stringify({
-        name: 'Duplicate User',
-        firstName: 'Duplicate',
-        lastName: 'User',
-        email: 'duplicate-user@example.com',
-        password: 'test-password-123!',
-      }),
-    });
+    const firstSignUp = await fetch(
+      `${server.baseUrl}/api/auth/sign-up/email`,
+      {
+        method: 'POST',
+        headers: authRequestHeaders,
+        body: JSON.stringify({
+          name: 'Duplicate User',
+          firstName: 'Duplicate',
+          lastName: 'User',
+          email: 'duplicate-user@example.com',
+          password: 'test-password-123!',
+        }),
+      }
+    );
 
     assert.equal(firstSignUp.status, 200);
 
-    const secondSignUp = await fetch(`${server.baseUrl}/api/auth/sign-up/email`, {
-      method: 'POST',
-      headers: authRequestHeaders,
-      body: JSON.stringify({
-        name: 'Another User',
-        firstName: 'Another',
-        lastName: 'User',
-        email: 'duplicate-user@example.com',
-        password: 'test-password-123!',
-      }),
-    });
+    const secondSignUp = await fetch(
+      `${server.baseUrl}/api/auth/sign-up/email`,
+      {
+        method: 'POST',
+        headers: authRequestHeaders,
+        body: JSON.stringify({
+          name: 'Another User',
+          firstName: 'Another',
+          lastName: 'User',
+          email: 'duplicate-user@example.com',
+          password: 'test-password-123!',
+        }),
+      }
+    );
 
     assert.equal(secondSignUp.status, 200);
 
-    const users = await db.select().from(user).where(eq(user.email, 'duplicate-user@example.com'));
+    const users = await db
+      .select()
+      .from(user)
+      .where(eq(user.email, 'duplicate-user@example.com'));
 
     assert.equal(users.length, 1);
     const existingUser = users[0];
@@ -196,14 +291,17 @@ test('email verification gates sign-in until verified, then exposes authenticate
       }),
     });
 
-    const blockedSignIn = await fetch(`${server.baseUrl}/api/auth/sign-in/email`, {
-      method: 'POST',
-      headers: authRequestHeaders,
-      body: JSON.stringify({
-        email: 'verified-user@example.com',
-        password: 'test-password-123',
-      }),
-    });
+    const blockedSignIn = await fetch(
+      `${server.baseUrl}/api/auth/sign-in/email`,
+      {
+        method: 'POST',
+        headers: authRequestHeaders,
+        body: JSON.stringify({
+          email: 'verified-user@example.com',
+          password: 'test-password-123',
+        }),
+      }
+    );
 
     assert.equal(blockedSignIn.status, 403);
 
@@ -255,6 +353,7 @@ test('email verification gates sign-in until verified, then exposes authenticate
     assert.deepEqual(mePayload.roles, []);
     assert.deepEqual(mePayload.security.twoFactor, {
       enabled: false,
+      enabledAt: null,
       required: false,
       requiredForRoles: [],
       satisfied: true,
@@ -268,7 +367,10 @@ test('email verification gates sign-in until verified, then exposes authenticate
 
     assert.equal(security.status, 200);
     const securityPayload = await security.json();
-    assert.equal(securityPayload.routes.manage.enable, '/api/auth/two-factor/enable');
+    assert.equal(
+      securityPayload.routes.manage.enable,
+      '/api/auth/two-factor/enable'
+    );
   } finally {
     await server.close();
   }
@@ -296,14 +398,17 @@ test('password reset queues a reset email and the new password becomes usable', 
 
     assert.equal(clearOutbox.status, 200);
 
-    const resetRequest = await fetch(`${server.baseUrl}/api/auth/request-password-reset`, {
-      method: 'POST',
-      headers: authRequestHeaders,
-      body: JSON.stringify({
-        email: 'reset-user@example.com',
-        redirectTo: '/reset-password',
-      }),
-    });
+    const resetRequest = await fetch(
+      `${server.baseUrl}/api/auth/request-password-reset`,
+      {
+        method: 'POST',
+        headers: authRequestHeaders,
+        body: JSON.stringify({
+          email: 'reset-user@example.com',
+          redirectTo: '/reset-password',
+        }),
+      }
+    );
 
     assert.equal(resetRequest.status, 200);
 
@@ -330,25 +435,31 @@ test('password reset queues a reset email and the new password becomes usable', 
     assert.equal(resetPassword.status, 200);
     assert.equal((await resetPassword.json()).status, true);
 
-    const oldPasswordSignIn = await fetch(`${server.baseUrl}/api/auth/sign-in/email`, {
-      method: 'POST',
-      headers: authRequestHeaders,
-      body: JSON.stringify({
-        email: 'reset-user@example.com',
-        password: 'original-password-123',
-      }),
-    });
+    const oldPasswordSignIn = await fetch(
+      `${server.baseUrl}/api/auth/sign-in/email`,
+      {
+        method: 'POST',
+        headers: authRequestHeaders,
+        body: JSON.stringify({
+          email: 'reset-user@example.com',
+          password: 'original-password-123',
+        }),
+      }
+    );
 
     assert.equal(oldPasswordSignIn.status, 401);
 
-    const newPasswordSignIn = await fetch(`${server.baseUrl}/api/auth/sign-in/email`, {
-      method: 'POST',
-      headers: authRequestHeaders,
-      body: JSON.stringify({
-        email: 'reset-user@example.com',
-        password: 'updated-password-123',
-      }),
-    });
+    const newPasswordSignIn = await fetch(
+      `${server.baseUrl}/api/auth/sign-in/email`,
+      {
+        method: 'POST',
+        headers: authRequestHeaders,
+        body: JSON.stringify({
+          email: 'reset-user@example.com',
+          password: 'updated-password-123',
+        }),
+      }
+    );
 
     assert.equal(newPasswordSignIn.status, 403);
   } finally {
@@ -378,9 +489,12 @@ test('required-role users are blocked from privileged routes until two-factor is
 
     assert.ok(verificationToken);
 
-    await fetch(`${server.baseUrl}/api/auth/verify-email?token=${verificationToken}&callbackURL=%2F`, {
-      redirect: 'manual',
-    });
+    await fetch(
+      `${server.baseUrl}/api/auth/verify-email?token=${verificationToken}&callbackURL=%2F`,
+      {
+        redirect: 'manual',
+      }
+    );
 
     const signIn = await fetch(`${server.baseUrl}/api/auth/sign-in/email`, {
       method: 'POST',
@@ -409,21 +523,25 @@ test('required-role users are blocked from privileged routes until two-factor is
     assert.equal(rolesResponse.status, 200);
     assert.deepEqual((await rolesResponse.json()).security.twoFactor, {
       enabled: false,
+      enabledAt: null,
       required: true,
       requiredForRoles: ['admin'],
       satisfied: false,
     });
 
-    const blockedRoute = await fetch(`${server.baseUrl}/auth/admin/sower-profiles`, {
-      method: 'POST',
-      headers: {
-        ...jsonHeaders,
-        cookie: cookieHeader,
-      },
-      body: JSON.stringify({
-        displayName: 'Blocked Without 2FA',
-      }),
-    });
+    const blockedRoute = await fetch(
+      `${server.baseUrl}/auth/admin/sower-profiles`,
+      {
+        method: 'POST',
+        headers: {
+          ...jsonHeaders,
+          cookie: cookieHeader,
+        },
+        body: JSON.stringify({
+          displayName: 'Blocked Without 2FA',
+        }),
+      }
+    );
 
     assert.equal(blockedRoute.status, 403);
     assert.deepEqual(await blockedRoute.json(), {
@@ -438,6 +556,104 @@ test('required-role users are blocked from privileged routes until two-factor is
 
     assert.equal(assignment.length, 1);
     assert.equal(assignment[0]?.role, 'admin');
+  } finally {
+    await server.close();
+  }
+});
+
+test('authenticated users can update their phone number and changing a password records a timestamp', async () => {
+  const server = await startServer();
+
+  try {
+    await fetch(`${server.baseUrl}/api/auth/sign-up/email`, {
+      method: 'POST',
+      headers: authRequestHeaders,
+      body: JSON.stringify({
+        name: 'Settings User',
+        firstName: 'Settings',
+        lastName: 'User',
+        email: 'settings-user@example.com',
+        password: 'settings-password-123!',
+      }),
+    });
+
+    const emails = await fetch(`${server.baseUrl}/auth/dev/emails`);
+    const emailPayload = await emails.json();
+    const verificationToken = extractTokenFromUrl(emailPayload.emails[0].url);
+
+    assert.ok(verificationToken);
+
+    await fetch(
+      `${server.baseUrl}/api/auth/verify-email?token=${verificationToken}&callbackURL=%2F`,
+      {
+        redirect: 'manual',
+      }
+    );
+
+    const signIn = await fetch(`${server.baseUrl}/api/auth/sign-in/email`, {
+      method: 'POST',
+      headers: authRequestHeaders,
+      body: JSON.stringify({
+        email: 'settings-user@example.com',
+        password: 'settings-password-123!',
+      }),
+    });
+
+    assert.equal(signIn.status, 200);
+    const cookieHeader = getCookieHeader(signIn);
+
+    const updatePhone = await fetch(`${server.baseUrl}/api/auth/update-user`, {
+      method: 'POST',
+      headers: {
+        ...authRequestHeaders,
+        cookie: cookieHeader,
+      },
+      body: JSON.stringify({
+        phoneNumber: '+61 400 000 000',
+      }),
+    });
+
+    assert.equal(updatePhone.status, 200);
+
+    const changePassword = await fetch(
+      `${server.baseUrl}/api/auth/change-password`,
+      {
+        method: 'POST',
+        headers: {
+          ...authRequestHeaders,
+          cookie: cookieHeader,
+        },
+        body: JSON.stringify({
+          currentPassword: 'settings-password-123!',
+          newPassword: 'updated-settings-password-123!',
+          revokeOtherSessions: false,
+        }),
+      }
+    );
+
+    assert.equal(changePassword.status, 200);
+
+    const me = await fetch(`${server.baseUrl}/auth/me`, {
+      headers: {
+        cookie: cookieHeader,
+      },
+    });
+
+    assert.equal(me.status, 200);
+    const mePayload = await me.json();
+
+    assert.equal(mePayload.user.phoneNumber, '+61 400 000 000');
+    assert.ok(mePayload.user.passwordChangedAt);
+    assert.equal(mePayload.security.twoFactor.enabledAt, null);
+
+    const users = await db
+      .select()
+      .from(user)
+      .where(eq(user.email, 'settings-user@example.com'));
+
+    assert.equal(users.length, 1);
+    assert.equal(users[0]?.phoneNumber, '+61 400 000 000');
+    assert.ok(users[0]?.passwordChangedAt);
   } finally {
     await server.close();
   }

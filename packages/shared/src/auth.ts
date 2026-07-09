@@ -1,10 +1,10 @@
 export const userRoles = [
-  'creative_evangelist',
-  'sower',
-  'gatekeeper',
-  'seed_allocator',
-  'stewardship_staff',
-  'admin',
+  "creative_evangelist",
+  "sower",
+  "gatekeeper",
+  "seed_allocator",
+  "stewardship_staff",
+  "admin",
 ] as const;
 
 export type UserRole = (typeof userRoles)[number];
@@ -15,17 +15,22 @@ export const authValidation = {
   passwordMinSymbols: 1,
   firstNameMinLength: 1,
   lastNameMinLength: 1,
+  phoneMinDigits: 7,
+  phoneMaxDigits: 15,
 } as const;
 
 const emailAddressPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordSymbolPattern = /[^A-Za-z0-9\s]/g;
+const phoneNumberPattern = /^\+?[0-9()\-\s]+$/;
 
 export const normalizeNamePart = (value: string) => {
-  return value.trim().replace(/\s+/g, ' ');
+  return value.trim().replace(/\s+/g, " ");
 };
 
 export const buildFullName = (firstName: string, lastName: string) => {
-  return [normalizeNamePart(firstName), normalizeNamePart(lastName)].filter(Boolean).join(' ');
+  return [normalizeNamePart(firstName), normalizeNamePart(lastName)]
+    .filter(Boolean)
+    .join(" ");
 };
 
 export const isValidFirstName = (value: string) => {
@@ -40,6 +45,25 @@ export const isValidEmailAddress = (value: string) => {
   return emailAddressPattern.test(value.trim());
 };
 
+export const normalizePhoneNumber = (value: string) => {
+  return value.trim().replace(/\s+/g, " ");
+};
+
+export const isValidPhoneNumber = (value: string) => {
+  const normalizedValue = normalizePhoneNumber(value);
+
+  if (!normalizedValue || !phoneNumberPattern.test(normalizedValue)) {
+    return false;
+  }
+
+  const digitCount = normalizedValue.replace(/\D/g, "").length;
+
+  return (
+    digitCount >= authValidation.phoneMinDigits &&
+    digitCount <= authValidation.phoneMaxDigits
+  );
+};
+
 export const countPasswordSymbols = (value: string) => {
   return value.match(passwordSymbolPattern)?.length ?? 0;
 };
@@ -48,33 +72,36 @@ export const hasRequiredPasswordSymbols = (value: string) => {
   return countPasswordSymbols(value) >= authValidation.passwordMinSymbols;
 };
 
-export const twoFactorRecommendedRoles = ['creative_evangelist', 'sower'] as const;
+export const twoFactorRecommendedRoles = [
+  "creative_evangelist",
+  "sower",
+] as const;
 
 export const twoFactorRequiredRoles = [
-  'gatekeeper',
-  'seed_allocator',
-  'stewardship_staff',
-  'admin',
+  "gatekeeper",
+  "seed_allocator",
+  "stewardship_staff",
+  "admin",
 ] as const satisfies readonly UserRole[];
 
 export const accountLifecycleStages = [
-  'pending_email_verification',
-  'active',
-  'password_reset_required',
-  'email_change_pending',
-  'disabled',
+  "pending_email_verification",
+  "active",
+  "password_reset_required",
+  "email_change_pending",
+  "disabled",
 ] as const;
 
 export type AccountLifecycleStage = (typeof accountLifecycleStages)[number];
 
 export const authFlowKeys = [
-  'sign_up',
-  'sign_in',
-  'verify_email',
-  'password_reset',
-  'email_update',
-  'two_factor_authentication',
-  'sower_claim',
+  "sign_up",
+  "sign_in",
+  "verify_email",
+  "password_reset",
+  "email_update",
+  "two_factor_authentication",
+  "sower_claim",
 ] as const;
 
 export type AuthFlowKey = (typeof authFlowKeys)[number];
@@ -91,39 +118,39 @@ export const rolesRequireTwoFactor = (roles: readonly UserRole[]) => {
 
 export const roleCapabilities: RoleCapabilityMap = {
   creative_evangelist: [
-    'create draft projects',
-    'submit projects for review',
-    'respond to revision requests',
-    'propose edits to owned projects',
-    'view owned project history',
+    "create draft projects",
+    "submit projects for review",
+    "respond to revision requests",
+    "propose edits to owned projects",
+    "view owned project history",
   ],
   sower: [
-    'sign in to an account',
-    'view personal seed history',
-    'claim a manually created sower record',
+    "sign in to an account",
+    "view personal seed history",
+    "claim a manually created sower record",
   ],
   gatekeeper: [
-    'review submissions and edits',
-    'approve, reject, or request revisions',
-    'control project visibility and publishing',
-    'mark completed projects as case studies',
+    "review submissions and edits",
+    "approve, reject, or request revisions",
+    "control project visibility and publishing",
+    "mark completed projects as case studies",
   ],
   seed_allocator: [
-    'create manual sower records',
-    'link a seed to a project',
-    'mark a project as sown',
-    'maintain seed allocation records',
+    "create manual sower records",
+    "link a seed to a project",
+    "mark a project as sown",
+    "maintain seed allocation records",
   ],
   stewardship_staff: [
-    'view project and seed records',
-    'view archived items',
-    'support stewardship workflows',
+    "view project and seed records",
+    "view archived items",
+    "support stewardship workflows",
   ],
   admin: [
-    'manage users',
-    'assign roles',
-    'manage security-sensitive platform settings',
-    'oversee access policies',
+    "manage users",
+    "assign roles",
+    "manage security-sensitive platform settings",
+    "oversee access policies",
   ],
 };
 
@@ -137,7 +164,7 @@ export interface AuthCapabilities {
     readonly emailVerificationRequired: boolean;
     readonly passwordResetEnabled: boolean;
     readonly emailUpdateEnabled: boolean;
-    readonly twoFactorAuthentication: 'totp_with_backup_codes';
+    readonly twoFactorAuthentication: "totp_with_backup_codes";
     readonly twoFactorPolicy: {
       readonly recommendedRoles: readonly UserRole[];
       readonly requiredRoles: readonly UserRole[];
@@ -152,11 +179,13 @@ export interface AuthCapabilities {
     readonly passwordMinSymbols: number;
     readonly firstNameMinLength: number;
     readonly lastNameMinLength: number;
+    readonly phoneMinDigits: number;
+    readonly phoneMaxDigits: number;
   };
   readonly sowerClaiming: {
     readonly enabled: boolean;
     readonly preservesHistory: boolean;
-    readonly verification: 'email_ownership_plus_staff_review';
+    readonly verification: "email_ownership_plus_staff_review";
   };
 }
 
@@ -170,7 +199,7 @@ export const authCapabilities: AuthCapabilities = {
     emailVerificationRequired: true,
     passwordResetEnabled: true,
     emailUpdateEnabled: true,
-    twoFactorAuthentication: 'totp_with_backup_codes',
+    twoFactorAuthentication: "totp_with_backup_codes",
     twoFactorPolicy: {
       recommendedRoles: twoFactorRecommendedRoles,
       requiredRoles: twoFactorRequiredRoles,
@@ -183,6 +212,6 @@ export const authCapabilities: AuthCapabilities = {
   sowerClaiming: {
     enabled: true,
     preservesHistory: true,
-    verification: 'email_ownership_plus_staff_review',
+    verification: "email_ownership_plus_staff_review",
   },
 };

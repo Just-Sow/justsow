@@ -5,6 +5,8 @@ import {
 	isValidEmailAddress,
 	isValidFirstName,
 	isValidLastName,
+	isValidPhoneNumber,
+	normalizePhoneNumber,
 	normalizeNamePart
 } from '../../../../../packages/shared/src/index.js';
 
@@ -36,6 +38,14 @@ export const validateLastName = (value: string) => {
 	}
 
 	return isValidLastName(value) ? '' : 'Please enter your last name.';
+};
+
+export const validatePhoneNumber = (value: string) => {
+	if (!value.trim()) {
+		return '';
+	}
+
+	return isValidPhoneNumber(normalizePhoneNumber(value)) ? '' : 'Enter a valid phone number.';
 };
 
 export const validatePassword = (value: string) => {

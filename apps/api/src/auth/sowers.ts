@@ -1,4 +1,4 @@
-import { and, desc, eq, isNull } from 'drizzle-orm';
+import { and, desc, eq, isNull, sql } from 'drizzle-orm';
 import type { InferInsertModel } from 'drizzle-orm';
 import { db } from '../db/client.js';
 import { sowerClaim, sowerProfile } from '../db/schema/app.js';
@@ -22,12 +22,18 @@ export interface ResolveSowerClaimInput {
   notes?: string;
 }
 
-export const createManualSowerProfile = async (input: CreateManualSowerProfileInput) => {
+const normalizeContactEmail = (value: string) => value.trim().toLowerCase();
+
+export const createManualSowerProfile = async (
+  input: CreateManualSowerProfileInput
+) => {
   const [profile] = await db
     .insert(sowerProfile)
     .values({
       displayName: input.displayName,
-      contactEmail: input.contactEmail,
+      contactEmail: input.contactEmail
+        ? normalizeContactEmail(input.contactEmail)
+        : undefined,
       createdByUserId: input.createdByUserId,
       notes: input.notes,
       source: 'staff_manual',
@@ -39,6 +45,10 @@ export const createManualSowerProfile = async (input: CreateManualSowerProfileIn
   }
 
   return profile;
+};
+
+export const listSowerProfiles = async () => {
+  return db.select().from(sowerProfile).orderBy(desc(sowerProfile.createdAt));
 };
 
 export const listSowerClaimsForProfile = async (sowerProfileId: string) => {
@@ -75,7 +85,9 @@ export const completeSowerClaim = async (input: ResolveSowerClaimInput) => {
       resolvedByUserId: input.resolvedByUserId,
       notes: input.notes,
     })
-    .where(and(eq(sowerClaim.id, input.claimId), eq(sowerClaim.status, 'pending')))
+    .where(
+      and(eq(sowerClaim.id, input.claimId), eq(sowerClaim.status, 'pending'))
+    )
     .returning();
 
   if (!claim) {
@@ -89,7 +101,12 @@ export const completeSowerClaim = async (input: ResolveSowerClaimInput) => {
       claimedAt: new Date(),
       updatedAt: new Date(),
     })
-    .where(and(eq(sowerProfile.id, claim.sowerProfileId), isNull(sowerProfile.linkedUserId)))
+    .where(
+      and(
+        eq(sowerProfile.id, claim.sowerProfileId),
+        isNull(sowerProfile.linkedUserId)
+      )
+    )
     .returning();
 
   return {
@@ -107,7 +124,9 @@ export const rejectSowerClaim = async (input: ResolveSowerClaimInput) => {
       resolvedByUserId: input.resolvedByUserId,
       notes: input.notes,
     })
-    .where(and(eq(sowerClaim.id, input.claimId), eq(sowerClaim.status, 'pending')))
+    .where(
+      and(eq(sowerClaim.id, input.claimId), eq(sowerClaim.status, 'pending'))
+    )
     .returning();
 
   return claim ?? null;
@@ -119,6 +138,44 @@ export const findSowerProfileByLinkedUser = async (linkedUserId: string) => {
     .from(sowerProfile)
     .where(eq(sowerProfile.linkedUserId, linkedUserId))
     .limit(1);
+
+  return profile ?? null;
+};
+
+export const findUnclaimedSowerProfileByEmail = async (email: string) => {
+  const normalizedEmail = normalizeContactEmail(email);
+  const [profile] = await db
+    .select()
+    .from(sowerProfile)
+    .where(
+      and(
+        isNull(sowerProfile.linkedUserId),
+        sql`lower(${sowerProfile.contactEmail}) = ${normalizedEmail}`
+      )
+    )
+    .limit(1);
+
+  return profile ?? null;
+};
+
+export const claimSowerProfileForUser = async (input: {
+  profileId: string;
+  userId: string;
+}) => {
+  const [profile] = await db
+    .update(sowerProfile)
+    .set({
+      linkedUserId: input.userId,
+      claimedAt: new Date(),
+      updatedAt: new Date(),
+    })
+    .where(
+      and(
+        eq(sowerProfile.id, input.profileId),
+        isNull(sowerProfile.linkedUserId)
+      )
+    )
+    .returning();
 
   return profile ?? null;
 };

@@ -39,6 +39,8 @@ Current auth API surface:
 - `GET /auth/setup`
 - `GET /auth/dev/emails`
 - `DELETE /auth/dev/emails`
+- `GET /auth/dev/sower-profiles`
+- `POST /auth/dev/sower-profiles`
 - `GET /auth/me`
 - `GET /auth/security`
 - `GET /auth/roles`
@@ -69,3 +71,4 @@ Current email lifecycle direction:
 - development uses a file-backed outbox at `apps/api/.data/dev-email-outbox.json`
 - use `GET /auth/dev/emails` to inspect the latest verification and reset links during local UI work
 - use `DELETE /auth/dev/emails` to clear the local outbox between test runs
+- use `POST /auth/dev/sower-profiles` to create a manual unclaimed sower record for local claim-flow testing

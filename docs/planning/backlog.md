@@ -17,7 +17,6 @@
 ## Medium-Term
 
 - implement sower account claiming flow
-- implement two-factor authentication flows
 - design case study publishing workflow
 - define initial production deployment runbooks
 

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { like, and, eq } from 'drizzle-orm';
 import type { FastifyPluginAsync, FastifyReply } from 'fastify';
 import type { UserRole } from '../../../../packages/shared/src/index.js';
 import {
@@ -17,6 +18,8 @@ import {
 import { getRequestIdentity, hasRequiredRole } from '../auth/session.js';
 import { createAuditEvent } from '../audit/events.js';
 import { userRoles } from '../../../../packages/shared/src/index.js';
+import { db } from '../db/client.js';
+import { verification } from '../db/schema/auth.js';
 
 const createSowerProfileSchema = z.object({
   displayName: z.string().min(1),
@@ -112,12 +115,51 @@ export const authAppRoutes: FastifyPluginAsync = async (app) => {
         manage: {
           enable: '/api/auth/two-factor/enable',
           disable: '/api/auth/two-factor/disable',
+          clearTrustedDevices: '/auth/security/trusted-devices/clear',
           getTotpUri: '/api/auth/two-factor/get-totp-uri',
           verifyTotp: '/api/auth/two-factor/verify-totp',
           verifyBackupCode: '/api/auth/two-factor/verify-backup-code',
           generateBackupCodes: '/api/auth/two-factor/generate-backup-codes',
         },
       },
+    };
+  });
+
+  app.post('/auth/security/trusted-devices/clear', async (request, reply) => {
+    const identity = await getRequestIdentity(request);
+
+    if (!identity) {
+      return reply.code(401).send({
+        error: 'UNAUTHORIZED',
+      });
+    }
+
+    await db
+      .delete(verification)
+      .where(
+        and(
+          eq(verification.value, identity.user.id),
+          like(verification.identifier, 'trust-device-%')
+        )
+      );
+
+    reply.header(
+      'set-cookie',
+      'trust_device=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax'
+    );
+
+    await createAuditEvent({
+      actorType: 'user',
+      actorUserId: identity.user.id,
+      action: 'two_factor.trusted_devices_cleared',
+      targetType: 'user',
+      targetId: identity.user.id,
+      ipAddress: request.ip,
+      userAgent: request.headers['user-agent'],
+    });
+
+    return {
+      status: true,
     };
   });
 

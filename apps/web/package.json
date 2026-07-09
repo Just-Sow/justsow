@@ -21,15 +21,15 @@
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.22.0",
 		"@iconify-json/mdi": "^1.2.3",
-		"@internationalized/date": "^3.8.1",
-		"@lucide/svelte": "^0.515.0",
+		"@internationalized/date": "^3.12.2",
+		"@lucide/svelte": "^1.23.0",
 		"@sveltejs/adapter-auto": "^6.1.0",
 		"@sveltejs/kit": "^2.22.0",
 		"@sveltejs/vite-plugin-svelte": "^6.0.0",
 		"@tailwindcss/vite": "^4.0.0",
 		"@types/node": "^22",
 		"@vitest/browser": "^3.2.3",
-		"bits-ui": "^2.8.6",
+		"bits-ui": "^2.18.1",
 		"clsx": "^2.1.1",
 		"eslint": "^9.22.0",
 		"eslint-config-prettier": "^10.0.1",
@@ -51,5 +51,11 @@
 		"vite": "^7.0.4",
 		"vitest": "^3.2.3",
 		"vitest-browser-svelte": "^0.1.0"
+	},
+	"dependencies": {
+		"@iconify-json/flagpack": "^1.2.8",
+		"@iconify/svelte": "^5.2.2",
+		"libphonenumber-js": "^1.13.8",
+		"qrcode": "^1.5.4"
 	}
 }

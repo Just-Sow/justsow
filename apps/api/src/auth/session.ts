@@ -9,17 +9,21 @@ import { listActiveRolesForUser } from './roles.js';
 
 interface TwoFactorCapableUser {
   twoFactorEnabled?: boolean | null;
+  twoFactorEnabledAt?: Date | string | null;
 }
 
 export interface IdentityTwoFactorState {
   enabled: boolean;
+  enabledAt: string | null;
   required: boolean;
   requiredForRoles: UserRole[];
   satisfied: boolean;
 }
 
 const hasTwoFactorEnabled = (user: unknown): user is TwoFactorCapableUser => {
-  return typeof user === 'object' && user !== null && 'twoFactorEnabled' in user;
+  return (
+    typeof user === 'object' && user !== null && 'twoFactorEnabled' in user
+  );
 };
 
 export const getIdentityTwoFactorState = (
@@ -28,9 +32,16 @@ export const getIdentityTwoFactorState = (
 ): IdentityTwoFactorState => {
   const enabled = hasTwoFactorEnabled(user) && user.twoFactorEnabled === true;
   const requiredForRoles = roles.filter((role) => roleRequiresTwoFactor(role));
+  const enabledAt =
+    hasTwoFactorEnabled(user) && user.twoFactorEnabledAt
+      ? user.twoFactorEnabledAt instanceof Date
+        ? user.twoFactorEnabledAt.toISOString()
+        : user.twoFactorEnabledAt
+      : null;
 
   return {
     enabled,
+    enabledAt,
     required: requiredForRoles.length > 0,
     requiredForRoles,
     satisfied: requiredForRoles.length === 0 || enabled,
@@ -61,6 +72,9 @@ export const getRequestIdentity = async (request: FastifyRequest) => {
   };
 };
 
-export const hasRequiredRole = (roles: readonly UserRole[], requiredRoles: readonly UserRole[]) => {
+export const hasRequiredRole = (
+  roles: readonly UserRole[],
+  requiredRoles: readonly UserRole[]
+) => {
   return requiredRoles.some((role) => roles.includes(role));
 };
