@@ -19,6 +19,20 @@ JustSow will use:
 
 Epic branches should hold related work for a single larger stream, while individual commits should stay narrow enough to preserve readable history and safe rollback points.
 
+## Commit Message Structure
+
+Use a short, conventional subject line:
+
+`type(scope): imperative summary`
+
+Examples:
+
+- `fix(auth): add route rate limiting`
+- `docs(git): add commit message guidance`
+- `feat(web): tighten otp layout`
+
+Keep the subject under about 72 characters when practical. Add a brief body only when the change needs context that the subject cannot carry on its own.
+
 ## Why
 
 - concurrent work is expected across epics and sub-tasks
