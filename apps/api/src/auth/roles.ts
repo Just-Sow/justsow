@@ -23,7 +23,12 @@ export const listActiveRolesForUser = async (userId: string) => {
       role: userRoleAssignment.role,
     })
     .from(userRoleAssignment)
-    .where(and(eq(userRoleAssignment.userId, userId), isNull(userRoleAssignment.revokedAt)));
+    .where(
+      and(
+        eq(userRoleAssignment.userId, userId),
+        isNull(userRoleAssignment.revokedAt)
+      )
+    );
 
   return assignments.map((assignment) => assignment.role);
 };

@@ -18,7 +18,12 @@ const readOutbox = async () => {
     const file = await readFile(outboxPath, 'utf8');
     return JSON.parse(file) as DevelopmentEmailRecord[];
   } catch (error) {
-    if (typeof error === 'object' && error !== null && 'code' in error && error.code === 'ENOENT') {
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      'code' in error &&
+      error.code === 'ENOENT'
+    ) {
       return [];
     }
 

@@ -14,6 +14,7 @@
     "db:migrate": "drizzle-kit migrate --config=drizzle.config.ts",
     "db:migrate:test": "node --import tsx scripts/migrate-test-database.ts",
     "db:setup": "pnpm run db:prepare && pnpm run db:migrate && pnpm run db:migrate:test",
+    "db:reset:dev": "node --import tsx scripts/reset-and-seed-dev-database.ts",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx scripts/run-tests.ts"
   },

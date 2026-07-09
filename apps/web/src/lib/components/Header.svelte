@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { ChevronDown, LogOut, Settings, UserRound } from '@lucide/svelte';
 	import { authRequest } from '$lib/auth/client.js';
 	import { getAuthStore } from '$lib/auth/store.js';
@@ -33,20 +34,28 @@
 		open = false;
 		accountOpen = false;
 		await invalidateAll();
-		await goto('/');
+		await goto(resolve('/'));
 	};
 </script>
 
-<header class="sticky top-0 z-50 hidden w-full border-b border-border/70 bg-background/95 backdrop-blur md:block">
+<header
+	class="sticky top-0 z-50 hidden w-full border-b border-border/70 bg-background/95 backdrop-blur md:block"
+>
 	<div class="relative container mx-auto flex h-20 items-center justify-between px-4">
-		<a href="/" class="z-10 flex items-center gap-2">
+		<a href={resolve('/')} class="z-10 flex items-center gap-2">
 			<img src={logo} alt="MyApp Logo" class="h-12 w-auto" />
 		</a>
 
 		<nav class="absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 gap-6 md:flex">
-			<a href="/" class="text-sm font-medium text-foreground/80 hover:text-primary">Home</a>
-			<a href="/about" class="text-sm font-medium text-foreground/80 hover:text-primary">About</a>
-			<a href="/contact" class="text-sm font-medium text-foreground/80 hover:text-primary">Contact</a
+			<a href={resolve('/')} class="text-sm font-medium text-foreground/80 hover:text-primary"
+				>Home</a
+			>
+			<a href={resolve('/about')} class="text-sm font-medium text-foreground/80 hover:text-primary"
+				>About</a
+			>
+			<a
+				href={resolve('/contact')}
+				class="text-sm font-medium text-foreground/80 hover:text-primary">Contact</a
 			>
 		</nav>
 
@@ -54,7 +63,12 @@
 			{#if isAuthenticated}
 				<Popover.Root bind:open={accountOpen}>
 					<Popover.Trigger>
-						<Button type="button" variant="ghost" class="gap-3 text-foreground/85" aria-label="Open account menu">
+						<Button
+							type="button"
+							variant="ghost"
+							class="gap-3 text-foreground/85"
+							aria-label="Open account menu"
+						>
 							<UserRound class="size-4 text-foreground/85" />
 							<span>{displayName}</span>
 							<ChevronDown
@@ -72,7 +86,7 @@
 
 						<div class="mt-1 border-t border-border/70 pt-1">
 							<a
-								href="/account/settings"
+								href={resolve('/account/settings')}
 								class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-muted/60 hover:text-foreground"
 								onclick={() => (accountOpen = false)}
 							>
@@ -120,16 +134,26 @@
 			class="flex w-(--bits-popover-content-available-width) max-w-none flex-col gap-8 border border-border/70 bg-background/95 p-6 shadow-lg"
 		>
 			<nav class="flex flex-col gap-6 text-left">
-				<a href="/" class="text-2xl font-semibold text-foreground/85 hover:text-primary">Home</a>
-				<a href="/about" class="text-2xl font-semibold text-foreground/85 hover:text-primary">About</a>
-				<a href="/contact" class="text-2xl font-semibold text-foreground/85 hover:text-primary">Contact</a>
+				<a href={resolve('/')} class="text-2xl font-semibold text-foreground/85 hover:text-primary"
+					>Home</a
+				>
+				<a
+					href={resolve('/about')}
+					class="text-2xl font-semibold text-foreground/85 hover:text-primary">About</a
+				>
+				<a
+					href={resolve('/contact')}
+					class="text-2xl font-semibold text-foreground/85 hover:text-primary">Contact</a
+				>
 			</nav>
 
 			<div class="mt-8 flex flex-col items-center gap-4">
 				{#if isAuthenticated}
 					<div class="w-full rounded-xl border border-border/70 bg-muted/20 p-4 text-left">
 						<div class="flex items-center gap-3">
-							<span class="flex size-10 items-center justify-center rounded-full bg-muted text-foreground/70">
+							<span
+								class="flex size-10 items-center justify-center rounded-full bg-muted text-foreground/70"
+							>
 								<UserRound class="size-5" />
 							</span>
 							<div class="min-w-0">
@@ -140,7 +164,7 @@
 
 						<div class="mt-4 flex flex-col gap-1 border-t border-border/70 pt-3">
 							<a
-								href="/account/settings"
+								href={resolve('/account/settings')}
 								class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-muted/60 hover:text-foreground"
 								onclick={() => (open = false)}
 							>
@@ -170,7 +194,7 @@
 		</Popover.Content>
 	</Popover.Root>
 
-	<a href="/" class="flex items-center gap-2">
+	<a href={resolve('/')} class="flex items-center gap-2">
 		<img src={logo} alt="MyApp Logo" class="h-10 w-auto" />
 	</a>
 </header>

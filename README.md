@@ -76,5 +76,6 @@ Development is expected to run against local PostgreSQL via `docker compose`, no
 - `pnpm db:up`
 - `pnpm db:prepare`
 - `pnpm db:setup`
+- `pnpm db:reset:dev`
 - `pnpm db:down`
 - `pnpm db:logs`

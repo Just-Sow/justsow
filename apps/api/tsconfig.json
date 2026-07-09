@@ -11,5 +11,9 @@
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts", "../../packages/shared/src/**/*.ts"]
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "../../packages/shared/src/**/*.ts"
+  ]
 }

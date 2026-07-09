@@ -1,5 +1,4 @@
 import { and, desc, eq, isNull, sql } from 'drizzle-orm';
-import type { InferInsertModel } from 'drizzle-orm';
 import { db } from '../db/client.js';
 import { sowerClaim, sowerProfile } from '../db/schema/app.js';
 

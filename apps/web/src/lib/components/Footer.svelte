@@ -1,3 +1,7 @@
+<script lang="ts">
+	import { resolve } from '$app/paths';
+</script>
+
 <footer class="border-t border-border/70 bg-primary text-primary-foreground">
 	<!-- Main Footer Content -->
 	<div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -12,14 +16,27 @@
 
 			<!-- Navigation Links -->
 			<div class="flex flex-col items-center text-center md:items-start md:text-left">
-				<h4 class="mb-3 text-sm font-semibold tracking-[0.18em] uppercase text-primary-foreground/70">
+				<h4
+					class="mb-3 text-sm font-semibold tracking-[0.18em] uppercase text-primary-foreground/70"
+				>
 					Explore
 				</h4>
 				<ul class="space-y-2">
-					<li><a href="/" class="text-primary-foreground/90 hover:text-white">Home</a></li>
-					<li><a href="/projects" class="text-primary-foreground/90 hover:text-white">Projects</a></li>
-					<li><a href="/about" class="text-primary-foreground/90 hover:text-white">About</a></li>
-					<li><a href="/contact" class="text-primary-foreground/90 hover:text-white">Contact</a></li>
+					<li>
+						<a href={resolve('/')} class="text-primary-foreground/90 hover:text-white">Home</a>
+					</li>
+					<li>
+						<span class="text-primary-foreground/65">Projects</span>
+					</li>
+					<li>
+						<a href={resolve('/about')} class="text-primary-foreground/90 hover:text-white">About</a
+						>
+					</li>
+					<li>
+						<a href={resolve('/contact')} class="text-primary-foreground/90 hover:text-white"
+							>Contact</a
+						>
+					</li>
 				</ul>
 			</div>
 

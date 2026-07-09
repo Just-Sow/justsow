@@ -208,7 +208,7 @@ export const auth = betterAuth({
   databaseHooks: {
     user: {
       create: {
-        after: async (user, context) => {
+        after: async (user) => {
           const matchedSowerProfile = await findUnclaimedSowerProfileByEmail(
             user.email
           );

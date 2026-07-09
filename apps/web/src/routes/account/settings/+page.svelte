@@ -1,11 +1,5 @@
 <script lang="ts">
-	import {
-		CircleAlert,
-		CircleCheck,
-		PencilLine,
-		RotateCcwKey,
-		ShieldAlert
-	} from '@lucide/svelte';
+	import { CircleAlert, CircleCheck, PencilLine, RotateCcwKey, ShieldAlert } from '@lucide/svelte';
 	import { getAuthStore } from '$lib/auth/store.js';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Button } from '$lib/components/ui/button';
@@ -74,7 +68,9 @@
 	});
 </script>
 
-<section class="mx-auto flex min-h-[calc(100svh-9rem)] w-full max-w-4xl items-start justify-center px-4 py-12 sm:px-6">
+<section
+	class="mx-auto flex min-h-[calc(100svh-9rem)] w-full max-w-4xl items-start justify-center px-4 py-12 sm:px-6"
+>
 	<div class="w-full max-w-2xl space-y-8">
 		<div class="space-y-2 text-center">
 			<p class="text-sm font-semibold tracking-[0.22em] text-primary uppercase">Your Account</p>
@@ -87,14 +83,21 @@
 
 		<div class="space-y-8">
 			<div class="space-y-4">
-				<h2 class="text-sm font-semibold tracking-[0.16em] text-foreground uppercase">Account info</h2>
+				<h2 class="text-sm font-semibold tracking-[0.16em] text-foreground uppercase">
+					Account info
+				</h2>
 
-				<div class="border-border/70 divide-border/70 overflow-hidden rounded-xl border bg-background/95">
+				<div
+					class="border-border/70 divide-border/70 overflow-hidden rounded-xl border bg-background/95"
+				>
 					<div class="flex items-center justify-between gap-4 px-5 py-4">
 						<div class="min-w-0 flex-1 space-y-1">
-							<p class="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">Name</p>
+							<p class="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
+								Name
+							</p>
 							<p class="truncate text-sm text-foreground">
-								{$auth?.user.firstName} {$auth?.user.lastName}
+								{$auth?.user.firstName}
+								{$auth?.user.lastName}
 							</p>
 						</div>
 
@@ -106,7 +109,9 @@
 
 					<div class="border-border/70 flex items-center justify-between gap-4 border-t px-5 py-4">
 						<div class="min-w-0 flex-1 space-y-1">
-							<p class="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">Email</p>
+							<p class="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
+								Email
+							</p>
 							<p class="truncate text-sm text-foreground">{$auth?.user.email}</p>
 						</div>
 
@@ -118,7 +123,9 @@
 
 					<div class="border-border/70 flex items-center justify-between gap-4 border-t px-5 py-4">
 						<div class="min-w-0 flex-1 space-y-1">
-							<p class="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">Phone</p>
+							<p class="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
+								Phone
+							</p>
 							<p class="truncate text-sm text-foreground">
 								{$auth?.user.phoneNumber || 'Add a phone number'}
 							</p>
@@ -137,7 +144,9 @@
 					Password and security
 				</h2>
 
-				<div class="border-border/70 divide-border/70 overflow-hidden rounded-xl border bg-background/95">
+				<div
+					class="border-border/70 divide-border/70 overflow-hidden rounded-xl border bg-background/95"
+				>
 					<div class="flex items-center justify-between gap-4 px-5 py-4">
 						<div class="min-w-0 flex-1 space-y-1">
 							<p class="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
@@ -168,11 +177,9 @@
 									<Tooltip.Trigger>
 										<Badge
 											variant={data.security?.twoFactor.enabled ? 'outline' : 'destructive'}
-											class={
-												data.security?.twoFactor.enabled
-													? 'cursor-default border-emerald-500/25 bg-emerald-500/10 px-2.5 py-1 text-emerald-700 dark:text-emerald-300'
-													: 'cursor-help px-2.5 py-1'
-											}
+											class={data.security?.twoFactor.enabled
+												? 'cursor-default border-emerald-500/25 bg-emerald-500/10 px-2.5 py-1 text-emerald-700 dark:text-emerald-300'
+												: 'cursor-help px-2.5 py-1'}
 										>
 											{#if data.security?.twoFactor.enabled}
 												<CircleCheck />
@@ -238,4 +245,8 @@
 
 <PasswordDialog bind:open={passwordDialogOpen} onSaved={handleSaved} />
 
-<TwoFactorDialog bind:open={twoFactorDialogOpen} initialSecurity={data.security} onSaved={handleSaved} />
+<TwoFactorDialog
+	bind:open={twoFactorDialogOpen}
+	initialSecurity={data.security}
+	onSaved={handleSaved}
+/>

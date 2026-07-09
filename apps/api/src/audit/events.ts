@@ -41,10 +41,18 @@ export const createAuditEvent = async (input: CreateAuditEventInput) => {
   return createdEvent;
 };
 
-export const listAuditEventsForTarget = async (targetType: AuditTargetType, targetId: string) => {
+export const listAuditEventsForTarget = async (
+  targetType: AuditTargetType,
+  targetId: string
+) => {
   return db
     .select()
     .from(auditEvent)
-    .where(and(eq(auditEvent.targetType, targetType), eq(auditEvent.targetId, targetId)))
+    .where(
+      and(
+        eq(auditEvent.targetType, targetType),
+        eq(auditEvent.targetId, targetId)
+      )
+    )
     .orderBy(desc(auditEvent.occurredAt));
 };

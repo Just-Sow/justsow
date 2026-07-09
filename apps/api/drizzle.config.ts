@@ -9,7 +9,8 @@ loadEnv({ path: resolve(currentDirectory, '../../.env') });
 loadEnv({ path: resolve(currentDirectory, '.env'), override: false });
 
 const connectionString =
-  process.env.DATABASE_URL ?? 'postgres://justsow:justsow@127.0.0.1:5432/justsow_dev';
+  process.env.DATABASE_URL ??
+  'postgres://justsow:justsow@127.0.0.1:5432/justsow_dev';
 
 export default defineConfig({
   out: './drizzle',

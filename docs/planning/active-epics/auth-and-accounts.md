@@ -41,7 +41,7 @@ Define and implement the account system for multi-role users, including secure a
 
 ## Status
 
-In Progress
+Completed
 
 ## Progress
 
@@ -70,9 +70,5 @@ Completed:
 - account settings now support self-service name, email, phone number, password, and two-factor management
 - auth profile data now includes phone number, password-changed timestamp, and two-factor enabled timestamp for account settings
 - password changes now record a timestamp and account settings show the latest password and two-factor security status metadata
-- manual sower records can now be created through a development-only API route for local claim-flow testing
+- local reset-and-seed tooling now prepares a known admin account and an unclaimed sower profile for auth testing
 - normal sign-up now auto-claims an existing unlinked sower profile when the email matches
-
-Next:
-
-- refine and verify the account claiming flow in the web app around normal sign-up and verification

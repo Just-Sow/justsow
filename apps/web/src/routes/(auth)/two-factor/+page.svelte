@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { CircleAlert, CircleCheck } from '@lucide/svelte';
 	import AuthShell from '$lib/components/auth/AuthShell.svelte';
 	import { authRequest, getAuthErrorMessage } from '$lib/auth/client.js';
@@ -23,7 +24,9 @@
 		errorMessage = '';
 
 		const path =
-			mode === 'totp' ? '/api/auth/two-factor/verify-totp' : '/api/auth/two-factor/verify-backup-code';
+			mode === 'totp'
+				? '/api/auth/two-factor/verify-totp'
+				: '/api/auth/two-factor/verify-backup-code';
 
 		const result = await authRequest<{ user?: { id: string } }>(path, {
 			method: 'POST',
@@ -40,7 +43,7 @@
 		}
 
 		await invalidateAll();
-		await goto('/');
+		await goto(resolve('/'));
 	};
 </script>
 
@@ -51,15 +54,14 @@
 >
 	<Card.Header class="space-y-3 text-center">
 		<Card.Title>Two-factor verification</Card.Title>
-		<Card.Description>
-			Use the current code from your authenticator app.
-		</Card.Description>
+		<Card.Description>Use the current code from your authenticator app.</Card.Description>
 	</Card.Header>
 
 	<Card.Content class="space-y-5">
 		<form class="space-y-5" onsubmit={handleSubmit}>
 			<div class="space-y-2">
-				<Label for="two-factor-code">{mode === 'totp' ? 'Authenticator code' : 'Backup code'}</Label>
+				<Label for="two-factor-code">{mode === 'totp' ? 'Authenticator code' : 'Backup code'}</Label
+				>
 				{#if mode === 'totp'}
 					<InputOTP.Root
 						id="two-factor-code"
@@ -69,7 +71,9 @@
 						required
 					>
 						{#snippet children({ cells })}
-							<InputOTP.Group class="mx-auto gap-2.5 *:data-[slot=input-otp-slot]:rounded-md *:data-[slot=input-otp-slot]:border">
+							<InputOTP.Group
+								class="mx-auto gap-2.5 *:data-[slot=input-otp-slot]:rounded-md *:data-[slot=input-otp-slot]:border"
+							>
 								{#each cells as cell (cell)}
 									<InputOTP.Slot
 										{cell}
@@ -109,14 +113,14 @@
 						errorMessage = '';
 					}}
 				>
-					{mode === 'totp'
-						? 'Use a backup code instead'
-						: 'Back to authenticator code'}
+					{mode === 'totp' ? 'Use a backup code instead' : 'Back to authenticator code'}
 				</button>
 			</div>
 
 			{#if errorMessage}
-				<p class="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+				<p
+					class="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive"
+				>
 					{errorMessage}
 				</p>
 			{/if}
@@ -133,6 +137,6 @@
 	</Card.Content>
 
 	<Card.Footer class="justify-center text-sm text-muted-foreground">
-		<a href="/login" class="hover:text-primary">Back to login</a>
+		<a href={resolve('/login')} class="hover:text-primary">Back to login</a>
 	</Card.Footer>
 </AuthShell>

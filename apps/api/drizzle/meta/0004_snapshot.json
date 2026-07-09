@@ -147,12 +147,8 @@
           "name": "audit_event_actor_user_id_user_id_fk",
           "tableFrom": "audit_event",
           "tableTo": "user",
-          "columnsFrom": [
-            "actor_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["actor_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -297,12 +293,8 @@
           "name": "sower_claim_sower_profile_id_sower_profile_id_fk",
           "tableFrom": "sower_claim",
           "tableTo": "sower_profile",
-          "columnsFrom": [
-            "sower_profile_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["sower_profile_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -310,12 +302,8 @@
           "name": "sower_claim_claimant_user_id_user_id_fk",
           "tableFrom": "sower_claim",
           "tableTo": "user",
-          "columnsFrom": [
-            "claimant_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["claimant_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -323,12 +311,8 @@
           "name": "sower_claim_resolved_by_user_id_user_id_fk",
           "tableFrom": "sower_claim",
           "tableTo": "user",
-          "columnsFrom": [
-            "resolved_by_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["resolved_by_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -462,12 +446,8 @@
           "name": "sower_profile_linked_user_id_user_id_fk",
           "tableFrom": "sower_profile",
           "tableTo": "user",
-          "columnsFrom": [
-            "linked_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["linked_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -475,12 +455,8 @@
           "name": "sower_profile_created_by_user_id_user_id_fk",
           "tableFrom": "sower_profile",
           "tableTo": "user",
-          "columnsFrom": [
-            "created_by_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["created_by_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -606,12 +582,8 @@
           "name": "user_role_assignment_user_id_user_id_fk",
           "tableFrom": "user_role_assignment",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -619,12 +591,8 @@
           "name": "user_role_assignment_assigned_by_user_id_user_id_fk",
           "tableFrom": "user_role_assignment",
           "tableTo": "user",
-          "columnsFrom": [
-            "assigned_by_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["assigned_by_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -632,12 +600,8 @@
           "name": "user_role_assignment_revoked_by_user_id_user_id_fk",
           "tableFrom": "user_role_assignment",
           "tableTo": "user",
-          "columnsFrom": [
-            "revoked_by_user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["revoked_by_user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -739,12 +703,8 @@
           "name": "account_user_id_user_id_fk",
           "tableFrom": "account",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -816,12 +776,8 @@
           "name": "session_user_id_user_id_fk",
           "tableFrom": "session",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -831,9 +787,7 @@
         "session_token_unique": {
           "name": "session_token_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "token"
-          ]
+          "columns": ["token"]
         }
       },
       "policies": {},
@@ -895,12 +849,8 @@
           "name": "two_factor_user_id_user_id_fk",
           "tableFrom": "two_factor",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -987,9 +937,7 @@
         "user_email_unique": {
           "name": "user_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
@@ -1052,10 +1000,7 @@
     "public.audit_actor_type": {
       "name": "audit_actor_type",
       "schema": "public",
-      "values": [
-        "user",
-        "system"
-      ]
+      "values": ["user", "system"]
     },
     "public.audit_target_type": {
       "name": "audit_target_type",
@@ -1073,28 +1018,17 @@
     "public.sower_claim_status": {
       "name": "sower_claim_status",
       "schema": "public",
-      "values": [
-        "pending",
-        "completed",
-        "rejected",
-        "expired"
-      ]
+      "values": ["pending", "completed", "rejected", "expired"]
     },
     "public.sower_claim_verification_method": {
       "name": "sower_claim_verification_method",
       "schema": "public",
-      "values": [
-        "email_ownership_plus_staff_review"
-      ]
+      "values": ["email_ownership_plus_staff_review"]
     },
     "public.sower_profile_source": {
       "name": "sower_profile_source",
       "schema": "public",
-      "values": [
-        "staff_manual",
-        "self_registered",
-        "imported"
-      ]
+      "values": ["staff_manual", "self_registered", "imported"]
     },
     "public.user_role": {
       "name": "user_role",

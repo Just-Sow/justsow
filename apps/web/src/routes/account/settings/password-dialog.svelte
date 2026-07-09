@@ -158,7 +158,9 @@
 		<div class="space-y-5 p-6">
 			<Dialog.Header>
 				<Dialog.Title>Change password</Dialog.Title>
-				<Dialog.Description>Use a new password that meets the same security rules as sign-up.</Dialog.Description>
+				<Dialog.Description
+					>Use a new password that meets the same security rules as sign-up.</Dialog.Description
+				>
 			</Dialog.Header>
 
 			<form class="space-y-5" onsubmit={handleSubmit}>
@@ -249,7 +251,9 @@
 							<InputGroup.Button
 								size="icon-xs"
 								variant="ghost"
-								aria-label={showConfirmPassword ? 'Hide password confirmation' : 'Show password confirmation'}
+								aria-label={showConfirmPassword
+									? 'Hide password confirmation'
+									: 'Show password confirmation'}
 								aria-pressed={showConfirmPassword}
 								class="rounded-full"
 								onclick={() => (showConfirmPassword = !showConfirmPassword)}

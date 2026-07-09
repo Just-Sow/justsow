@@ -39,9 +39,10 @@ export const sowerClaimStatus = pgEnum('sower_claim_status', [
   'expired',
 ]);
 
-export const sowerClaimVerificationMethod = pgEnum('sower_claim_verification_method', [
-  'email_ownership_plus_staff_review',
-]);
+export const sowerClaimVerificationMethod = pgEnum(
+  'sower_claim_verification_method',
+  ['email_ownership_plus_staff_review']
+);
 
 export const userRoleAssignment = pgTable(
   'user_role_assignment',
@@ -54,7 +55,9 @@ export const userRoleAssignment = pgTable(
     assignedByUserId: text('assigned_by_user_id').references(() => user.id, {
       onDelete: 'set null',
     }),
-    assignedAt: timestamp('assigned_at', { withTimezone: true }).notNull().defaultNow(),
+    assignedAt: timestamp('assigned_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
     revokedAt: timestamp('revoked_at', { withTimezone: true }),
     revokedByUserId: text('revoked_by_user_id').references(() => user.id, {
       onDelete: 'set null',
@@ -81,15 +84,22 @@ export const auditEvent = pgTable(
     action: text('action').notNull(),
     targetType: auditTargetType('target_type').notNull(),
     targetId: text('target_id').notNull(),
-    occurredAt: timestamp('occurred_at', { withTimezone: true }).notNull().defaultNow(),
+    occurredAt: timestamp('occurred_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
     ipAddress: text('ip_address'),
     userAgent: text('user_agent'),
-    metadata: jsonb('metadata').notNull().default(sql`'{}'::jsonb`),
+    metadata: jsonb('metadata')
+      .notNull()
+      .default(sql`'{}'::jsonb`),
   },
   (table) => ({
     occurredAtLookup: index('audit_event_occurred_at_idx').on(table.occurredAt),
     actorLookup: index('audit_event_actor_user_id_idx').on(table.actorUserId),
-    targetLookup: index('audit_event_target_idx').on(table.targetType, table.targetId),
+    targetLookup: index('audit_event_target_idx').on(
+      table.targetType,
+      table.targetId
+    ),
     actionLookup: index('audit_event_action_idx').on(table.action),
   })
 );
@@ -108,16 +118,24 @@ export const sowerProfile = pgTable(
     createdByUserId: text('created_by_user_id').references(() => user.id, {
       onDelete: 'set null',
     }),
-    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
     claimedAt: timestamp('claimed_at', { withTimezone: true }),
   },
   (table) => ({
     linkedUserLookup: uniqueIndex('sower_profile_linked_user_id_idx')
       .on(table.linkedUserId)
       .where(sql`${table.linkedUserId} is not null`),
-    emailLookup: index('sower_profile_contact_email_idx').on(table.contactEmail),
-    displayNameLookup: index('sower_profile_display_name_idx').on(table.displayName),
+    emailLookup: index('sower_profile_contact_email_idx').on(
+      table.contactEmail
+    ),
+    displayNameLookup: index('sower_profile_display_name_idx').on(
+      table.displayName
+    ),
   })
 );
 
@@ -135,7 +153,9 @@ export const sowerClaim = pgTable(
     verificationMethod: sowerClaimVerificationMethod('verification_method')
       .notNull()
       .default('email_ownership_plus_staff_review'),
-    requestedAt: timestamp('requested_at', { withTimezone: true }).notNull().defaultNow(),
+    requestedAt: timestamp('requested_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
     resolvedAt: timestamp('resolved_at', { withTimezone: true }),
     resolvedByUserId: text('resolved_by_user_id').references(() => user.id, {
       onDelete: 'set null',
@@ -143,8 +163,12 @@ export const sowerClaim = pgTable(
     notes: text('notes'),
   },
   (table) => ({
-    profileLookup: index('sower_claim_sower_profile_id_idx').on(table.sowerProfileId),
-    claimantLookup: index('sower_claim_claimant_user_id_idx').on(table.claimantUserId),
+    profileLookup: index('sower_claim_sower_profile_id_idx').on(
+      table.sowerProfileId
+    ),
+    claimantLookup: index('sower_claim_claimant_user_id_idx').on(
+      table.claimantUserId
+    ),
     pendingClaimByProfile: uniqueIndex('sower_claim_pending_by_profile_idx')
       .on(table.sowerProfileId)
       .where(sql`${table.status} = 'pending'`),

@@ -42,14 +42,21 @@ const assignRoleSchema = z.object({
 });
 
 const adminRoles = ['admin'] as const;
-const sowerReviewRoles = ['admin', 'seed_allocator', 'stewardship_staff'] as const;
+const sowerReviewRoles = [
+  'admin',
+  'seed_allocator',
+  'stewardship_staff',
+] as const;
 
 const rejectMissingRequiredTwoFactor = (
   identity: NonNullable<Awaited<ReturnType<typeof getRequestIdentity>>>,
   reply: FastifyReply,
   requiredRoles: readonly UserRole[]
 ) => {
-  if (!hasRequiredRole(identity.roles, requiredRoles) || identity.twoFactor.satisfied) {
+  if (
+    !hasRequiredRole(identity.roles, requiredRoles) ||
+    identity.twoFactor.satisfied
+  ) {
     return null;
   }
 
@@ -226,7 +233,11 @@ export const authAppRoutes: FastifyPluginAsync = async (app) => {
       });
     }
 
-    const twoFactorResponse = rejectMissingRequiredTwoFactor(identity, reply, sowerReviewRoles);
+    const twoFactorResponse = rejectMissingRequiredTwoFactor(
+      identity,
+      reply,
+      sowerReviewRoles
+    );
 
     if (twoFactorResponse) {
       return twoFactorResponse;
@@ -255,143 +266,164 @@ export const authAppRoutes: FastifyPluginAsync = async (app) => {
     });
   });
 
-  app.get('/auth/admin/sower-profiles/:profileId/claims', async (request, reply) => {
-    const identity = await getRequestIdentity(request);
+  app.get(
+    '/auth/admin/sower-profiles/:profileId/claims',
+    async (request, reply) => {
+      const identity = await getRequestIdentity(request);
 
-    if (!identity) {
-      return reply.code(401).send({
-        error: 'UNAUTHORIZED',
+      if (!identity) {
+        return reply.code(401).send({
+          error: 'UNAUTHORIZED',
+        });
+      }
+
+      if (!hasRequiredRole(identity.roles, sowerReviewRoles)) {
+        return reply.code(403).send({
+          error: 'FORBIDDEN',
+        });
+      }
+
+      const twoFactorResponse = rejectMissingRequiredTwoFactor(
+        identity,
+        reply,
+        sowerReviewRoles
+      );
+
+      if (twoFactorResponse) {
+        return twoFactorResponse;
+      }
+
+      const params = z.object({ profileId: z.uuid() }).parse(request.params);
+      const claims = await listSowerClaimsForProfile(params.profileId);
+
+      return {
+        claims,
+      };
+    }
+  );
+
+  app.post(
+    '/auth/admin/sower-claims/:claimId/approve',
+    async (request, reply) => {
+      const identity = await getRequestIdentity(request);
+
+      if (!identity) {
+        return reply.code(401).send({
+          error: 'UNAUTHORIZED',
+        });
+      }
+
+      if (!hasRequiredRole(identity.roles, sowerReviewRoles)) {
+        return reply.code(403).send({
+          error: 'FORBIDDEN',
+        });
+      }
+
+      const twoFactorResponse = rejectMissingRequiredTwoFactor(
+        identity,
+        reply,
+        sowerReviewRoles
+      );
+
+      if (twoFactorResponse) {
+        return twoFactorResponse;
+      }
+
+      const params = z.object({ claimId: z.uuid() }).parse(request.params);
+      const body = resolveSowerClaimSchema.parse(request.body);
+      const result = await completeSowerClaim({
+        claimId: params.claimId,
+        resolvedByUserId: identity.user.id,
+        notes: body.notes,
       });
-    }
 
-    if (!hasRequiredRole(identity.roles, sowerReviewRoles)) {
-      return reply.code(403).send({
-        error: 'FORBIDDEN',
+      if (!result) {
+        return reply.code(404).send({
+          error: 'CLAIM_NOT_FOUND',
+        });
+      }
+
+      await createAuditEvent({
+        actorType: 'user',
+        actorUserId: identity.user.id,
+        action: 'sower_claim.approved',
+        targetType: 'sower_claim',
+        targetId: result.claim.id,
+        ipAddress: request.ip,
+        userAgent: request.headers['user-agent'],
+        metadata: {
+          sowerProfileId: result.claim.sowerProfileId,
+          claimantUserId: result.claim.claimantUserId,
+        },
       });
+
+      return {
+        claim: result.claim,
+        profile: result.profile,
+      };
     }
+  );
 
-    const twoFactorResponse = rejectMissingRequiredTwoFactor(identity, reply, sowerReviewRoles);
+  app.post(
+    '/auth/admin/sower-claims/:claimId/reject',
+    async (request, reply) => {
+      const identity = await getRequestIdentity(request);
 
-    if (twoFactorResponse) {
-      return twoFactorResponse;
-    }
+      if (!identity) {
+        return reply.code(401).send({
+          error: 'UNAUTHORIZED',
+        });
+      }
 
-    const params = z.object({ profileId: z.uuid() }).parse(request.params);
-    const claims = await listSowerClaimsForProfile(params.profileId);
+      if (!hasRequiredRole(identity.roles, sowerReviewRoles)) {
+        return reply.code(403).send({
+          error: 'FORBIDDEN',
+        });
+      }
 
-    return {
-      claims,
-    };
-  });
+      const twoFactorResponse = rejectMissingRequiredTwoFactor(
+        identity,
+        reply,
+        sowerReviewRoles
+      );
 
-  app.post('/auth/admin/sower-claims/:claimId/approve', async (request, reply) => {
-    const identity = await getRequestIdentity(request);
+      if (twoFactorResponse) {
+        return twoFactorResponse;
+      }
 
-    if (!identity) {
-      return reply.code(401).send({
-        error: 'UNAUTHORIZED',
+      const params = z.object({ claimId: z.uuid() }).parse(request.params);
+      const body = resolveSowerClaimSchema.parse(request.body);
+      const claim = await rejectSowerClaim({
+        claimId: params.claimId,
+        resolvedByUserId: identity.user.id,
+        notes: body.notes,
       });
-    }
 
-    if (!hasRequiredRole(identity.roles, sowerReviewRoles)) {
-      return reply.code(403).send({
-        error: 'FORBIDDEN',
+      if (!claim) {
+        return reply.code(404).send({
+          error: 'CLAIM_NOT_FOUND',
+        });
+      }
+
+      await createAuditEvent({
+        actorType: 'user',
+        actorUserId: identity.user.id,
+        action: 'sower_claim.rejected',
+        targetType: 'sower_claim',
+        targetId: claim.id,
+        ipAddress: request.ip,
+        userAgent: request.headers['user-agent'],
+        metadata: {
+          sowerProfileId: claim.sowerProfileId,
+          claimantUserId: claim.claimantUserId,
+        },
       });
+
+      return {
+        claim,
+      };
     }
-
-    const twoFactorResponse = rejectMissingRequiredTwoFactor(identity, reply, sowerReviewRoles);
-
-    if (twoFactorResponse) {
-      return twoFactorResponse;
-    }
-
-    const params = z.object({ claimId: z.uuid() }).parse(request.params);
-    const body = resolveSowerClaimSchema.parse(request.body);
-    const result = await completeSowerClaim({
-      claimId: params.claimId,
-      resolvedByUserId: identity.user.id,
-      notes: body.notes,
-    });
-
-    if (!result) {
-      return reply.code(404).send({
-        error: 'CLAIM_NOT_FOUND',
-      });
-    }
-
-    await createAuditEvent({
-      actorType: 'user',
-      actorUserId: identity.user.id,
-      action: 'sower_claim.approved',
-      targetType: 'sower_claim',
-      targetId: result.claim.id,
-      ipAddress: request.ip,
-      userAgent: request.headers['user-agent'],
-      metadata: {
-        sowerProfileId: result.claim.sowerProfileId,
-        claimantUserId: result.claim.claimantUserId,
-      },
-    });
-
-    return {
-      claim: result.claim,
-      profile: result.profile,
-    };
-  });
-
-  app.post('/auth/admin/sower-claims/:claimId/reject', async (request, reply) => {
-    const identity = await getRequestIdentity(request);
-
-    if (!identity) {
-      return reply.code(401).send({
-        error: 'UNAUTHORIZED',
-      });
-    }
-
-    if (!hasRequiredRole(identity.roles, sowerReviewRoles)) {
-      return reply.code(403).send({
-        error: 'FORBIDDEN',
-      });
-    }
-
-    const twoFactorResponse = rejectMissingRequiredTwoFactor(identity, reply, sowerReviewRoles);
-
-    if (twoFactorResponse) {
-      return twoFactorResponse;
-    }
-
-    const params = z.object({ claimId: z.uuid() }).parse(request.params);
-    const body = resolveSowerClaimSchema.parse(request.body);
-    const claim = await rejectSowerClaim({
-      claimId: params.claimId,
-      resolvedByUserId: identity.user.id,
-      notes: body.notes,
-    });
-
-    if (!claim) {
-      return reply.code(404).send({
-        error: 'CLAIM_NOT_FOUND',
-      });
-    }
-
-    await createAuditEvent({
-      actorType: 'user',
-      actorUserId: identity.user.id,
-      action: 'sower_claim.rejected',
-      targetType: 'sower_claim',
-      targetId: claim.id,
-      ipAddress: request.ip,
-      userAgent: request.headers['user-agent'],
-      metadata: {
-        sowerProfileId: claim.sowerProfileId,
-        claimantUserId: claim.claimantUserId,
-      },
-    });
-
-    return {
-      claim,
-    };
-  });
+  );
 
   app.post('/auth/admin/users/:userId/roles', async (request, reply) => {
     const identity = await getRequestIdentity(request);
@@ -408,13 +440,19 @@ export const authAppRoutes: FastifyPluginAsync = async (app) => {
       });
     }
 
-    const twoFactorResponse = rejectMissingRequiredTwoFactor(identity, reply, adminRoles);
+    const twoFactorResponse = rejectMissingRequiredTwoFactor(
+      identity,
+      reply,
+      adminRoles
+    );
 
     if (twoFactorResponse) {
       return twoFactorResponse;
     }
 
-    const params = z.object({ userId: z.string().min(1) }).parse(request.params);
+    const params = z
+      .object({ userId: z.string().min(1) })
+      .parse(request.params);
     const body = assignRoleSchema.parse(request.body);
     const assignment = await assignUserRole({
       userId: params.userId,
@@ -448,65 +486,74 @@ export const authAppRoutes: FastifyPluginAsync = async (app) => {
     });
   });
 
-  app.delete('/auth/admin/users/:userId/roles/:role', async (request, reply) => {
-    const identity = await getRequestIdentity(request);
+  app.delete(
+    '/auth/admin/users/:userId/roles/:role',
+    async (request, reply) => {
+      const identity = await getRequestIdentity(request);
 
-    if (!identity) {
-      return reply.code(401).send({
-        error: 'UNAUTHORIZED',
-      });
-    }
+      if (!identity) {
+        return reply.code(401).send({
+          error: 'UNAUTHORIZED',
+        });
+      }
 
-    if (!hasRequiredRole(identity.roles, adminRoles)) {
-      return reply.code(403).send({
-        error: 'FORBIDDEN',
-      });
-    }
+      if (!hasRequiredRole(identity.roles, adminRoles)) {
+        return reply.code(403).send({
+          error: 'FORBIDDEN',
+        });
+      }
 
-    const twoFactorResponse = rejectMissingRequiredTwoFactor(identity, reply, adminRoles);
+      const twoFactorResponse = rejectMissingRequiredTwoFactor(
+        identity,
+        reply,
+        adminRoles
+      );
 
-    if (twoFactorResponse) {
-      return twoFactorResponse;
-    }
+      if (twoFactorResponse) {
+        return twoFactorResponse;
+      }
 
-    const params = z
-      .object({
-        userId: z.string().min(1),
-        role: z.enum(userRoles),
-      })
-      .parse(request.params);
-    const body = z.object({ reason: z.string().min(1).optional() }).parse(request.body ?? {});
-    const assignment = await revokeUserRole({
-      userId: params.userId,
-      role: params.role,
-      revokedByUserId: identity.user.id,
-      reason: body.reason,
-    });
-
-    if (!assignment) {
-      return reply.code(404).send({
-        error: 'ROLE_ASSIGNMENT_NOT_FOUND',
-      });
-    }
-
-    await createAuditEvent({
-      actorType: 'user',
-      actorUserId: identity.user.id,
-      action: 'user_role.revoked',
-      targetType: 'user_role_assignment',
-      targetId: assignment.id,
-      ipAddress: request.ip,
-      userAgent: request.headers['user-agent'],
-      metadata: {
+      const params = z
+        .object({
+          userId: z.string().min(1),
+          role: z.enum(userRoles),
+        })
+        .parse(request.params);
+      const body = z
+        .object({ reason: z.string().min(1).optional() })
+        .parse(request.body ?? {});
+      const assignment = await revokeUserRole({
         userId: params.userId,
         role: params.role,
-      },
-    });
+        revokedByUserId: identity.user.id,
+        reason: body.reason,
+      });
 
-    return {
-      assignment,
-    };
-  });
+      if (!assignment) {
+        return reply.code(404).send({
+          error: 'ROLE_ASSIGNMENT_NOT_FOUND',
+        });
+      }
+
+      await createAuditEvent({
+        actorType: 'user',
+        actorUserId: identity.user.id,
+        action: 'user_role.revoked',
+        targetType: 'user_role_assignment',
+        targetId: assignment.id,
+        ipAddress: request.ip,
+        userAgent: request.headers['user-agent'],
+        metadata: {
+          userId: params.userId,
+          role: params.role,
+        },
+      });
+
+      return {
+        assignment,
+      };
+    }
+  );
 
   app.get('/auth/admin/users/:userId/roles', async (request, reply) => {
     const identity = await getRequestIdentity(request);
@@ -523,13 +570,19 @@ export const authAppRoutes: FastifyPluginAsync = async (app) => {
       });
     }
 
-    const twoFactorResponse = rejectMissingRequiredTwoFactor(identity, reply, adminRoles);
+    const twoFactorResponse = rejectMissingRequiredTwoFactor(
+      identity,
+      reply,
+      adminRoles
+    );
 
     if (twoFactorResponse) {
       return twoFactorResponse;
     }
 
-    const params = z.object({ userId: z.string().min(1) }).parse(request.params);
+    const params = z
+      .object({ userId: z.string().min(1) })
+      .parse(request.params);
 
     return {
       roles: await listActiveRolesForUser(params.userId),

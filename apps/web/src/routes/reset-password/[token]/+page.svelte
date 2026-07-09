@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Eye, EyeOff } from '@lucide/svelte';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import AuthShell from '$lib/components/auth/AuthShell.svelte';
 	import { authRequest, getAuthErrorMessage } from '$lib/auth/client.js';
@@ -73,12 +74,15 @@
 		}
 
 		isSubmitting = true;
-		const result = await authRequest<{ status: boolean }>(`/api/auth/reset-password?token=${token}`, {
-			method: 'POST',
-			body: JSON.stringify({
-				newPassword: password
-			})
-		});
+		const result = await authRequest<{ status: boolean }>(
+			`/api/auth/reset-password?token=${token}`,
+			{
+				method: 'POST',
+				body: JSON.stringify({
+					newPassword: password
+				})
+			}
+		);
 
 		if (!result.ok) {
 			errorMessage = getAuthErrorMessage(result, 'We could not reset the password with this link.');
@@ -88,7 +92,7 @@
 
 		successMessage = 'Your password has been reset. You can now sign in with the new password.';
 		isSubmitting = false;
-		await goto('/login');
+		await goto(resolve('/login'));
 	};
 </script>
 
@@ -99,7 +103,8 @@
 >
 	<Card.Header class="space-y-2">
 		<Card.Title>Reset password</Card.Title>
-		<Card.Description>Your new password will replace the previous one immediately.</Card.Description>
+		<Card.Description>Your new password will replace the previous one immediately.</Card.Description
+		>
 	</Card.Header>
 
 	<Card.Content>
@@ -156,7 +161,9 @@
 						<InputGroup.Button
 							size="icon-xs"
 							variant="ghost"
-							aria-label={showConfirmPassword ? 'Hide password confirmation' : 'Show password confirmation'}
+							aria-label={showConfirmPassword
+								? 'Hide password confirmation'
+								: 'Show password confirmation'}
 							aria-pressed={showConfirmPassword}
 							class="rounded-full"
 							onclick={() => (showConfirmPassword = !showConfirmPassword)}
@@ -175,13 +182,17 @@
 			</div>
 
 			{#if errorMessage}
-				<p class="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+				<p
+					class="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive"
+				>
 					{errorMessage}
 				</p>
 			{/if}
 
 			{#if successMessage}
-				<p class="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-foreground">
+				<p
+					class="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-foreground"
+				>
 					{successMessage}
 				</p>
 			{/if}

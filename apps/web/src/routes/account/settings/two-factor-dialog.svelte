@@ -1,5 +1,13 @@
 <script lang="ts">
-	import { Copy, Download, Eye, EyeOff, ShieldCheck, SmartphoneNfc, TriangleAlert } from '@lucide/svelte';
+	import {
+		Copy,
+		Download,
+		Eye,
+		EyeOff,
+		ShieldCheck,
+		SmartphoneNfc,
+		TriangleAlert
+	} from '@lucide/svelte';
 	import QRCode from 'qrcode';
 	import { invalidateAll } from '$app/navigation';
 	import { authRequest, getAuthErrorMessage } from '$lib/auth/client.js';
@@ -7,7 +15,6 @@
 	import { validateRequired } from '$lib/auth/validation.js';
 	import { Button } from '$lib/components/ui/button';
 	import * as Dialog from '$lib/components/ui/dialog';
-	import Input from '$lib/components/ui/input/input.svelte';
 	import * as InputGroup from '$lib/components/ui/input-group';
 	import * as InputOTP from '$lib/components/ui/input-otp';
 	import Label from '$lib/components/ui/label/label.svelte';
@@ -47,7 +54,8 @@
 		onSaved?: (message: string) => void | Promise<void>;
 	} = $props();
 
-	let security = $state<AuthSecurityViewer | null>(null);
+	let securityOverride = $state<AuthSecurityViewer | null>(null);
+	const security = $derived(securityOverride ?? initialSecurity);
 	let stage = $state<Stage>('password');
 	let setupPassword = $state('');
 	let showSetupPassword = $state(false);
@@ -69,10 +77,6 @@
 	let isDisabling = $state(false);
 	let message = $state('');
 	let tone = $state<NoticeTone>('info');
-
-	$effect(() => {
-		security = initialSecurity;
-	});
 
 	$effect(() => {
 		if (open) {
@@ -138,7 +142,7 @@
 		await invalidateAll();
 		const result = await authRequest<AuthSecurityViewer>('/auth/security');
 		if (result.ok && result.data) {
-			security = result.data;
+			securityOverride = result.data;
 		}
 	};
 
@@ -383,7 +387,8 @@
 
 		stage = 'manage';
 		tone = 'success';
-		message = 'Trusted devices were cleared. Future sign-ins will require a fresh two-factor check.';
+		message =
+			'Trusted devices were cleared. Future sign-ins will require a fresh two-factor check.';
 	};
 
 	const copyBackupCodes = async () => {
@@ -414,7 +419,9 @@
 		<div class="space-y-5 p-6">
 			<Dialog.Header>
 				<Dialog.Title>Two-factor authentication</Dialog.Title>
-				<Dialog.Description>Use an authenticator app plus backup codes to secure your account.</Dialog.Description>
+				<Dialog.Description
+					>Use an authenticator app plus backup codes to secure your account.</Dialog.Description
+				>
 			</Dialog.Header>
 
 			{#if security?.twoFactor.required}
@@ -425,7 +432,9 @@
 			{/if}
 
 			{#if !security}
-				<div class="flex items-start gap-3 rounded-lg border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+				<div
+					class="flex items-start gap-3 rounded-lg border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive"
+				>
 					<TriangleAlert class="mt-0.5 size-4 shrink-0" />
 					<p>Security controls could not be loaded for this session.</p>
 				</div>
@@ -473,7 +482,9 @@
 					<div class="space-y-5">
 						<div class="space-y-1">
 							<p class="text-sm font-semibold text-foreground">Step 1 of 3</p>
-							<p class="text-sm text-muted-foreground">Scan the QR code with your authenticator app.</p>
+							<p class="text-sm text-muted-foreground">
+								Scan the QR code with your authenticator app.
+							</p>
 						</div>
 
 						<div class="flex justify-center">
@@ -484,7 +495,9 @@
 									class="size-52 rounded-lg border border-border/70 bg-card p-2"
 								/>
 							{:else}
-								<div class="flex size-52 items-center justify-center rounded-lg border border-border/70 bg-card text-sm text-muted-foreground">
+								<div
+									class="flex size-52 items-center justify-center rounded-lg border border-border/70 bg-card text-sm text-muted-foreground"
+								>
 									Preparing QR code...
 								</div>
 							{/if}
@@ -520,7 +533,9 @@
 					<form class="space-y-5" onsubmit={finishSetup}>
 						<div class="space-y-1">
 							<p class="text-sm font-semibold text-foreground">Step 2 of 3</p>
-							<p class="text-sm text-muted-foreground">Enter the 6-digit code from your authenticator app.</p>
+							<p class="text-sm text-muted-foreground">
+								Enter the 6-digit code from your authenticator app.
+							</p>
 						</div>
 
 						<div class="space-y-2">
@@ -533,7 +548,9 @@
 								required
 							>
 								{#snippet children({ cells })}
-									<InputOTP.Group class="gap-2.5 *:data-[slot=input-otp-slot]:rounded-md *:data-[slot=input-otp-slot]:border">
+									<InputOTP.Group
+										class="gap-2.5 *:data-[slot=input-otp-slot]:rounded-md *:data-[slot=input-otp-slot]:border"
+									>
 										{#each cells as cell (cell)}
 											<InputOTP.Slot
 												{cell}
@@ -558,162 +575,171 @@
 						</Dialog.Footer>
 					</form>
 				{/if}
-			{:else}
-				{#if stage === 'backup'}
-					<div class="space-y-5">
-						<div class="space-y-1">
-							<p class="text-sm font-semibold text-foreground">Step 3 of 3</p>
-							<p class="text-sm text-muted-foreground">
-								Save these backup codes somewhere secure. Each code can be used once.
-							</p>
-						</div>
-
-						<Textarea value={backupCodesText} readonly rows={8} class="font-mono text-sm" />
-
-						<div class="flex flex-wrap gap-3">
-							<Button type="button" variant="outline" onclick={copyBackupCodes}>
-								<Copy />
-								{copiedBackupCodes ? 'Copied' : 'Copy'}
-							</Button>
-							<Button type="button" variant="outline" onclick={downloadBackupCodes}>
-								<Download />
-								Download
-							</Button>
-						</div>
-
-						<Dialog.Footer class="px-0 pb-0">
-							<Button type="button" onclick={() => (stage = 'manage')}>I’ve saved these codes</Button>
-						</Dialog.Footer>
-					</div>
-				{:else if stage === 'manage'}
-					<div class="space-y-5">
+			{:else if stage === 'backup'}
+				<div class="space-y-5">
+					<div class="space-y-1">
+						<p class="text-sm font-semibold text-foreground">Step 3 of 3</p>
 						<p class="text-sm text-muted-foreground">
-							Two-factor authentication is active on this account.
+							Save these backup codes somewhere secure. Each code can be used once.
 						</p>
-
-						<div class="grid gap-3 sm:grid-cols-2">
-							<Button type="button" variant="outline" class="w-full" onclick={() => (stage = 'regenerate')}>
-								Generate new backup codes
-							</Button>
-							<Button
-								type="button"
-								variant="outline"
-								class="w-full"
-								onclick={() => (stage = 'trusted-devices')}
-							>
-								Clear trusted devices
-							</Button>
-						</div>
-
-						<Dialog.Footer class="px-0 pb-0">
-							<Button type="button" variant="outline" onclick={() => (open = false)}>Close</Button>
-							<Button type="button" variant="destructive" onclick={() => (stage = 'disable')}>
-								Disable
-							</Button>
-						</Dialog.Footer>
 					</div>
-				{:else if stage === 'regenerate'}
-					<form class="space-y-5" onsubmit={regenerateBackupCodes}>
-						<p class="text-sm text-muted-foreground">
-							Enter your password to generate a new set of backup codes.
-						</p>
 
-						<div class="space-y-2">
-							<Label for="backup-codes-password">Password</Label>
-							<InputGroup.Root>
-								<InputGroup.Input
-									id="backup-codes-password"
-									type={showRecoveryPassword ? 'text' : 'password'}
-									bind:value={recoveryPassword}
-									placeholder="Enter your password"
-									required
-								/>
-								<InputGroup.Addon align="inline-end">
-									<InputGroup.Button
-										size="icon-xs"
-										variant="ghost"
-										aria-label={showRecoveryPassword ? 'Hide recovery password' : 'Show recovery password'}
-										aria-pressed={showRecoveryPassword}
-										class="rounded-full"
-										onclick={() => (showRecoveryPassword = !showRecoveryPassword)}
-									>
-										{#if showRecoveryPassword}
-											<EyeOff />
-										{:else}
-											<Eye />
-										{/if}
-									</InputGroup.Button>
-								</InputGroup.Addon>
-							</InputGroup.Root>
-						</div>
+					<Textarea value={backupCodesText} readonly rows={8} class="font-mono text-sm" />
 
-						<Dialog.Footer class="px-0 pb-0">
-							<Button type="button" variant="outline" onclick={() => (stage = 'manage')}>Back</Button>
-							<Button type="submit" disabled={isRegenerating}>
-								{isRegenerating ? 'Generating...' : 'Generate backup codes'}
-							</Button>
-						</Dialog.Footer>
-					</form>
-				{:else if stage === 'trusted-devices'}
-					<div class="space-y-5">
-						<div class="flex items-start gap-3 rounded-lg border border-border/70 bg-muted/35 px-4 py-3 text-sm text-muted-foreground">
-							<SmartphoneNfc class="mt-0.5 size-4 shrink-0" />
-							<p>
-								Clearing trusted devices removes remembered two-factor trust so every device
-								will need a fresh authenticator or backup-code check on the next sign-in.
-							</p>
-						</div>
-
-						<Dialog.Footer class="px-0 pb-0">
-							<Button type="button" variant="outline" onclick={() => (stage = 'manage')}>Back</Button>
-							<Button type="button" disabled={isClearingTrustedDevices} onclick={clearTrustedDevices}>
-								{isClearingTrustedDevices ? 'Clearing...' : 'Clear trusted devices'}
-							</Button>
-						</Dialog.Footer>
+					<div class="flex flex-wrap gap-3">
+						<Button type="button" variant="outline" onclick={copyBackupCodes}>
+							<Copy />
+							{copiedBackupCodes ? 'Copied' : 'Copy'}
+						</Button>
+						<Button type="button" variant="outline" onclick={downloadBackupCodes}>
+							<Download />
+							Download
+						</Button>
 					</div>
-				{:else if stage === 'disable'}
-					<form class="space-y-5" onsubmit={disableTwoFactor}>
-						<p class="text-sm text-muted-foreground">
-							Enter your password to disable two-factor authentication.
+
+					<Dialog.Footer class="px-0 pb-0">
+						<Button type="button" onclick={() => (stage = 'manage')}>I’ve saved these codes</Button>
+					</Dialog.Footer>
+				</div>
+			{:else if stage === 'manage'}
+				<div class="space-y-5">
+					<p class="text-sm text-muted-foreground">
+						Two-factor authentication is active on this account.
+					</p>
+
+					<div class="grid gap-3 sm:grid-cols-2">
+						<Button
+							type="button"
+							variant="outline"
+							class="w-full"
+							onclick={() => (stage = 'regenerate')}
+						>
+							Generate new backup codes
+						</Button>
+						<Button
+							type="button"
+							variant="outline"
+							class="w-full"
+							onclick={() => (stage = 'trusted-devices')}
+						>
+							Clear trusted devices
+						</Button>
+					</div>
+
+					<Dialog.Footer class="px-0 pb-0">
+						<Button type="button" variant="outline" onclick={() => (open = false)}>Close</Button>
+						<Button type="button" variant="destructive" onclick={() => (stage = 'disable')}>
+							Disable
+						</Button>
+					</Dialog.Footer>
+				</div>
+			{:else if stage === 'regenerate'}
+				<form class="space-y-5" onsubmit={regenerateBackupCodes}>
+					<p class="text-sm text-muted-foreground">
+						Enter your password to generate a new set of backup codes.
+					</p>
+
+					<div class="space-y-2">
+						<Label for="backup-codes-password">Password</Label>
+						<InputGroup.Root>
+							<InputGroup.Input
+								id="backup-codes-password"
+								type={showRecoveryPassword ? 'text' : 'password'}
+								bind:value={recoveryPassword}
+								placeholder="Enter your password"
+								required
+							/>
+							<InputGroup.Addon align="inline-end">
+								<InputGroup.Button
+									size="icon-xs"
+									variant="ghost"
+									aria-label={showRecoveryPassword
+										? 'Hide recovery password'
+										: 'Show recovery password'}
+									aria-pressed={showRecoveryPassword}
+									class="rounded-full"
+									onclick={() => (showRecoveryPassword = !showRecoveryPassword)}
+								>
+									{#if showRecoveryPassword}
+										<EyeOff />
+									{:else}
+										<Eye />
+									{/if}
+								</InputGroup.Button>
+							</InputGroup.Addon>
+						</InputGroup.Root>
+					</div>
+
+					<Dialog.Footer class="px-0 pb-0">
+						<Button type="button" variant="outline" onclick={() => (stage = 'manage')}>Back</Button>
+						<Button type="submit" disabled={isRegenerating}>
+							{isRegenerating ? 'Generating...' : 'Generate backup codes'}
+						</Button>
+					</Dialog.Footer>
+				</form>
+			{:else if stage === 'trusted-devices'}
+				<div class="space-y-5">
+					<div
+						class="flex items-start gap-3 rounded-lg border border-border/70 bg-muted/35 px-4 py-3 text-sm text-muted-foreground"
+					>
+						<SmartphoneNfc class="mt-0.5 size-4 shrink-0" />
+						<p>
+							Clearing trusted devices removes remembered two-factor trust so every device will need
+							a fresh authenticator or backup-code check on the next sign-in.
 						</p>
+					</div>
 
-						<div class="space-y-2">
-							<Label for="disable-two-factor-password">Password</Label>
-							<InputGroup.Root>
-								<InputGroup.Input
-									id="disable-two-factor-password"
-									type={showDisablePassword ? 'text' : 'password'}
-									bind:value={disablePassword}
-									placeholder="Enter your password"
-									required
-								/>
-								<InputGroup.Addon align="inline-end">
-									<InputGroup.Button
-										size="icon-xs"
-										variant="ghost"
-										aria-label={showDisablePassword ? 'Hide disable password' : 'Show disable password'}
-										aria-pressed={showDisablePassword}
-										class="rounded-full"
-										onclick={() => (showDisablePassword = !showDisablePassword)}
-									>
-										{#if showDisablePassword}
-											<EyeOff />
-										{:else}
-											<Eye />
-										{/if}
-									</InputGroup.Button>
-								</InputGroup.Addon>
-							</InputGroup.Root>
-						</div>
+					<Dialog.Footer class="px-0 pb-0">
+						<Button type="button" variant="outline" onclick={() => (stage = 'manage')}>Back</Button>
+						<Button type="button" disabled={isClearingTrustedDevices} onclick={clearTrustedDevices}>
+							{isClearingTrustedDevices ? 'Clearing...' : 'Clear trusted devices'}
+						</Button>
+					</Dialog.Footer>
+				</div>
+			{:else if stage === 'disable'}
+				<form class="space-y-5" onsubmit={disableTwoFactor}>
+					<p class="text-sm text-muted-foreground">
+						Enter your password to disable two-factor authentication.
+					</p>
 
-						<Dialog.Footer class="px-0 pb-0">
-							<Button type="button" variant="outline" onclick={() => (stage = 'manage')}>Back</Button>
-							<Button type="submit" variant="destructive" disabled={isDisabling}>
-								{isDisabling ? 'Disabling...' : 'Disable'}
-							</Button>
-						</Dialog.Footer>
-					</form>
-				{/if}
+					<div class="space-y-2">
+						<Label for="disable-two-factor-password">Password</Label>
+						<InputGroup.Root>
+							<InputGroup.Input
+								id="disable-two-factor-password"
+								type={showDisablePassword ? 'text' : 'password'}
+								bind:value={disablePassword}
+								placeholder="Enter your password"
+								required
+							/>
+							<InputGroup.Addon align="inline-end">
+								<InputGroup.Button
+									size="icon-xs"
+									variant="ghost"
+									aria-label={showDisablePassword
+										? 'Hide disable password'
+										: 'Show disable password'}
+									aria-pressed={showDisablePassword}
+									class="rounded-full"
+									onclick={() => (showDisablePassword = !showDisablePassword)}
+								>
+									{#if showDisablePassword}
+										<EyeOff />
+									{:else}
+										<Eye />
+									{/if}
+								</InputGroup.Button>
+							</InputGroup.Addon>
+						</InputGroup.Root>
+					</div>
+
+					<Dialog.Footer class="px-0 pb-0">
+						<Button type="button" variant="outline" onclick={() => (stage = 'manage')}>Back</Button>
+						<Button type="submit" variant="destructive" disabled={isDisabling}>
+							{isDisabling ? 'Disabling...' : 'Disable'}
+						</Button>
+					</Dialog.Footer>
+				</form>
 			{/if}
 
 			{#if message}

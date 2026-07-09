@@ -74,13 +74,9 @@
 	<div class="mt-8 grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 		{#each projects as project (project.title)}
 			<Card.Root class="pt-0 transition-shadow duration-300 hover:shadow-lg">
-				<a href={`/project/${project.title.replace(/\s+/g, '-').toLowerCase()}`} class="block">
+				<div class="block">
 					<Card.Header class="relative p-0">
-						<img
-							src={project.image}
-							alt={project.title}
-							class="h-64 w-full object-cover"
-						/>
+						<img src={project.image} alt={project.title} class="h-64 w-full object-cover" />
 						<div
 							class="absolute top-4 left-4 flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground"
 						>
@@ -92,11 +88,10 @@
 						<h3 class="mb-2 text-xl font-semibold">{project.title}</h3>
 						<p class="text-sm text-muted-foreground">{project.description}</p>
 					</Card.Content>
-				</a>
-				<Card.Footer class="mx-auto">
-					<Button size="sm" href={`/project/${project.title.replace(/\s+/g, '-').toLowerCase()}`}
-						>Learn More</Button
-					>
+				</div>
+				<Card.Footer class="mx-auto flex-col gap-2 text-center">
+					<Button size="sm" disabled>Project details coming soon</Button>
+					<p class="text-xs text-muted-foreground">Detailed project pages are not published yet.</p>
 				</Card.Footer>
 			</Card.Root>
 		{/each}

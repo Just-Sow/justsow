@@ -326,7 +326,9 @@
 														class="size-4 shrink-0"
 													/>
 													<span class="truncate">{selectedPhoneCountry.code}</span>
-													<span class="text-muted-foreground">{selectedPhoneCountry.callingCode}</span>
+													<span class="text-muted-foreground"
+														>{selectedPhoneCountry.callingCode}</span
+													>
 												</span>
 												<ChevronsUpDown class="size-4 shrink-0 opacity-50" />
 											</Button>
@@ -343,7 +345,10 @@
 															value={country.searchValue}
 															onSelect={() => {
 																phoneCountryCode = country.code;
-																phoneNumber = formatPhoneNumberForCountry(phoneNumber, country.code);
+																phoneNumber = formatPhoneNumberForCountry(
+																	phoneNumber,
+																	country.code
+																);
 																if (touched.phoneNumber) {
 																	errors.phoneNumber = validatePhoneNumber();
 																}

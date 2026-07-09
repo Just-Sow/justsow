@@ -4,6 +4,7 @@ import { eq } from 'drizzle-orm';
 import { buildApp } from '../src/app.js';
 import { db } from '../src/db/client.js';
 import { user } from '../src/db/schema/auth.js';
+import { createManualSowerProfile } from '../src/auth/sowers.js';
 import { userRoleAssignment } from '../src/db/schema/app.js';
 import { extractTokenFromUrl, resetTestState } from './helpers.js';
 
@@ -84,30 +85,18 @@ test('sign-up queues verification email and dev outbox endpoints expose it', asy
   }
 });
 
-test('development sower profiles can be created and are auto-claimed on sign-up by matching email', async () => {
+test('manual sower profiles are auto-claimed on sign-up by matching email', async () => {
   const server = await startServer();
 
   try {
-    const createProfile = await fetch(
-      `${server.baseUrl}/auth/dev/sower-profiles`,
-      {
-        method: 'POST',
-        headers: jsonHeaders,
-        body: JSON.stringify({
-          displayName: 'Claimable Sower',
-          contactEmail: 'claimable-sower@example.com',
-          notes: 'Created in development for claim flow testing.',
-        }),
-      }
-    );
+    const profile = await createManualSowerProfile({
+      displayName: 'Claimable Sower',
+      contactEmail: 'claimable-sower@example.com',
+      notes: 'Created directly for claim flow testing.',
+    });
 
-    assert.equal(createProfile.status, 201);
-    const createProfilePayload = await createProfile.json();
-    assert.equal(
-      createProfilePayload.profile.contactEmail,
-      'claimable-sower@example.com'
-    );
-    assert.equal(createProfilePayload.profile.linkedUserId, null);
+    assert.equal(profile.contactEmail, 'claimable-sower@example.com');
+    assert.equal(profile.linkedUserId, null);
 
     const signUp = await fetch(`${server.baseUrl}/api/auth/sign-up/email`, {
       method: 'POST',

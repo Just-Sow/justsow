@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { authRequest, getAuthErrorMessage } from '$lib/auth/client.js';
 	import { validateEmail, validateRequired } from '$lib/auth/validation.js';
 	import AuthShell from '$lib/components/auth/AuthShell.svelte';
@@ -100,12 +101,12 @@
 		}
 
 		if (result.data?.twoFactorRedirect) {
-			await goto('/two-factor');
+			await goto(resolve('/two-factor'));
 			return;
 		}
 
 		await invalidateAll();
-		await goto('/');
+		await goto(resolve('/'));
 	};
 </script>
 
@@ -137,7 +138,10 @@
 			<div class="space-y-2">
 				<div class="flex items-center justify-between gap-3">
 					<Label for="login-password">Password</Label>
-					<a href="/forgot-password" class="text-sm text-muted-foreground hover:text-primary">
+					<a
+						href={resolve('/forgot-password')}
+						class="text-sm text-muted-foreground hover:text-primary"
+					>
 						Forgot password?
 					</a>
 				</div>
@@ -157,7 +161,9 @@
 			</div>
 
 			{#if errorMessage}
-				<div class="space-y-3 rounded-md border border-destructive/20 bg-destructive/5 px-3 py-3 text-sm">
+				<div
+					class="space-y-3 rounded-md border border-destructive/20 bg-destructive/5 px-3 py-3 text-sm"
+				>
 					<p class="text-destructive">{errorMessage}</p>
 					{#if errorMessage.toLowerCase().includes('verification')}
 						<Button type="button" variant="outline" size="sm" onclick={resendVerificationEmail}>
@@ -168,7 +174,9 @@
 			{/if}
 
 			{#if verificationMessage}
-				<p class="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-foreground">
+				<p
+					class="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-foreground"
+				>
 					{verificationMessage}
 				</p>
 			{/if}
@@ -181,6 +189,6 @@
 
 	<Card.Footer class="justify-center gap-1 pt-0 pb-6 text-sm text-muted-foreground">
 		<span>Don’t have an account?</span>
-		<a href="/signup" class="font-medium text-primary hover:underline">Create one</a>
+		<a href={resolve('/signup')} class="font-medium text-primary hover:underline">Create one</a>
 	</Card.Footer>
 </AuthShell>

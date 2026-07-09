@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import AuthShell from '$lib/components/auth/AuthShell.svelte';
 	import { authRequest, getAuthErrorMessage } from '$lib/auth/client.js';
 	import { validateEmail } from '$lib/auth/validation.js';
@@ -85,13 +86,17 @@
 			</div>
 
 			{#if errorMessage}
-				<p class="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+				<p
+					class="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive"
+				>
 					{errorMessage}
 				</p>
 			{/if}
 
 			{#if successMessage}
-				<p class="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-foreground">
+				<p
+					class="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-foreground"
+				>
 					{successMessage}
 				</p>
 			{/if}
@@ -104,6 +109,6 @@
 
 	<Card.Footer class="justify-center gap-1 pt-0 pb-6 text-sm text-muted-foreground">
 		<span>Remembered it?</span>
-		<a href="/login" class="font-medium text-primary hover:underline">Back to login</a>
+		<a href={resolve('/login')} class="font-medium text-primary hover:underline">Back to login</a>
 	</Card.Footer>
 </AuthShell>

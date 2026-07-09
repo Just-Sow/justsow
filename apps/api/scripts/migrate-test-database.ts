@@ -11,7 +11,9 @@ loadEnv({ path: resolve(currentDirectory, '../.env'), override: false });
 const testDatabaseUrl = process.env.DATABASE_TEST_URL;
 
 if (!testDatabaseUrl) {
-  throw new Error('DATABASE_TEST_URL must be set before running test migrations');
+  throw new Error(
+    'DATABASE_TEST_URL must be set before running test migrations'
+  );
 }
 
 const result = spawnSync(

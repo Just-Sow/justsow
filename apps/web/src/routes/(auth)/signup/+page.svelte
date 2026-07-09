@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { Eye, EyeOff } from '@lucide/svelte';
 	import AuthShell from '$lib/components/auth/AuthShell.svelte';
 	import { authRequest, getAuthErrorMessage } from '$lib/auth/client.js';
@@ -136,7 +137,9 @@
 <AuthShell centered title="Create your account">
 	<Card.Header class="gap-2 px-6 pt-6 pb-4 text-center">
 		<Card.Title class="text-2xl">Create your account</Card.Title>
-		<Card.Description>Sign up to get started or claim an existing sower record with the same email.</Card.Description>
+		<Card.Description
+			>Sign up to get started or claim an existing sower record with the same email.</Card.Description
+		>
 	</Card.Header>
 
 	<Card.Content class="pb-4">
@@ -245,7 +248,9 @@
 							<InputGroup.Button
 								size="icon-xs"
 								variant="ghost"
-								aria-label={showConfirmPassword ? 'Hide password confirmation' : 'Show password confirmation'}
+								aria-label={showConfirmPassword
+									? 'Hide password confirmation'
+									: 'Show password confirmation'}
 								aria-pressed={showConfirmPassword}
 								class="rounded-full"
 								onclick={() => (showConfirmPassword = !showConfirmPassword)}
@@ -265,13 +270,17 @@
 			</div>
 
 			{#if errorMessage}
-				<p class="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+				<p
+					class="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive"
+				>
 					{errorMessage}
 				</p>
 			{/if}
 
 			{#if successMessage}
-				<p class="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-foreground">
+				<p
+					class="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-foreground"
+				>
 					{successMessage}
 				</p>
 			{/if}
@@ -284,6 +293,6 @@
 
 	<Card.Footer class="justify-center gap-1 pt-0 pb-6 text-sm text-muted-foreground">
 		<span>Already have an account?</span>
-		<a href="/login" class="font-medium text-primary hover:underline">Sign in</a>
+		<a href={resolve('/login')} class="font-medium text-primary hover:underline">Sign in</a>
 	</Card.Footer>
 </AuthShell>

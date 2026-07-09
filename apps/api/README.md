@@ -27,6 +27,7 @@ Database workflow:
 - `pnpm db:up` from the repo root to start local Postgres
 - `pnpm db:prepare` from the repo root to ensure dev and test databases exist
 - `pnpm db:setup` from the repo root to prepare databases and apply migrations
+- `pnpm db:reset:dev` from the repo root to clear the dev database and seed local auth test data
 - `pnpm --filter @justsow/api db:generate` to generate Drizzle migrations
 - `pnpm --filter @justsow/api db:migrate` to apply migrations
 - `pnpm --filter @justsow/api db:migrate:test` to apply migrations to the test database
@@ -39,8 +40,6 @@ Current auth API surface:
 - `GET /auth/setup`
 - `GET /auth/dev/emails`
 - `DELETE /auth/dev/emails`
-- `GET /auth/dev/sower-profiles`
-- `POST /auth/dev/sower-profiles`
 - `GET /auth/me`
 - `GET /auth/security`
 - `GET /auth/roles`
@@ -71,4 +70,9 @@ Current email lifecycle direction:
 - development uses a file-backed outbox at `apps/api/.data/dev-email-outbox.json`
 - use `GET /auth/dev/emails` to inspect the latest verification and reset links during local UI work
 - use `DELETE /auth/dev/emails` to clear the local outbox between test runs
-- use `POST /auth/dev/sower-profiles` to create a manual unclaimed sower record for local claim-flow testing
+
+Seeded local auth test data from `pnpm db:reset:dev`:
+
+- admin account email: `admin-testing@justsow.local`
+- admin account password: `testing-password-123!`
+- unclaimed sower email: `unclaimed-sower@justsow.local`
