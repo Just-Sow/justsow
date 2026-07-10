@@ -28,3 +28,4 @@ Use root workspace commands where possible:
 
 - **Icons** are handled with Unplugin Icons / Iconify; import icons as needed.
 - **UI components** are centralized in `src/lib/components/ui` using shadcn conventions.
+- `pnpm test` runs both unit and browser tests. Run `pnpm test:setup` first if Chromium is not already installed.
