@@ -121,6 +121,15 @@ Typically this means checking whether updates are needed in:
 
 Do not create busywork documentation updates for trivial code changes. The standard is: if future sessions or other agents would benefit from the state change being recorded, update the docs in the same turn.
 
+## Validation Gate
+
+Before asking the user to approve work for a PR or other handoff, run the appropriate validation set for the scope of the change.
+
+- Always run format, lint, typecheck, and the relevant tests before marking work ready for PR.
+- Do not rerun that full gate after every small edit; reserve it for the point where you are preparing to ask for approval or finish a PR branch.
+- If the change affects browser behavior in `apps/web`, include the browser test path as part of the validation gate, not just `pnpm test`.
+- Keep the final state clean before asking for approval, including any formatting fixes needed by the validation run.
+
 ## UX Copy And Design Guardrails
 
 - UI copy should be user-facing and functional, not commentary about the app's design, architecture, implementation choices, or product philosophy.
