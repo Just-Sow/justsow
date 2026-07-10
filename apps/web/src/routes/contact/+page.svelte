@@ -4,7 +4,10 @@
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
-	import { Camera, Send, Users, X, Mail } from '@lucide/svelte';
+	import { Mail, Send } from '@lucide/svelte';
+	import SiFacebook from '~icons/simple-icons/facebook';
+	import SiInstagram from '~icons/simple-icons/instagram';
+	import SiX from '~icons/simple-icons/x';
 
 	let name = $state('');
 	let email = $state('');
@@ -29,19 +32,19 @@
 				href: 'https://www.instagram.com/officialjustsow/',
 				label: 'Instagram',
 				handle: '@officialjustsow',
-				icon: Camera
+				icon: SiInstagram
 			},
 			{
 				href: 'https://www.facebook.com/JustSowGiving/',
 				label: 'Facebook',
 				handle: '/JustSowGiving',
-				icon: Users
+				icon: SiFacebook
 			},
 			{
 				href: 'https://x.com/just_sow',
 				label: 'X',
 				handle: '@just_sow',
-				icon: X
+				icon: SiX
 			}
 	];
 
