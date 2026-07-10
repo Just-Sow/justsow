@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { ChevronDown, LogOut, Settings, UserRound } from '@lucide/svelte';
+	import { ChevronDown, LogOut, Menu, Settings, UserRound, X } from '@lucide/svelte';
 	import { authRequest } from '$lib/auth/client.js';
 	import { getAuthStore } from '$lib/auth/store.js';
 	import logo from '$lib/assets/logo.svg';
 	import { Button } from '$lib/components/ui/button';
 	import * as Popover from '$lib/components/ui/popover';
-	import MdiMenu from '~icons/mdi/menu';
-	import MdiClose from '~icons/mdi/close';
 
 	const auth = getAuthStore();
 	let open = $state(false);
@@ -122,9 +120,9 @@
 		<Popover.Trigger>
 			<Button variant="ghost" class="gap-2 px-2 text-foreground/85">
 				{#if open}
-					<MdiClose class="h-6 w-6" />
+					<X class="h-6 w-6" />
 				{:else}
-					<MdiMenu class="h-6 w-6" />
+					<Menu class="h-6 w-6" />
 				{/if}
 				<span class="text-lg font-medium">Menu</span>
 			</Button>

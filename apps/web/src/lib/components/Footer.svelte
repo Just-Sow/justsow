@@ -47,15 +47,39 @@
 				</h4>
 
 				<!-- Email link -->
-				<a href="mailto:info@justsow.org" class="text-primary-foreground/90 hover:text-white">
+				<a
+					href="mailto:info@justsow.org"
+					class="inline-flex w-fit text-primary-foreground/90 transition-colors hover:text-white"
+				>
 					info@justsow.org
 				</a>
 
 				<!-- Social links -->
-				<div class="flex justify-center gap-4 md:justify-start">
-					<span class="text-primary-foreground/70">Twitter</span>
-					<span class="text-primary-foreground/70">Facebook</span>
-					<span class="text-primary-foreground/70">Instagram</span>
+				<div class="flex flex-wrap justify-center gap-3 md:justify-start">
+					<a
+						href="https://www.instagram.com/officialjustsow/"
+						target="_blank"
+						rel="noreferrer"
+						class="inline-flex w-fit text-primary-foreground/90 transition-colors hover:text-white"
+					>
+						Instagram
+					</a>
+					<a
+						href="https://www.facebook.com/JustSowGiving/"
+						target="_blank"
+						rel="noreferrer"
+						class="inline-flex w-fit text-primary-foreground/90 transition-colors hover:text-white"
+					>
+						Facebook
+					</a>
+					<a
+						href="https://x.com/just_sow"
+						target="_blank"
+						rel="noreferrer"
+						class="inline-flex w-fit text-primary-foreground/90 transition-colors hover:text-white"
+					>
+						X
+					</a>
 				</div>
 			</div>
 		</div>

@@ -8,7 +8,8 @@ Accepted
 
 JustSow will use:
 
-- one branch per epic or parallel workstream
+- one branch per epic or parallel workstream, named with a stable prefix such as `epic/<workstream-slug>`
+- other branch types should use a stable prefix that matches the work: `fix/<slug>`, `feat/<slug>`, `docs/<slug>`, or `chore/<slug>`
 - small commits scoped to one task or coherent change
 - merges back to the mainline only after the branch stays internally consistent
 - commits on epic or other non-`main` branches may be made without per-commit user approval
@@ -18,6 +19,8 @@ JustSow will use:
 - any amendment to an accepted decision must be re-approved by the user before it returns to `Accepted`
 
 Epic branches should hold related work for a single larger stream, while individual commits should stay narrow enough to preserve readable history and safe rollback points.
+Use `epic/<workstream-slug>` for epic branches so the branch purpose is obvious in `git branch` and PR lists.
+Use the other prefixes above for smaller branches so the branch purpose is still obvious before merge.
 
 ## Commit Message Structure
 

@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import MdiSeedling from '~icons/mdi/seedling';
-	import MdiWater from '~icons/mdi/water';
-	import MdiSun from '~icons/mdi/weather-sunny';
-	import MdiLightbulb from '~icons/mdi/lightbulb';
-	import MdiHandshake from '~icons/mdi/handshake';
-	import MdiTree from '~icons/mdi/tree';
+	import {
+		Droplets,
+		Handshake,
+		Lightbulb,
+		Sprout,
+		SunMedium,
+		TreePine
+	} from '@lucide/svelte';
 </script>
 
 <!-- Our Story -->
@@ -64,19 +66,19 @@
 
 		<div class="grid grid-cols-1 gap-8 md:grid-cols-3">
 			<div class="flex flex-col items-center text-center">
-				<MdiSeedling class="mb-4 h-12 w-12 text-primary" />
+				<Sprout class="mb-4 h-12 w-12 text-primary" />
 				<h3 class="mb-2 text-xl font-semibold">Seed Grants</h3>
 				<p>£10,000 / $20,000 AUD (students £1,000 / $2,000 AUD)</p>
 			</div>
 
 			<div class="flex flex-col items-center text-center">
-				<MdiWater class="mb-4 h-12 w-12 text-accent" />
+				<Droplets class="mb-4 h-12 w-12 text-accent" />
 				<h3 class="mb-2 text-xl font-semibold">Growth Opportunities</h3>
 				<p>Second seed up to £50,000 / $100,000 AUD</p>
 			</div>
 
 			<div class="flex flex-col items-center text-center">
-				<MdiSun class="mb-4 h-12 w-12 text-secondary" />
+				<SunMedium class="mb-4 h-12 w-12 text-secondary" />
 				<h3 class="mb-2 text-xl font-semibold">Wide Reach</h3>
 				<p>Funding multiple projects to multiply impact</p>
 			</div>
@@ -90,25 +92,25 @@
 		<h2 class="mb-12 text-4xl font-bold sm:text-5xl lg:text-6xl">How We Work</h2>
 		<div class="grid grid-cols-1 gap-8 md:grid-cols-4">
 			<div class="flex flex-col items-center">
-				<MdiLightbulb class="mb-2 h-12 w-12 text-primary" />
+				<Lightbulb class="mb-2 h-12 w-12 text-primary" />
 				<h3 class="mb-1 font-semibold">Submit Your Idea</h3>
 				<p class="text-sm">Share your creative gospel project.</p>
 			</div>
 
 			<div class="flex flex-col items-center">
-				<MdiHandshake class="mb-2 h-12 w-12 text-primary" />
+				<Handshake class="mb-2 h-12 w-12 text-primary" />
 				<h3 class="mb-1 font-semibold">Receive Seed Funding</h3>
 				<p class="text-sm">Get initial support to get started.</p>
 			</div>
 
 			<div class="flex flex-col items-center">
-				<MdiTree class="mb-2 h-12 w-12 text-primary" />
+				<TreePine class="mb-2 h-12 w-12 text-primary" />
 				<h3 class="mb-1 font-semibold">Grow Your Project</h3>
 				<p class="text-sm">Develop for 12 months with support.</p>
 			</div>
 
 			<div class="flex flex-col items-center">
-				<MdiSeedling class="mb-2 h-12 w-12 text-primary" />
+				<Sprout class="mb-2 h-12 w-12 text-primary" />
 				<h3 class="mb-1 font-semibold">Apply for Larger Seed</h3>
 				<p class="text-sm">Multiply your impact for the Kingdom.</p>
 			</div>
