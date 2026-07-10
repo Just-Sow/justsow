@@ -27,27 +27,6 @@
 		message: false
 	});
 
-	const socialLinks = [
-			{
-				href: 'https://www.instagram.com/officialjustsow/',
-				label: 'Instagram',
-				handle: '@officialjustsow',
-				icon: SiInstagram
-			},
-			{
-				href: 'https://www.facebook.com/JustSowGiving/',
-				label: 'Facebook',
-				handle: '/JustSowGiving',
-				icon: SiFacebook
-			},
-			{
-				href: 'https://x.com/just_sow',
-				label: 'X',
-				handle: '@just_sow',
-				icon: SiX
-			}
-	];
-
 	const validateField = (field: keyof typeof fieldErrors) => {
 		switch (field) {
 			case 'name':
@@ -60,9 +39,7 @@
 				return !fieldErrors.email;
 			case 'message':
 				fieldErrors.message =
-					message.trim().length >= 20
-						? ''
-						: 'Tell us a little more so we can respond properly.';
+					message.trim().length >= 20 ? '' : 'Tell us a little more so we can respond properly.';
 				return !fieldErrors.message;
 		}
 	};
@@ -181,19 +158,39 @@
 						Connect on socials
 					</p>
 					<ul class="space-y-3">
-						{#each socialLinks as socialLink (socialLink.href)}
-							<li class="w-fit">
-								<a
-									href={socialLink.href}
-									target="_blank"
-									rel="noreferrer"
-									class="inline-flex w-fit items-center space-x-3 text-base transition-colors hover:text-primary"
-								>
-									<socialLink.icon class="h-6 w-6 text-primary" />
-									<span>{socialLink.handle}</span>
-								</a>
-							</li>
-						{/each}
+						<li class="w-fit">
+							<a
+								href="https://www.instagram.com/officialjustsow/"
+								target="_blank"
+								rel="noreferrer"
+								class="inline-flex w-fit items-center space-x-3 text-base transition-colors hover:text-primary"
+							>
+								<SiInstagram class="h-5 w-5 text-primary" />
+								<span>@officialjustsow</span>
+							</a>
+						</li>
+						<li class="w-fit">
+							<a
+								href="https://www.facebook.com/JustSowGiving/"
+								target="_blank"
+								rel="noreferrer"
+								class="inline-flex w-fit items-center space-x-3 text-base transition-colors hover:text-primary"
+							>
+								<SiFacebook class="h-5 w-5 text-primary" />
+								<span>/JustSowGiving</span>
+							</a>
+						</li>
+						<li class="w-fit">
+							<a
+								href="https://x.com/just_sow"
+								target="_blank"
+								rel="noreferrer"
+								class="inline-flex w-fit items-center space-x-3 text-base transition-colors hover:text-primary"
+							>
+								<SiX class="h-5 w-5 text-primary" />
+								<span>@just_sow</span>
+							</a>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -202,7 +199,7 @@
 		<div>
 			<Card.Root class="rounded-2xl bg-white p-8 shadow-lg">
 				<h3 class="mb-6 text-2xl font-semibold">Send a Message</h3>
-				<form class="space-y-4" method="POST" action="/api/contact">
+				<form class="space-y-4" method="POST" action="/api/contact" onsubmit={handleSubmit}>
 					<div>
 						<Label class="mb-1 block font-medium" for="name">Name</Label>
 						<Input
@@ -253,17 +250,27 @@
 					</div>
 					<div class="sr-only">
 						<Label for="website">Website</Label>
-						<Input id="website" name="website" bind:value={website} tabindex={-1} autocomplete="off" />
+						<Input
+							id="website"
+							name="website"
+							bind:value={website}
+							tabindex={-1}
+							autocomplete="off"
+						/>
 					</div>
 
 					{#if successMessage}
-						<p class="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-800">
+						<p
+							class="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-800"
+						>
 							{successMessage}
 						</p>
 					{/if}
 
 					{#if errorMessage}
-						<p class="rounded-lg border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+						<p
+							class="rounded-lg border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive"
+						>
 							{errorMessage}
 						</p>
 					{/if}

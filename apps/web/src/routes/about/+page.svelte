@@ -1,13 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import {
-		Droplets,
-		Handshake,
-		Lightbulb,
-		Sprout,
-		SunMedium,
-		TreePine
-	} from '@lucide/svelte';
+	import { Droplets, Handshake, Lightbulb, Sprout, SunMedium, TreePine } from '@lucide/svelte';
 </script>
 
 <!-- Our Story -->

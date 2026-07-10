@@ -27,7 +27,8 @@ test('POST /api/contact stores the submission and returns success', async () => 
       payload: {
         name: 'Ada Lovelace',
         email: 'ada@example.com',
-        message: 'I would like to ask about the best way to submit a project idea.',
+        message:
+          'I would like to ask about the best way to submit a project idea.',
       },
     });
 

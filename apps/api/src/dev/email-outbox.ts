@@ -4,7 +4,11 @@ import { env } from '../config/env.js';
 
 export interface DevelopmentEmailRecord {
   id: string;
-  kind: 'verification' | 'password_reset' | 'contact_acknowledgement' | 'contact_notification';
+  kind:
+    | 'verification'
+    | 'password_reset'
+    | 'contact_acknowledgement'
+    | 'contact_notification';
   email: string;
   recipients?: string[];
   subject?: string;

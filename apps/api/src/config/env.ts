@@ -29,9 +29,7 @@ const envSchema = z.object({
     .string()
     .default('apps/api/.data/dev-email-outbox.json'),
   CONTACT_ADMIN_EMAILS: z.string().default(''),
-  CONTACT_OUTBOX_PATH: z
-    .string()
-    .default('apps/api/.data/contact-outbox.json'),
+  CONTACT_OUTBOX_PATH: z.string().default('apps/api/.data/contact-outbox.json'),
 });
 
 export const env = envSchema.parse(process.env);
