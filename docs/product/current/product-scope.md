@@ -39,6 +39,7 @@ All project-owner changes after submission require gatekeeper approval before th
 - sign in securely
 - view their own seed history
 - be linked to existing manually created sower records
+- discover projects through their local country market by default
 
 For MVP, a sower may also exist without a self-created account. Staff can create a sower record manually and the sower can later take control of that record by setting a password through email-based account claiming.
 
@@ -55,6 +56,8 @@ For MVP, a sower may also exist without a self-created account. Staff can create
 
 - one seed per project
 - a project is either unsown or sown
+- project discovery defaults to a local country market rather than a globally mixed listing
+- pricing and funding amounts are localized within the active market view
 - broader internal operations continue in Notion
 - advanced region expansion is deferred
 

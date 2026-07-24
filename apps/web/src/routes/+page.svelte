@@ -2,6 +2,7 @@
 	import { MapPin } from '@lucide/svelte';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
+	import * as HoverCard from '$lib/components/ui/hover-card';
 
 	const projects = [
 		{
@@ -9,23 +10,102 @@
 			description: 'Funding music programs for underprivileged youth to inspire creativity.',
 			image:
 				'https://images.unsplash.com/photo-1697197603033-df2940b7f22e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-			location: 'AUS'
+			location: 'Sydney, NSW',
+			fundingRaised: 5000,
+			fundingGoal: 20000,
+			milestones: [
+				{
+					amount: 10000,
+					title: 'Core recording funded',
+					description: 'Covers studio time, basic production, and the first release package.'
+				},
+				{
+					amount: 15000,
+					title: 'Community launch unlocked',
+					description: 'Adds launch events, promo assets, and volunteer activation materials.'
+				},
+				{
+					amount: 20000,
+					title: 'Full rollout ready',
+					description: 'Funds the complete campaign push across churches, schools, and socials.'
+				}
+			]
 		},
 		{
 			title: 'Urban Art Project',
 			description: 'Transforming city walls into vibrant art to empower local artists.',
 			image:
 				'https://images.unsplash.com/photo-1697197603033-df2940b7f22e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-			location: 'UK'
+			location: 'Inner West, NSW',
+			fundingRaised: 15000,
+			fundingGoal: 20000,
+			milestones: [
+				{
+					amount: 10000,
+					title: 'Wall access secured',
+					description: 'Covers permits, prep work, and artist onboarding for the first mural.'
+				},
+				{
+					amount: 15000,
+					title: 'First mural delivered',
+					description: 'Funds paint, lift hire, and production for the flagship public artwork.'
+				},
+				{
+					amount: 20000,
+					title: 'Neighbourhood series unlocked',
+					description: 'Extends the project into additional sites with local workshop support.'
+				}
+			]
 		},
 		{
 			title: 'Tech for Good',
 			description: 'Providing affordable tech workshops to bridge the digital divide.',
 			image:
 				'https://images.unsplash.com/photo-1697197603033-df2940b7f22e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-			location: 'UK'
+			location: 'Brisbane, QLD',
+			fundingRaised: 12500,
+			fundingGoal: 20000,
+			milestones: [
+				{
+					amount: 7500,
+					title: 'Pilot sessions funded',
+					description: 'Launches the first workshop run with devices, trainers, and venue costs.'
+				},
+				{
+					amount: 12500,
+					title: 'Second cohort opened',
+					description: 'Adds more seats and support materials for the next intake of students.'
+				},
+				{
+					amount: 17500,
+					title: 'Regional outreach expanded',
+					description: 'Extends the program into partner communities outside the initial hub.'
+				},
+				{
+					amount: 20000,
+					title: 'Program fully funded',
+					description: 'Covers the complete delivery plan and follow-up mentoring support.'
+				}
+			]
 		}
 	];
+
+	const formatCompactCurrency = (value: number) => {
+		if (value % 1000 === 0) {
+			return `$${value / 1000}k`;
+		}
+
+		return `$${(value / 1000).toFixed(1)}k`;
+	};
+
+	const formatCurrency = (value: number) =>
+		new Intl.NumberFormat('en-AU', {
+			style: 'currency',
+			currency: 'AUD',
+			maximumFractionDigits: 0
+		})
+			.format(value)
+			.replace('A$', '$');
 </script>
 
 <!-- Hero -->
@@ -35,40 +115,22 @@
   to-primary/50 py-16 text-center"
 >
 	<h1 class="text-4xl font-bold sm:text-5xl lg:text-6xl">
-		Plant the <span class="text-primary">Seed</span>
+		Creative ideas.
 		<br />
-		Transform the
-		<span class="text-primary">World</span>
+		<span class="text-primary">Eternal impact.</span>
 	</h1>
 
 	<p class="mt-4 text-lg">
 		We connect generous sowers with bold evangelists, funding and growing creative gospel projects.
 	</p>
-
-	<div class="mt-10 flex flex-col items-center gap-8 sm:flex-row sm:justify-center">
-		<div class="text-center">
-			<p class="text-4xl font-extrabold text-primary">21</p>
-			<p class="mt-2 text-lg font-medium">Projects Seeking Funding</p>
-		</div>
-		<div class="text-center">
-			<p class="text-4xl font-extrabold text-primary">10</p>
-			<p class="mt-2 text-lg font-medium">Seeds Available for Projects</p>
-		</div>
-	</div>
-	<div class="mt-10 space-x-4">
-		<Button size="lg" variant="secondary">Add Your Project</Button>
-		<Button variant="outline" size="lg">Become a Sower</Button>
-	</div>
 </section>
 
 <!-- Projects -->
-<section class="mx-auto w-full max-w-7xl px-4 py-8 text-center sm:px-6 lg:px-8">
-	<h2 class="text-3xl font-bold sm:text-4xl lg:text-5xl">
-		Featured <span class="text-primary">Projects</span>
-	</h2>
-	<p class="mt-4 text-lg">
-		Explore some of the inspiring projects funded and growing through our community.
-	</p>
+<section class="mx-auto w-full max-w-7xl px-4 py-8 text-left sm:px-6 lg:px-8">
+	<h3 class="mt-4 max-w-3xl text-lg font-semibold sm:text-xl lg:text-2xl">
+		Partner with other Sowers to launch the next Gospel idea
+	</h3>
+	<div class="mt-3 h-1 w-16 bg-primary"></div>
 
 	<!-- Project Grid -->
 	<div class="mt-8 grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -76,9 +138,9 @@
 			<Card.Root class="pt-0 transition-shadow duration-300 hover:shadow-lg">
 				<div class="block">
 					<Card.Header class="relative p-0">
-						<img src={project.image} alt={project.title} class="h-64 w-full object-cover" />
+						<img src={project.image} alt={project.title} class="h-52 w-full object-cover" />
 						<div
-							class="absolute top-4 left-4 flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground"
+							class="absolute bottom-4 left-4 flex items-center gap-1 rounded-full border border-border/70 bg-background px-3 py-1 text-xs font-medium text-foreground shadow-sm"
 						>
 							<MapPin />
 							{project.location}
@@ -87,11 +149,84 @@
 					<Card.Content class="mt-2">
 						<h3 class="mb-2 text-xl font-semibold">{project.title}</h3>
 						<p class="text-sm text-muted-foreground">{project.description}</p>
+						<div class="mt-4 space-y-3">
+							<div class="flex items-center justify-between gap-3 text-xs text-muted-foreground">
+								<div>{formatCurrency(project.fundingRaised)} raised</div>
+								<div>{formatCurrency(project.fundingGoal)} goal</div>
+							</div>
+
+							<div
+								class="relative h-2 overflow-visible rounded-full bg-primary/15"
+								role="progressbar"
+								aria-label={`${project.title} funding progress`}
+								aria-valuemin="0"
+								aria-valuemax={project.fundingGoal}
+								aria-valuenow={project.fundingRaised}
+							>
+								<div
+									class="h-full rounded-full bg-primary transition-[width] duration-300 ease-out"
+									style={`width: ${(project.fundingRaised / project.fundingGoal) * 100}%`}
+								></div>
+
+								{#each project.milestones as milestone (milestone.amount)}
+									<HoverCard.Root openDelay={100} closeDelay={50}>
+										<HoverCard.Trigger
+											class="absolute top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 rounded-full"
+											style={`left: ${(milestone.amount / project.fundingGoal) * 100}%`}
+										>
+											<button
+												type="button"
+												class={`flex size-4 items-center justify-center rounded-full border-2 bg-background text-[10px] leading-none font-bold shadow-sm transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+													project.fundingRaised >= milestone.amount
+														? 'border-primary bg-primary text-primary-foreground'
+														: 'border-primary text-transparent'
+												}`}
+												aria-label={`${project.title} milestone at ${formatCompactCurrency(milestone.amount)}`}
+											>
+												{#if project.fundingRaised >= milestone.amount}
+													<span>✓</span>
+												{/if}
+											</button>
+										</HoverCard.Trigger>
+
+										<HoverCard.Content class="w-52">
+											<div class="space-y-1.5">
+												<p class="text-sm font-semibold text-foreground">
+													{milestone.title}
+												</p>
+												<p class="text-xs text-muted-foreground">
+													{milestone.description}
+												</p>
+												<p class="text-xs text-muted-foreground">
+													{project.fundingRaised >= milestone.amount
+														? `${formatCompactCurrency(milestone.amount)} milestone reached`
+														: `Unlocks at ${formatCompactCurrency(milestone.amount)}`}
+												</p>
+											</div>
+										</HoverCard.Content>
+									</HoverCard.Root>
+								{/each}
+							</div>
+
+							<div class="relative h-5 pt-1">
+								<div class="absolute top-0 left-0 text-[10px] font-medium text-muted-foreground">
+									$0
+								</div>
+								{#each project.milestones as milestone (milestone.amount)}
+									<div
+										class="absolute top-0 -translate-x-1/2 text-[10px] font-medium text-muted-foreground"
+										style={`left: ${(milestone.amount / project.fundingGoal) * 100}%`}
+									>
+										{formatCompactCurrency(milestone.amount)}
+									</div>
+								{/each}
+							</div>
+						</div>
 					</Card.Content>
 				</div>
-				<Card.Footer class="mx-auto flex-col gap-2 text-center">
-					<Button size="sm" disabled>Project details coming soon</Button>
-					<p class="text-xs text-muted-foreground">Detailed project pages are not published yet.</p>
+				<Card.Footer class="mx-auto flex gap-4 text-center">
+					<Button aria-label="Project details coming soon">View Project</Button>
+					<Button variant="secondary" aria-label="Project details coming soon">Fund Now</Button>
 				</Card.Footer>
 			</Card.Root>
 		{/each}

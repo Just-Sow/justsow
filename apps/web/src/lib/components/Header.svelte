@@ -4,7 +4,7 @@
 	import { ChevronDown, LogOut, Menu, Settings, UserRound, X } from '@lucide/svelte';
 	import { authRequest } from '$lib/auth/client.js';
 	import { getAuthStore } from '$lib/auth/store.js';
-	import logo from '$lib/assets/logo.svg';
+	import logo from '$lib/assets/branding/logo.svg';
 	import { Button } from '$lib/components/ui/button';
 	import * as Popover from '$lib/components/ui/popover';
 
@@ -41,7 +41,7 @@
 >
 	<div class="relative container mx-auto flex h-20 items-center justify-between px-4">
 		<a href={resolve('/')} class="z-10 flex items-center gap-2">
-			<img src={logo} alt="MyApp Logo" class="h-12 w-auto" />
+			<img src={logo} alt="JustSow logo" class="h-12 w-auto" />
 		</a>
 
 		<nav class="absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 gap-6 md:flex">
@@ -193,6 +193,6 @@
 	</Popover.Root>
 
 	<a href={resolve('/')} class="flex items-center gap-2">
-		<img src={logo} alt="MyApp Logo" class="h-10 w-auto" />
+		<img src={logo} alt="JustSow logo" class="h-10 w-auto" />
 	</a>
 </header>
