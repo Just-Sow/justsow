@@ -4,7 +4,7 @@
 	import { ChevronDown, LogOut, Menu, Settings, UserRound, X } from '@lucide/svelte';
 	import { authRequest } from '$lib/auth/client.js';
 	import { getAuthStore } from '$lib/auth/store.js';
-	import logo from '$lib/assets/logo.svg';
+	import logo from '$lib/assets/branding/logo.svg';
 	import { Button } from '$lib/components/ui/button';
 	import * as Popover from '$lib/components/ui/popover';
 
@@ -41,7 +41,7 @@
 >
 	<div class="relative container mx-auto flex h-20 items-center justify-between px-4">
 		<a href={resolve('/')} class="z-10 flex items-center gap-2">
-			<img src={logo} alt="MyApp Logo" class="h-12 w-auto" />
+			<img src={logo} alt="JustSow logo" class="h-12 w-auto" />
 		</a>
 
 		<nav class="absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 gap-6 md:flex">
@@ -60,20 +60,16 @@
 		<div class="z-10 flex items-center gap-3">
 			{#if isAuthenticated}
 				<Popover.Root bind:open={accountOpen}>
-					<Popover.Trigger>
-						<Button
-							type="button"
-							variant="ghost"
-							class="gap-3 text-foreground/85"
-							aria-label="Open account menu"
-						>
-							<UserRound class="size-4 text-foreground/85" />
-							<span>{displayName}</span>
-							<ChevronDown
-								strokeWidth={2.5}
-								class={`size-4 text-foreground/85 transition-transform duration-200 ${accountOpen ? 'rotate-180' : 'rotate-0'}`}
-							/>
-						</Button>
+					<Popover.Trigger
+						class="inline-flex h-9 items-center justify-center gap-3 rounded-md px-4 py-2 text-sm font-medium text-foreground/85 outline-none transition-[background-color,color,border-color,box-shadow,transform] duration-150 ease-out hover:bg-muted/60 hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
+						aria-label="Open account menu"
+					>
+						<UserRound class="size-4 text-foreground/85" />
+						<span>{displayName}</span>
+						<ChevronDown
+							strokeWidth={2.5}
+							class={`size-4 text-foreground/85 transition-transform duration-200 ${accountOpen ? 'rotate-180' : 'rotate-0'}`}
+						/>
 					</Popover.Trigger>
 
 					<Popover.Content align="end" class="w-72 p-2">
@@ -117,15 +113,15 @@
 	class="sticky top-0 z-50 flex h-16 w-full items-center justify-between border-b border-border/70 bg-background/95 px-4 backdrop-blur md:hidden"
 >
 	<Popover.Root bind:open>
-		<Popover.Trigger>
-			<Button variant="ghost" class="gap-2 px-2 text-foreground/85">
-				{#if open}
-					<X class="h-6 w-6" />
-				{:else}
-					<Menu class="h-6 w-6" />
-				{/if}
-				<span class="text-lg font-medium">Menu</span>
-			</Button>
+		<Popover.Trigger
+			class="inline-flex items-center justify-center gap-2 rounded-md px-2 py-2 text-foreground/85 outline-none transition-[background-color,color,border-color,box-shadow,transform] duration-150 ease-out hover:bg-muted/60 hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
+		>
+			{#if open}
+				<X class="h-6 w-6" />
+			{:else}
+				<Menu class="h-6 w-6" />
+			{/if}
+			<span class="text-lg font-medium">Menu</span>
 		</Popover.Trigger>
 
 		<Popover.Content
@@ -193,6 +189,6 @@
 	</Popover.Root>
 
 	<a href={resolve('/')} class="flex items-center gap-2">
-		<img src={logo} alt="MyApp Logo" class="h-10 w-auto" />
+		<img src={logo} alt="JustSow logo" class="h-10 w-auto" />
 	</a>
 </header>

@@ -39,9 +39,9 @@ This simplifies both public messaging and internal workflow for MVP.
 ## Visibility
 
 - draft and in-review items are private to relevant internal users and the Creative Evangelist
-- published projects are public
+- published projects are public, but project discovery should default to the viewer's active country market
 - archived non-case-study items are internal only
-- case studies are public
+- case studies are public and follow the same market-local discovery defaults unless explicitly curated otherwise
 
 ## Audit Expectations
 

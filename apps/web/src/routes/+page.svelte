@@ -1,97 +1,379 @@
 <script lang="ts">
 	import { MapPin } from '@lucide/svelte';
+	import twelveApostlesPhotography from '$lib/assets/content/home/12-apostles-photography.png';
+	import brewHope from '$lib/assets/content/home/brew-hope.png';
+	import coffeeAtTheBeach from '$lib/assets/content/home/coffee-at-the-beach.png';
+	import guitarAtTheBeach from '$lib/assets/content/home/guitar-at-the-beach.png';
+	import largeBanquet from '$lib/assets/content/home/large-banquet.png';
+	import successImages from '$lib/assets/content/home/success-images.png';
+	import uluru from '$lib/assets/content/home/uluru.png';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
+	import * as HoverCard from '$lib/components/ui/hover-card';
 
 	const projects = [
 		{
-			title: 'Music for Change',
-			description: 'Funding music programs for underprivileged youth to inspire creativity.',
-			image:
-				'https://images.unsplash.com/photo-1697197603033-df2940b7f22e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-			location: 'AUS'
+			title: 'Beach Conversations',
+			description:
+				'Creating space for natural, Christ-centred conversations with people already lingering by the water.',
+			image: coffeeAtTheBeach,
+			location: 'Gold Coast, QLD',
+			fundingRaised: 5000,
+			fundingGoal: 20000,
+			milestones: [
+				{
+					amount: 10000,
+					title: 'Conversation kits funded',
+					description:
+						'Covers coffee supplies, simple signage, and training prompts for the first volunteer team.'
+				},
+				{
+					amount: 15000,
+					title: 'Weekly beach rhythm launched',
+					description:
+						'Funds a repeatable presence with printed invites, follow-up resources, and team coordination.'
+				},
+				{
+					amount: 20000,
+					title: 'Coastal expansion ready',
+					description:
+						'Extends the model into more beaches with shared resourcing and volunteer support.'
+				}
+			]
 		},
 		{
-			title: 'Urban Art Project',
-			description: 'Transforming city walls into vibrant art to empower local artists.',
-			image:
-				'https://images.unsplash.com/photo-1697197603033-df2940b7f22e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-			location: 'UK'
+			title: 'Hope on the Streets',
+			description:
+				'Launching a mobile coffee and chats van that offers hospitality, prayer, and gospel conversations.',
+			image: brewHope,
+			location: 'Melbourne, VIC',
+			fundingRaised: 15000,
+			fundingGoal: 20000,
+			milestones: [
+				{
+					amount: 10000,
+					title: 'Van fit-out started',
+					description:
+						'Covers the first stage of coffee equipment, signage, and practical setup for outreach nights.'
+				},
+				{
+					amount: 15000,
+					title: 'Street service launched',
+					description:
+						'Funds the first full run of coffee, volunteer support, and on-the-ground engagement materials.'
+				},
+				{
+					amount: 20000,
+					title: 'Multi-suburb route unlocked',
+					description:
+						'Extends the van into more locations with repeat visits and stronger follow-up pathways.'
+				}
+			]
 		},
 		{
-			title: 'Tech for Good',
-			description: 'Providing affordable tech workshops to bridge the digital divide.',
-			image:
-				'https://images.unsplash.com/photo-1697197603033-df2940b7f22e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-			location: 'UK'
+			title: 'Outback Youth Nights',
+			description:
+				'Running regional gatherings that combine food, music, and a clear gospel invitation.',
+			image: uluru,
+			location: 'Alice Springs, NT',
+			fundingRaised: 12500,
+			fundingGoal: 20000,
+			milestones: [
+				{
+					amount: 7500,
+					title: 'Pilot sessions funded',
+					description: 'Launches the first workshop run with devices, trainers, and venue costs.'
+				},
+				{
+					amount: 12500,
+					title: 'Second cohort opened',
+					description: 'Adds more seats and support materials for the next intake of students.'
+				},
+				{
+					amount: 17500,
+					title: 'Regional outreach expanded',
+					description: 'Extends the program into partner communities outside the initial hub.'
+				},
+				{
+					amount: 20000,
+					title: 'Program fully funded',
+					description: 'Covers the complete delivery plan and follow-up mentoring support.'
+				}
+			]
+		},
+		{
+			title: 'Stories of Hope',
+			description:
+				'Making short gospel films and testimony stories that can travel online and open real conversations.',
+			image: twelveApostlesPhotography,
+			location: 'South-West, VIC',
+			fundingRaised: 9000,
+			fundingGoal: 20000,
+			milestones: [
+				{
+					amount: 5000,
+					title: 'Filmmaking kit funded',
+					description:
+						'Covers camera support, audio, lighting, and the basic gear needed for the first shoots.'
+				},
+				{
+					amount: 10000,
+					title: 'First gospel films produced',
+					description: 'Funds filming and editing for the opening set of testimony-led short films.'
+				},
+				{
+					amount: 15000,
+					title: 'Release campaign launched',
+					description:
+						'Adds subtitles, social cutdowns, and distribution support so the films can travel widely.'
+				},
+				{
+					amount: 20000,
+					title: 'Series fully commissioned',
+					description:
+						'Completes the full film slate with follow-up production, release support, and story capture.'
+				}
+			]
+		},
+		{
+			title: 'Neighbourhood Table',
+			description:
+				'Hosting shared meals that create a warm space to ask life’s big questions around the table.',
+			image: largeBanquet,
+			location: 'Adelaide, SA',
+			fundingRaised: 11000,
+			fundingGoal: 20000,
+			milestones: [
+				{
+					amount: 5000,
+					title: 'Pilot dinners launched',
+					description: 'Covers food, setup, and volunteer coordination for the first local meals.'
+				},
+				{
+					amount: 10000,
+					title: 'Monthly rhythm established',
+					description:
+						'Funds recurring dinners and simple invitations that welcome neighbours into honest conversation.'
+				},
+				{
+					amount: 15000,
+					title: 'Question-led evenings added',
+					description:
+						'Adds host training and table resources to help each meal open into deeper faith discussions.'
+				},
+				{
+					amount: 20000,
+					title: 'Multi-site table network',
+					description:
+						'Expands the format into more suburbs with shared resourcing and leadership support.'
+				}
+			]
+		},
+		{
+			title: 'Waves of Worship',
+			description:
+				'Bringing acoustic worship gatherings to public spaces where faith can be heard openly.',
+			image: guitarAtTheBeach,
+			location: 'Perth, WA',
+			fundingRaised: 14000,
+			fundingGoal: 20000,
+			milestones: [
+				{
+					amount: 5000,
+					title: 'First beach set funded',
+					description:
+						'Covers permits, portable sound, and volunteer support for the first gathering.'
+				},
+				{
+					amount: 10000,
+					title: 'Season schedule confirmed',
+					description: 'Funds a series of worship nights with printed invites and team logistics.'
+				},
+				{
+					amount: 15000,
+					title: 'Recording and sharing unlocked',
+					description: 'Adds live capture, social edits, and simple testimony integration.'
+				},
+				{
+					amount: 20000,
+					title: 'Regional worship trail launched',
+					description: 'Extends the gatherings into a broader coastal run with partner churches.'
+				}
+			]
 		}
 	];
+
+	const formatCompactCurrency = (value: number) => {
+		if (value % 1000 === 0) {
+			return `$${value / 1000}k`;
+		}
+
+		return `$${(value / 1000).toFixed(1)}k`;
+	};
+
+	const formatCurrency = (value: number) =>
+		new Intl.NumberFormat('en-AU', {
+			style: 'currency',
+			currency: 'AUD',
+			maximumFractionDigits: 0
+		})
+			.format(value)
+			.replace('A$', '$');
+
+	const getAmountLeft = (raised: number, goal: number) => Math.max(goal - raised, 0);
+	const isNearGoal = (raised: number, goal: number) => {
+		const amountLeft = getAmountLeft(raised, goal);
+		return amountLeft > 0 && amountLeft <= 5000;
+	};
 </script>
 
 <!-- Hero -->
-<section
-	class="bg-linear-to-b
-  from-background from-70%
-  to-primary/50 py-16 text-center"
->
-	<h1 class="text-4xl font-bold sm:text-5xl lg:text-6xl">
-		Plant the <span class="text-primary">Seed</span>
-		<br />
-		Transform the
-		<span class="text-primary">World</span>
-	</h1>
+<section class="w-full bg-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))]">
+	<div class="grid items-stretch lg:grid-cols-12">
+		<div
+			class="relative z-10 flex flex-col justify-center px-6 py-10 sm:px-10 sm:py-14 lg:col-span-5 lg:px-14"
+		>
+			<div class="relative z-10">
+				<p class="text-sm font-semibold tracking-[0.18em] text-primary uppercase">
+					Back bold gospel ideas
+				</p>
+				<h1 class="mt-4 max-w-xl text-4xl font-bold text-balance sm:text-5xl lg:text-6xl">
+					Creative ideas.
+					<span class="block text-primary">Eternal impact.</span>
+				</h1>
 
-	<p class="mt-4 text-lg">
-		We connect generous sowers with bold evangelists, funding and growing creative gospel projects.
-	</p>
+				<p class="mt-5 max-w-xl text-base leading-7 text-foreground/80 sm:text-lg">
+					JustSow connects generous sowers with creative evangelists, helping new gospel projects
+					move from first idea to public launch.
+				</p>
+			</div>
+		</div>
 
-	<div class="mt-10 flex flex-col items-center gap-8 sm:flex-row sm:justify-center">
-		<div class="text-center">
-			<p class="text-4xl font-extrabold text-primary">21</p>
-			<p class="mt-2 text-lg font-medium">Projects Seeking Funding</p>
+		<div class="relative min-h-70 lg:col-span-7 lg:min-h-130">
+			<div
+				class="absolute inset-y-0 left-0 z-10 hidden w-72 bg-linear-to-r from-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))] via-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))]/82 to-transparent lg:block"
+			></div>
+			<div
+				class="absolute inset-x-0 top-0 z-10 h-28 bg-linear-to-b from-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))] via-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))]/72 to-transparent lg:hidden"
+			></div>
+			<img
+				src={successImages}
+				alt="Supporters celebrating the success of a gospel project together"
+				class="h-full w-full object-cover object-center"
+			/>
 		</div>
-		<div class="text-center">
-			<p class="text-4xl font-extrabold text-primary">10</p>
-			<p class="mt-2 text-lg font-medium">Seeds Available for Projects</p>
-		</div>
-	</div>
-	<div class="mt-10 space-x-4">
-		<Button size="lg" variant="secondary">Add Your Project</Button>
-		<Button variant="outline" size="lg">Become a Sower</Button>
 	</div>
 </section>
 
 <!-- Projects -->
-<section class="mx-auto w-full max-w-7xl px-4 py-8 text-center sm:px-6 lg:px-8">
-	<h2 class="text-3xl font-bold sm:text-4xl lg:text-5xl">
-		Featured <span class="text-primary">Projects</span>
-	</h2>
-	<p class="mt-4 text-lg">
-		Explore some of the inspiring projects funded and growing through our community.
-	</p>
+<section class="mx-auto w-full max-w-7xl px-4 py-8 text-left sm:px-6 lg:px-8">
+	<h3 class="mt-4 max-w-3xl text-lg font-semibold sm:text-xl lg:text-2xl">
+		Partner with other Sowers to launch the next Gospel idea
+	</h3>
+	<div class="mt-3 h-1 w-16 bg-primary"></div>
 
 	<!-- Project Grid -->
 	<div class="mt-8 grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 		{#each projects as project (project.title)}
-			<Card.Root class="pt-0 transition-shadow duration-300 hover:shadow-lg">
-				<div class="block">
+			<Card.Root class="h-full pt-0 transition-shadow duration-300 hover:shadow-lg">
+				<div class="flex h-full flex-col">
 					<Card.Header class="relative p-0">
-						<img src={project.image} alt={project.title} class="h-64 w-full object-cover" />
+						<img src={project.image} alt={project.title} class="h-52 w-full object-cover" />
 						<div
-							class="absolute top-4 left-4 flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground"
+							class="absolute bottom-4 left-4 flex items-center gap-1 rounded-full border border-border/70 bg-background px-3 py-1 text-xs font-medium text-foreground shadow-sm"
 						>
 							<MapPin />
 							{project.location}
 						</div>
 					</Card.Header>
-					<Card.Content class="mt-2">
+					<Card.Content class="mt-2 flex flex-1 flex-col">
 						<h3 class="mb-2 text-xl font-semibold">{project.title}</h3>
 						<p class="text-sm text-muted-foreground">{project.description}</p>
+						<div class="mt-auto pt-4 space-y-3">
+							<div class="flex items-center justify-between gap-3 text-xs text-muted-foreground">
+								<div
+									class={isNearGoal(project.fundingRaised, project.fundingGoal)
+										? 'font-semibold text-secondary'
+										: ''}
+								>
+									{formatCurrency(getAmountLeft(project.fundingRaised, project.fundingGoal))} left to
+									raise
+								</div>
+								<div>{formatCurrency(project.fundingGoal)} goal</div>
+							</div>
+
+							<div
+								class={`relative h-2 overflow-visible rounded-full ${isNearGoal(project.fundingRaised, project.fundingGoal) ? 'bg-secondary/20' : 'bg-primary/15'}`}
+								role="progressbar"
+								aria-label={`${project.title} funding progress`}
+								aria-valuemin="0"
+								aria-valuemax={project.fundingGoal}
+								aria-valuenow={project.fundingRaised}
+							>
+								<div
+									class={`h-full rounded-full transition-[width] duration-300 ease-out ${isNearGoal(project.fundingRaised, project.fundingGoal) ? 'bg-secondary' : 'bg-primary'}`}
+									style={`width: ${(project.fundingRaised / project.fundingGoal) * 100}%`}
+								></div>
+
+								{#each project.milestones as milestone (milestone.amount)}
+									<HoverCard.Root openDelay={100} closeDelay={50}>
+										<HoverCard.Trigger
+											class={`absolute top-1/2 z-10 flex size-4 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 bg-background text-[10px] leading-none font-bold shadow-sm transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+												project.fundingRaised >= milestone.amount
+													? isNearGoal(project.fundingRaised, project.fundingGoal)
+														? 'border-secondary bg-secondary text-secondary-foreground'
+														: 'border-primary bg-primary text-primary-foreground'
+													: isNearGoal(project.fundingRaised, project.fundingGoal) &&
+														  milestone.amount === project.fundingGoal
+														? 'border-secondary text-transparent'
+														: 'border-primary text-transparent'
+											}`}
+											style={`left: ${(milestone.amount / project.fundingGoal) * 100}%`}
+											aria-label={`${project.title} milestone at ${formatCompactCurrency(milestone.amount)}`}
+										>
+											{#if project.fundingRaised >= milestone.amount}
+												<span>✓</span>
+											{/if}
+										</HoverCard.Trigger>
+
+										<HoverCard.Content class="w-52">
+											<div class="space-y-1.5">
+												<p class="text-sm font-semibold text-foreground">
+													{milestone.title}
+												</p>
+												<p class="text-xs text-muted-foreground">
+													{milestone.description}
+												</p>
+												<p class="text-xs text-muted-foreground">
+													{project.fundingRaised >= milestone.amount
+														? `${formatCompactCurrency(milestone.amount)} milestone reached`
+														: `Unlocks at ${formatCompactCurrency(milestone.amount)}`}
+												</p>
+											</div>
+										</HoverCard.Content>
+									</HoverCard.Root>
+								{/each}
+							</div>
+
+							<div class="relative h-5 pt-1">
+								<div class="absolute top-0 left-0 text-[10px] font-medium text-muted-foreground">
+									$0
+								</div>
+								{#each project.milestones as milestone (milestone.amount)}
+									<div
+										class="absolute top-0 -translate-x-1/2 text-[10px] font-medium text-muted-foreground"
+										style={`left: ${(milestone.amount / project.fundingGoal) * 100}%`}
+									>
+										{formatCompactCurrency(milestone.amount)}
+									</div>
+								{/each}
+							</div>
+						</div>
 					</Card.Content>
 				</div>
-				<Card.Footer class="mx-auto flex-col gap-2 text-center">
-					<Button size="sm" disabled>Project details coming soon</Button>
-					<p class="text-xs text-muted-foreground">Detailed project pages are not published yet.</p>
+				<Card.Footer class="mt-auto mx-auto flex gap-4 text-center">
+					<Button aria-label="Project details coming soon">View Project</Button>
+					<Button variant="secondary" aria-label="Project details coming soon">Fund Now</Button>
 				</Card.Footer>
 			</Card.Root>
 		{/each}

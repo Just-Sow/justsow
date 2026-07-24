@@ -38,14 +38,14 @@ Broader internal operations remain in Notion and are out of scope for the websit
 
 ## 3. Users And Roles
 
-| Role | Responsibilities | Access |
-| --- | --- | --- |
-| Project owner | Submit projects, revise applications, propose edits to existing projects | Own projects and related workflow only |
-| Sower | View own seed history, claim or manage own account | Own seed history only |
-| Gatekeeper | Approve, reject, revise, publish, archive, mark case studies | All relevant project workflow records |
-| Seed allocator | Create manual sower records, assign a seed to a project | Sower and seed allocation workflows |
-| Stewardship staff | View project and seed records, support stewardship process | Read-oriented access across relevant records |
-| Admin | Manage users, roles, and security-sensitive settings | Full administrative access |
+| Role              | Responsibilities                                                         | Access                                       |
+| ----------------- | ------------------------------------------------------------------------ | -------------------------------------------- |
+| Project owner     | Submit projects, revise applications, propose edits to existing projects | Own projects and related workflow only       |
+| Sower             | View own seed history, claim or manage own account                       | Own seed history only                        |
+| Gatekeeper        | Approve, reject, revise, publish, archive, mark case studies             | All relevant project workflow records        |
+| Seed allocator    | Create manual sower records, assign a seed to a project                  | Sower and seed allocation workflows          |
+| Stewardship staff | View project and seed records, support stewardship process               | Read-oriented access across relevant records |
+| Admin             | Manage users, roles, and security-sensitive settings                     | Full administrative access                   |
 
 Users may hold multiple roles at once.
 
@@ -71,41 +71,46 @@ Users may hold multiple roles at once.
 
 - **FR-7**: The system supports statuses covering draft, review, revision, approval, publication, sown state, completion, and archival.
 - **FR-8**: Only gatekeepers can approve project status or visibility changes.
-- **FR-9**: Published projects are public. Non-public and archived non-case-study projects are internal only.
+- **FR-9**: Published projects are public on the web. Non-public and archived non-case-study projects are internal only.
 - **FR-10**: Completed projects can be marked as case studies for public display.
 
-### 5.3 Project Change Approval
+### 5.3 Regional Visibility And Currency
 
-- **FR-11**: Project owners can propose edits to their own projects after initial approval.
-- **FR-12**: Proposed edits must be reviewed by gatekeepers before they affect the live project.
-- **FR-13**: The system records approval outcomes and revision feedback for submitted edits.
+- **FR-11**: Project discovery should default to the viewer's active country market, based on browser location or explicit market selection.
+- **FR-12**: Funding amounts shown in project discovery and project presentation must use the localized currency format for the active market being shown to the user.
 
-### 5.4 Seeds And Sowers
+### 5.4 Project Change Approval
 
-- **FR-14**: For MVP, each project can have at most one seed.
-- **FR-15**: A project is either unsown or sown.
-- **FR-16**: Seed allocation is performed by seed allocators.
-- **FR-17**: The system tracks seed history, project association, sower identity, and allocation date.
-- **FR-18**: Staff can create sower records without requiring immediate self-service registration.
-- **FR-19**: A sower can later claim a manually created record and access their history.
+- **FR-13**: Project owners can propose edits to their own projects after initial approval.
+- **FR-14**: Proposed edits must be reviewed by gatekeepers before they affect the live project.
+- **FR-15**: The system records approval outcomes and revision feedback for submitted edits.
 
-### 5.5 Accounts, Identity, And Security
+### 5.5 Seeds And Sowers
 
-- **FR-20**: Users can create and manage accounts where permitted by role and workflow.
-- **FR-21**: The system supports email verification, password reset, and account email update flows.
-- **FR-22**: The system supports two-factor authentication.
-- **FR-23**: Users may hold multiple roles.
+- **FR-16**: For MVP, each project can have at most one seed.
+- **FR-17**: A project is either unsown or sown.
+- **FR-18**: Seed allocation is performed by seed allocators.
+- **FR-19**: The system tracks seed history, project association, sower identity, and allocation date.
+- **FR-20**: Staff can create sower records without requiring immediate self-service registration.
+- **FR-21**: A sower can later claim a manually created record and access their history.
 
-### 5.6 Notifications
+### 5.6 Accounts, Identity, And Security
 
-- **FR-24**: Branded HTML email notifications are sent for account lifecycle events.
-- **FR-25**: Branded HTML email notifications are sent for project approval, rejection, and revision events.
-- **FR-26**: Notifications include direct links into the relevant area of the system where appropriate.
+- **FR-22**: Users can create and manage accounts where permitted by role and workflow.
+- **FR-23**: The system supports email verification, password reset, and account email update flows.
+- **FR-24**: The system supports two-factor authentication.
+- **FR-25**: Users may hold multiple roles.
 
-### 5.7 Media
+### 5.7 Notifications
 
-- **FR-27**: The platform stores and presents project images and a one-minute video.
-- **FR-28**: The platform may generate or store thumbnails or previews where needed for usable UX.
+- **FR-26**: Branded HTML email notifications are sent for account lifecycle events.
+- **FR-27**: Branded HTML email notifications are sent for project approval, rejection, and revision events.
+- **FR-28**: Notifications include direct links into the relevant area of the system where appropriate.
+
+### 5.8 Media
+
+- **FR-29**: The platform stores and presents project images and a one-minute video.
+- **FR-30**: The platform may generate or store thumbnails or previews where needed for usable UX.
 
 ## 6. Non-Functional Requirements
 
