@@ -19,6 +19,6 @@
     "db:reset:dev": "pnpm --dir apps/api run db:reset:dev"
   },
   "devDependencies": {
-    "turbo": "^2.10.4"
+    "turbo": "^2.10.6"
   }
 }
