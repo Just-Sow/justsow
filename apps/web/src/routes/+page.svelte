@@ -1,7 +1,7 @@
 <script lang="ts">
+	import { MapPin } from '@lucide/svelte';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
-	import MdiMapMarker from '~icons/mdi/map-marker';
 
 	const projects = [
 		{
@@ -80,7 +80,7 @@
 						<div
 							class="absolute top-4 left-4 flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground"
 						>
-							<MdiMapMarker />
+							<MapPin />
 							{project.location}
 						</div>
 					</Card.Header>

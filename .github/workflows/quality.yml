@@ -98,35 +98,11 @@ jobs:
           POSTGRES_TEST_DB: justsow_test
         run: pnpm db:setup
 
+      - name: Install Chromium
+        run: pnpm test:setup
+
       - name: Run tests
         env:
           DATABASE_URL: postgres://justsow:justsow@127.0.0.1:5432/justsow_dev
           DATABASE_TEST_URL: postgres://justsow:justsow@127.0.0.1:5432/justsow_test
         run: pnpm test
-
-  browser-tests:
-    name: Browser tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6
-        with:
-          version: 11.10.0
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Install Chromium
-        run: pnpm test:setup
-
-      - name: Run browser tests
-        run: pnpm --filter @justsow/web test:browser:ci

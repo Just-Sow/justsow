@@ -2,29 +2,23 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { env } from '../config/env.js';
 
-export interface DevelopmentEmailRecord {
+export interface ContactSubmissionRecord {
   id: string;
-  kind:
-    | 'verification'
-    | 'password_reset'
-    | 'contact_acknowledgement'
-    | 'contact_notification';
+  name: string;
   email: string;
-  recipients?: string[];
-  subject?: string;
-  text?: string;
-  replyTo?: string | null;
-  url?: string;
-  token?: string;
+  subject: string;
+  message: string;
   createdAt: string;
+  ipAddress: string | null;
+  userAgent: string | null;
 }
 
-const outboxPath = resolve(process.cwd(), env.DEV_EMAIL_OUTBOX_PATH);
+const outboxPath = resolve(process.cwd(), env.CONTACT_OUTBOX_PATH);
 
 const readOutbox = async () => {
   try {
     const file = await readFile(outboxPath, 'utf8');
-    return JSON.parse(file) as DevelopmentEmailRecord[];
+    return JSON.parse(file) as ContactSubmissionRecord[];
   } catch (error) {
     if (
       typeof error === 'object' &&
@@ -39,16 +33,16 @@ const readOutbox = async () => {
   }
 };
 
-const writeOutbox = async (records: readonly DevelopmentEmailRecord[]) => {
+const writeOutbox = async (records: readonly ContactSubmissionRecord[]) => {
   await mkdir(dirname(outboxPath), { recursive: true });
   await writeFile(outboxPath, JSON.stringify(records, null, 2));
 };
 
-export const queueDevelopmentEmail = async (
-  input: Omit<DevelopmentEmailRecord, 'id' | 'createdAt'>
+export const queueContactSubmission = async (
+  input: Omit<ContactSubmissionRecord, 'id' | 'createdAt'>
 ) => {
   const records = await readOutbox();
-  const record: DevelopmentEmailRecord = {
+  const record: ContactSubmissionRecord = {
     ...input,
     id: crypto.randomUUID(),
     createdAt: new Date().toISOString(),
@@ -60,10 +54,10 @@ export const queueDevelopmentEmail = async (
   return record;
 };
 
-export const listDevelopmentEmails = async () => {
+export const listContactSubmissions = async () => {
   return readOutbox();
 };
 
-export const clearDevelopmentEmails = async () => {
+export const clearContactSubmissions = async () => {
   await writeOutbox([]);
 };

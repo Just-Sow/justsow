@@ -24,12 +24,6 @@ Redesign and implement the public contact page so it has a clear user experience
 - spam prevention approach appropriate for MVP
 - final brand and content direction for contact copy
 
-## Open Questions
-
-- where contact submissions should be delivered for MVP
-- whether different enquiry types need routing
-- whether office, team, or project-specific contact details belong on the page
-
 ## Acceptance Criteria
 
 - the contact page has a clear and intentional UI
@@ -39,4 +33,14 @@ Redesign and implement the public contact page so it has a clear user experience
 
 ## Status
 
-Planned
+Complete
+
+## Progress
+
+Completed:
+
+- public contact page rebuilt around the original two-column layout with shadcn components
+- contact form now validates name, email, and message before submission
+- client-side submission now posts to `/api/contact` and surfaces success and failure states
+- API route now accepts contact submissions, applies basic spam throttling, and stores entries in a local contact outbox
+- contact page and API route both have automated coverage

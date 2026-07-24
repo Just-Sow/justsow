@@ -19,10 +19,12 @@
 	<title>JustSow</title>
 </svelte:head>
 
-<div>
+<div class="flex min-h-screen flex-col">
 	<Header />
 
-	{@render children?.()}
+	<main class="flex-1">
+		{@render children?.()}
+	</main>
 
 	<Footer />
 </div>
