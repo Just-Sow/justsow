@@ -17,7 +17,7 @@
 		"test:unit": "vitest run --project server",
 		"test:browser": "vitest run --project client",
 		"test:browser:ci": "vitest run --project client",
-		"test": "pnpm run test:unit && pnpm run test:browser:ci"
+		"test": "pnpm run test:unit"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.1.0",

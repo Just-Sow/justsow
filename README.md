@@ -38,6 +38,7 @@ Package-specific commands:
 - `pnpm --filter @justsow/web build`
 - `pnpm --filter @justsow/web lint`
 - `pnpm --filter @justsow/web test`
+- `pnpm --filter @justsow/web test:browser`
 - `pnpm --filter @justsow/web typecheck`
 - `pnpm --filter @justsow/web format`
 - `pnpm --filter @justsow/web test:setup`

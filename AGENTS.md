@@ -127,7 +127,9 @@ Before asking the user to approve work for a PR or other handoff, run the approp
 
 - Always run format, lint, typecheck, and the relevant tests before marking work ready for PR.
 - Do not rerun that full gate after every small edit; reserve it for the point where you are preparing to ask for approval or finish a PR branch.
-- If the change affects browser behavior in `apps/web`, include the browser test path as part of the validation gate, not just `pnpm test`.
+- `pnpm test` is the default non-browser test path for `apps/web`; run `pnpm --filter @justsow/web test:browser` explicitly when browser coverage is needed.
+- If a change affects browser behavior in `apps/web`, include the browser test path as part of the validation gate, not just `pnpm test`.
+- When a full branch or epic is being marked done, remind the user that browser tests still need to be run for any browser-affecting `apps/web` work.
 - Keep the final state clean before asking for approval, including any formatting fixes needed by the validation run.
 
 ## UX Copy And Design Guardrails
