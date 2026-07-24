@@ -24,7 +24,7 @@
 		"@eslint/js": "^10.0.1",
 		"@iconify-json/simple-icons": "^1.2.89",
 		"@internationalized/date": "^3.12.2",
-		"@lucide/svelte": "^1.23.0",
+		"@lucide/svelte": "^1.26.0",
 		"@sveltejs/adapter-auto": "^7.0.1",
 		"@sveltejs/kit": "^2.69.2",
 		"@sveltejs/vite-plugin-svelte": "^7.2.0",
