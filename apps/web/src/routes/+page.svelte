@@ -318,27 +318,22 @@
 								{#each project.milestones as milestone (milestone.amount)}
 									<HoverCard.Root openDelay={100} closeDelay={50}>
 										<HoverCard.Trigger
-											class="absolute top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 rounded-full"
+											class={`absolute top-1/2 z-10 flex size-4 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 bg-background text-[10px] leading-none font-bold shadow-sm transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+												project.fundingRaised >= milestone.amount
+													? isNearGoal(project.fundingRaised, project.fundingGoal)
+														? 'border-secondary bg-secondary text-secondary-foreground'
+														: 'border-primary bg-primary text-primary-foreground'
+													: isNearGoal(project.fundingRaised, project.fundingGoal) &&
+														  milestone.amount === project.fundingGoal
+														? 'border-secondary text-transparent'
+														: 'border-primary text-transparent'
+											}`}
 											style={`left: ${(milestone.amount / project.fundingGoal) * 100}%`}
+											aria-label={`${project.title} milestone at ${formatCompactCurrency(milestone.amount)}`}
 										>
-											<button
-												type="button"
-												class={`flex size-4 items-center justify-center rounded-full border-2 bg-background text-[10px] leading-none font-bold shadow-sm transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
-													project.fundingRaised >= milestone.amount
-														? isNearGoal(project.fundingRaised, project.fundingGoal)
-															? 'border-secondary bg-secondary text-secondary-foreground'
-															: 'border-primary bg-primary text-primary-foreground'
-														: isNearGoal(project.fundingRaised, project.fundingGoal) &&
-															  milestone.amount === project.fundingGoal
-															? 'border-secondary text-transparent'
-															: 'border-primary text-transparent'
-												}`}
-												aria-label={`${project.title} milestone at ${formatCompactCurrency(milestone.amount)}`}
-											>
-												{#if project.fundingRaised >= milestone.amount}
-													<span>✓</span>
-												{/if}
-											</button>
+											{#if project.fundingRaised >= milestone.amount}
+												<span>✓</span>
+											{/if}
 										</HoverCard.Trigger>
 
 										<HoverCard.Content class="w-52">
