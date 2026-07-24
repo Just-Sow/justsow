@@ -72,7 +72,8 @@
 		},
 		{
 			title: 'Outback Youth Nights',
-			description: 'Running regional gatherings that combine food, music, and a clear gospel invitation.',
+			description:
+				'Running regional gatherings that combine food, music, and a clear gospel invitation.',
 			image: uluru,
 			location: 'Alice Springs, NT',
 			fundingRaised: 12500,
@@ -118,8 +119,7 @@
 				{
 					amount: 10000,
 					title: 'First gospel films produced',
-					description:
-						'Funds filming and editing for the opening set of testimony-led short films.'
+					description: 'Funds filming and editing for the opening set of testimony-led short films.'
 				},
 				{
 					amount: 15000,
@@ -164,13 +164,15 @@
 				{
 					amount: 20000,
 					title: 'Multi-site table network',
-					description: 'Expands the format into more suburbs with shared resourcing and leadership support.'
+					description:
+						'Expands the format into more suburbs with shared resourcing and leadership support.'
 				}
 			]
 		},
 		{
 			title: 'Waves of Worship',
-			description: 'Bringing acoustic worship gatherings to public spaces where faith can be heard openly.',
+			description:
+				'Bringing acoustic worship gatherings to public spaces where faith can be heard openly.',
 			image: guitarAtTheBeach,
 			location: 'Perth, WA',
 			fundingRaised: 14000,
@@ -179,7 +181,8 @@
 				{
 					amount: 5000,
 					title: 'First beach set funded',
-					description: 'Covers permits, portable sound, and volunteer support for the first gathering.'
+					description:
+						'Covers permits, portable sound, and volunteer support for the first gathering.'
 				},
 				{
 					amount: 10000,
@@ -216,23 +219,50 @@
 		})
 			.format(value)
 			.replace('A$', '$');
+
+	const getAmountLeft = (raised: number, goal: number) => Math.max(goal - raised, 0);
+	const isNearGoal = (raised: number, goal: number) => {
+		const amountLeft = getAmountLeft(raised, goal);
+		return amountLeft > 0 && amountLeft <= 5000;
+	};
 </script>
 
 <!-- Hero -->
-<section
-	class="bg-linear-to-b
-  from-background from-70%
-  to-primary/50 py-16 text-center"
->
-	<h1 class="text-4xl font-bold sm:text-5xl lg:text-6xl">
-		Creative ideas.
-		<br />
-		<span class="text-primary">Eternal impact.</span>
-	</h1>
+<section class="w-full bg-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))]">
+	<div class="grid items-stretch lg:grid-cols-12">
+		<div
+			class="relative z-10 flex flex-col justify-center px-6 py-10 sm:px-10 sm:py-14 lg:col-span-5 lg:px-14"
+		>
+			<div class="relative z-10">
+				<p class="text-sm font-semibold tracking-[0.18em] text-primary uppercase">
+					Back bold gospel ideas
+				</p>
+				<h1 class="mt-4 max-w-xl text-4xl font-bold text-balance sm:text-5xl lg:text-6xl">
+					Creative ideas.
+					<span class="block text-primary">Eternal impact.</span>
+				</h1>
 
-	<p class="mt-4 text-lg">
-		We connect generous sowers with bold evangelists, funding and growing creative gospel projects.
-	</p>
+				<p class="mt-5 max-w-xl text-base leading-7 text-foreground/80 sm:text-lg">
+					JustSow connects generous sowers with creative evangelists, helping new gospel projects
+					move from first idea to public launch.
+				</p>
+			</div>
+		</div>
+
+		<div class="relative min-h-70 lg:col-span-7 lg:min-h-130">
+			<div
+				class="absolute inset-y-0 left-0 z-10 hidden w-72 bg-linear-to-r from-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))] via-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))]/82 to-transparent lg:block"
+			></div>
+			<div
+				class="absolute inset-x-0 top-0 z-10 h-28 bg-linear-to-b from-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))] via-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))]/72 to-transparent lg:hidden"
+			></div>
+			<img
+				src={successImages}
+				alt="Supporters celebrating the success of a gospel project together"
+				class="h-full w-full object-cover object-center"
+			/>
+		</div>
+	</div>
 </section>
 
 <!-- Projects -->
@@ -245,8 +275,8 @@
 	<!-- Project Grid -->
 	<div class="mt-8 grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 		{#each projects as project (project.title)}
-			<Card.Root class="pt-0 transition-shadow duration-300 hover:shadow-lg">
-				<div class="block">
+			<Card.Root class="h-full pt-0 transition-shadow duration-300 hover:shadow-lg">
+				<div class="flex h-full flex-col">
 					<Card.Header class="relative p-0">
 						<img src={project.image} alt={project.title} class="h-52 w-full object-cover" />
 						<div
@@ -256,17 +286,24 @@
 							{project.location}
 						</div>
 					</Card.Header>
-					<Card.Content class="mt-2">
+					<Card.Content class="mt-2 flex flex-1 flex-col">
 						<h3 class="mb-2 text-xl font-semibold">{project.title}</h3>
 						<p class="text-sm text-muted-foreground">{project.description}</p>
-						<div class="mt-4 space-y-3">
+						<div class="mt-auto pt-4 space-y-3">
 							<div class="flex items-center justify-between gap-3 text-xs text-muted-foreground">
-								<div>{formatCurrency(project.fundingRaised)} raised</div>
+								<div
+									class={isNearGoal(project.fundingRaised, project.fundingGoal)
+										? 'font-semibold text-secondary'
+										: ''}
+								>
+									{formatCurrency(getAmountLeft(project.fundingRaised, project.fundingGoal))} left to
+									raise
+								</div>
 								<div>{formatCurrency(project.fundingGoal)} goal</div>
 							</div>
 
 							<div
-								class="relative h-2 overflow-visible rounded-full bg-primary/15"
+								class={`relative h-2 overflow-visible rounded-full ${isNearGoal(project.fundingRaised, project.fundingGoal) ? 'bg-secondary/20' : 'bg-primary/15'}`}
 								role="progressbar"
 								aria-label={`${project.title} funding progress`}
 								aria-valuemin="0"
@@ -274,7 +311,7 @@
 								aria-valuenow={project.fundingRaised}
 							>
 								<div
-									class="h-full rounded-full bg-primary transition-[width] duration-300 ease-out"
+									class={`h-full rounded-full transition-[width] duration-300 ease-out ${isNearGoal(project.fundingRaised, project.fundingGoal) ? 'bg-secondary' : 'bg-primary'}`}
 									style={`width: ${(project.fundingRaised / project.fundingGoal) * 100}%`}
 								></div>
 
@@ -288,8 +325,13 @@
 												type="button"
 												class={`flex size-4 items-center justify-center rounded-full border-2 bg-background text-[10px] leading-none font-bold shadow-sm transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
 													project.fundingRaised >= milestone.amount
-														? 'border-primary bg-primary text-primary-foreground'
-														: 'border-primary text-transparent'
+														? isNearGoal(project.fundingRaised, project.fundingGoal)
+															? 'border-secondary bg-secondary text-secondary-foreground'
+															: 'border-primary bg-primary text-primary-foreground'
+														: isNearGoal(project.fundingRaised, project.fundingGoal) &&
+															  milestone.amount === project.fundingGoal
+															? 'border-secondary text-transparent'
+															: 'border-primary text-transparent'
 												}`}
 												aria-label={`${project.title} milestone at ${formatCompactCurrency(milestone.amount)}`}
 											>
@@ -334,7 +376,7 @@
 						</div>
 					</Card.Content>
 				</div>
-				<Card.Footer class="mx-auto flex gap-4 text-center">
+				<Card.Footer class="mt-auto mx-auto flex gap-4 text-center">
 					<Button aria-label="Project details coming soon">View Project</Button>
 					<Button variant="secondary" aria-label="Project details coming soon">Fund Now</Button>
 				</Card.Footer>
