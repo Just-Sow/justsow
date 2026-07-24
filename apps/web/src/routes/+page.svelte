@@ -1,68 +1,80 @@
 <script lang="ts">
 	import { MapPin } from '@lucide/svelte';
+	import twelveApostlesPhotography from '$lib/assets/content/home/12-apostles-photography.png';
+	import brewHope from '$lib/assets/content/home/brew-hope.png';
+	import coffeeAtTheBeach from '$lib/assets/content/home/coffee-at-the-beach.png';
+	import guitarAtTheBeach from '$lib/assets/content/home/guitar-at-the-beach.png';
+	import largeBanquet from '$lib/assets/content/home/large-banquet.png';
+	import successImages from '$lib/assets/content/home/success-images.png';
+	import uluru from '$lib/assets/content/home/uluru.png';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
 	import * as HoverCard from '$lib/components/ui/hover-card';
 
 	const projects = [
 		{
-			title: 'Music for Change',
-			description: 'Funding music programs for underprivileged youth to inspire creativity.',
-			image:
-				'https://images.unsplash.com/photo-1697197603033-df2940b7f22e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-			location: 'Sydney, NSW',
+			title: 'Beach Conversations',
+			description:
+				'Creating space for natural, Christ-centred conversations with people already lingering by the water.',
+			image: coffeeAtTheBeach,
+			location: 'Gold Coast, QLD',
 			fundingRaised: 5000,
 			fundingGoal: 20000,
 			milestones: [
 				{
 					amount: 10000,
-					title: 'Core recording funded',
-					description: 'Covers studio time, basic production, and the first release package.'
+					title: 'Conversation kits funded',
+					description:
+						'Covers coffee supplies, simple signage, and training prompts for the first volunteer team.'
 				},
 				{
 					amount: 15000,
-					title: 'Community launch unlocked',
-					description: 'Adds launch events, promo assets, and volunteer activation materials.'
+					title: 'Weekly beach rhythm launched',
+					description:
+						'Funds a repeatable presence with printed invites, follow-up resources, and team coordination.'
 				},
 				{
 					amount: 20000,
-					title: 'Full rollout ready',
-					description: 'Funds the complete campaign push across churches, schools, and socials.'
+					title: 'Coastal expansion ready',
+					description:
+						'Extends the model into more beaches with shared resourcing and volunteer support.'
 				}
 			]
 		},
 		{
-			title: 'Urban Art Project',
-			description: 'Transforming city walls into vibrant art to empower local artists.',
-			image:
-				'https://images.unsplash.com/photo-1697197603033-df2940b7f22e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-			location: 'Inner West, NSW',
+			title: 'Hope on the Streets',
+			description:
+				'Launching a mobile coffee and chats van that offers hospitality, prayer, and gospel conversations.',
+			image: brewHope,
+			location: 'Melbourne, VIC',
 			fundingRaised: 15000,
 			fundingGoal: 20000,
 			milestones: [
 				{
 					amount: 10000,
-					title: 'Wall access secured',
-					description: 'Covers permits, prep work, and artist onboarding for the first mural.'
+					title: 'Van fit-out started',
+					description:
+						'Covers the first stage of coffee equipment, signage, and practical setup for outreach nights.'
 				},
 				{
 					amount: 15000,
-					title: 'First mural delivered',
-					description: 'Funds paint, lift hire, and production for the flagship public artwork.'
+					title: 'Street service launched',
+					description:
+						'Funds the first full run of coffee, volunteer support, and on-the-ground engagement materials.'
 				},
 				{
 					amount: 20000,
-					title: 'Neighbourhood series unlocked',
-					description: 'Extends the project into additional sites with local workshop support.'
+					title: 'Multi-suburb route unlocked',
+					description:
+						'Extends the van into more locations with repeat visits and stronger follow-up pathways.'
 				}
 			]
 		},
 		{
-			title: 'Tech for Good',
-			description: 'Providing affordable tech workshops to bridge the digital divide.',
-			image:
-				'https://images.unsplash.com/photo-1697197603033-df2940b7f22e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-			location: 'Brisbane, QLD',
+			title: 'Outback Youth Nights',
+			description: 'Running regional gatherings that combine food, music, and a clear gospel invitation.',
+			image: uluru,
+			location: 'Alice Springs, NT',
 			fundingRaised: 12500,
 			fundingGoal: 20000,
 			milestones: [
@@ -85,6 +97,104 @@
 					amount: 20000,
 					title: 'Program fully funded',
 					description: 'Covers the complete delivery plan and follow-up mentoring support.'
+				}
+			]
+		},
+		{
+			title: 'Stories of Hope',
+			description:
+				'Making short gospel films and testimony stories that can travel online and open real conversations.',
+			image: twelveApostlesPhotography,
+			location: 'South-West, VIC',
+			fundingRaised: 9000,
+			fundingGoal: 20000,
+			milestones: [
+				{
+					amount: 5000,
+					title: 'Filmmaking kit funded',
+					description:
+						'Covers camera support, audio, lighting, and the basic gear needed for the first shoots.'
+				},
+				{
+					amount: 10000,
+					title: 'First gospel films produced',
+					description:
+						'Funds filming and editing for the opening set of testimony-led short films.'
+				},
+				{
+					amount: 15000,
+					title: 'Release campaign launched',
+					description:
+						'Adds subtitles, social cutdowns, and distribution support so the films can travel widely.'
+				},
+				{
+					amount: 20000,
+					title: 'Series fully commissioned',
+					description:
+						'Completes the full film slate with follow-up production, release support, and story capture.'
+				}
+			]
+		},
+		{
+			title: 'Neighbourhood Table',
+			description:
+				'Hosting shared meals that create a warm space to ask life’s big questions around the table.',
+			image: largeBanquet,
+			location: 'Adelaide, SA',
+			fundingRaised: 11000,
+			fundingGoal: 20000,
+			milestones: [
+				{
+					amount: 5000,
+					title: 'Pilot dinners launched',
+					description: 'Covers food, setup, and volunteer coordination for the first local meals.'
+				},
+				{
+					amount: 10000,
+					title: 'Monthly rhythm established',
+					description:
+						'Funds recurring dinners and simple invitations that welcome neighbours into honest conversation.'
+				},
+				{
+					amount: 15000,
+					title: 'Question-led evenings added',
+					description:
+						'Adds host training and table resources to help each meal open into deeper faith discussions.'
+				},
+				{
+					amount: 20000,
+					title: 'Multi-site table network',
+					description: 'Expands the format into more suburbs with shared resourcing and leadership support.'
+				}
+			]
+		},
+		{
+			title: 'Waves of Worship',
+			description: 'Bringing acoustic worship gatherings to public spaces where faith can be heard openly.',
+			image: guitarAtTheBeach,
+			location: 'Perth, WA',
+			fundingRaised: 14000,
+			fundingGoal: 20000,
+			milestones: [
+				{
+					amount: 5000,
+					title: 'First beach set funded',
+					description: 'Covers permits, portable sound, and volunteer support for the first gathering.'
+				},
+				{
+					amount: 10000,
+					title: 'Season schedule confirmed',
+					description: 'Funds a series of worship nights with printed invites and team logistics.'
+				},
+				{
+					amount: 15000,
+					title: 'Recording and sharing unlocked',
+					description: 'Adds live capture, social edits, and simple testimony integration.'
+				},
+				{
+					amount: 20000,
+					title: 'Regional worship trail launched',
+					description: 'Extends the gatherings into a broader coastal run with partner churches.'
 				}
 			]
 		}
