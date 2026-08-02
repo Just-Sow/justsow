@@ -3,6 +3,7 @@
 	import type { Map, Marker, Popup } from 'maplibre-gl';
 	import 'maplibre-gl/dist/maplibre-gl.css';
 	import { ALMOST_DONE_THRESHOLD } from '$lib/project-discovery';
+	import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 
 	type MapProject = {
 		title: string;
@@ -146,6 +147,7 @@
 
 	onMount(async () => {
 		const maplibregl = await import('maplibre-gl');
+		maplibregl.setWorkerUrl(maplibreWorkerUrl);
 
 		map = new maplibregl.Map({
 			container: mapContainer,
@@ -215,7 +217,9 @@
 	});
 </script>
 
-<div class="project-map-shell">
+<div
+	class="project-map-shell relative overflow-hidden rounded-xl border border-transparent bg-muted shadow-[0_12px_30px_rgb(15_23_42_/_8%)]"
+>
 	<div bind:this={mapContainer} class="project-map-canvas"></div>
 	<div class="project-map-legend">
 		<span class="project-map-legend-pin"></span>
@@ -228,16 +232,23 @@
 		position: relative;
 		height: min(680px, 72vh);
 		min-height: 500px;
-		overflow: visible;
+	}
+
+	:global(.project-map-shell)::after {
+		position: absolute;
+		inset: 0;
+		z-index: 3;
+		pointer-events: none;
 		border: 1px solid var(--border);
-		border-radius: 0.75rem;
-		background: var(--muted);
-		box-shadow: 0 12px 30px rgb(15 23 42 / 8%);
+		border-radius: inherit;
+		content: '';
 	}
 
 	:global(.project-map-canvas) {
 		position: absolute;
 		inset: 0;
+		overflow: hidden;
+		border-radius: inherit;
 	}
 
 	:global(.project-map-marker) {
@@ -299,7 +310,7 @@
 		border: 2px solid var(--background);
 	}
 
-	:global(.project-map-popup .maplibregl-popup-content) {
+	:global(.maplibregl-popup.project-map-popup .maplibregl-popup-content) {
 		padding: 0;
 		overflow: hidden;
 		border: 1px solid var(--border);
@@ -327,7 +338,7 @@
 	:global(.project-map-popup-card) {
 		width: 280px;
 		overflow: hidden;
-		border-radius: 0.7rem;
+		border-radius: 0;
 		background: var(--background);
 		color: var(--foreground);
 	}
@@ -337,7 +348,6 @@
 		height: 112px;
 		width: 100%;
 		object-fit: cover;
-		border-radius: 0.7rem 0.7rem 0 0;
 	}
 
 	:global(.project-map-popup-body) {

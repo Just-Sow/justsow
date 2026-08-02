@@ -13,21 +13,27 @@ export const load: LayoutServerLoad = async ({ fetch, request }) => {
 		};
 	}
 
-	const response = await fetch(`${apiOrigin}/auth/me`, {
-		headers: {
-			cookie
-		}
-	});
+	try {
+		const response = await fetch(`${apiOrigin}/auth/me`, {
+			headers: {
+				cookie
+			}
+		});
 
-	if (!response.ok) {
+		if (!response.ok) {
+			return {
+				auth: null satisfies AuthViewer | null
+			};
+		}
+
+		const auth = (await response.json()) as AuthViewer;
+
+		return {
+			auth
+		};
+	} catch {
 		return {
 			auth: null satisfies AuthViewer | null
 		};
 	}
-
-	const auth = (await response.json()) as AuthViewer;
-
-	return {
-		auth
-	};
 };
