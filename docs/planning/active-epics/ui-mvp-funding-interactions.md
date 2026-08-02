@@ -8,10 +8,11 @@ the donor journey before backend funding functionality is available.
 ## Scope
 
 - fund-now right-side sheet with project context and whole-$1,000 increment options
-- filter controls above featured projects
+- centered project views for Featured, Almost Done, Fresh Ideas, and Map
 - community preview showing other sowers connected to each project
 - ephemeral Seedbed basket with an ecommerce-style summary
 - browser-only state persistence for the current tab/session
+- interactive MapLibre project map with custom image pins and hover project surfaces
 
 ## Non-Goals
 
@@ -31,6 +32,8 @@ the donor journey before backend funding functionality is available.
 
 - the Fund Now sheet mirrors project-card milestones and previews the selected seed as a secondary funding segment
 - the next milestone amount is selected by default and marked with a secondary treatment and flame icon
+- Map uses the OpenMapTiles Positron style, with project pins positioned at the demo project locations
+- map hover surfaces include View Project and Fund Now actions; View Project remains a placeholder
 - “Review Seeds” currently closes the Seedbed summary only; checkout and allocation are not implemented
 
 ## Acceptance Criteria

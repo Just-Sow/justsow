@@ -1,6 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Check, Flame, MapPin, ShoppingBasket, X } from '@lucide/svelte';
+	import {
+		Check,
+		Flame,
+		LayoutGrid,
+		Map as MapIcon,
+		MapPin,
+		ShoppingBasket,
+		Sparkles,
+		X
+	} from '@lucide/svelte';
 	import twelveApostlesPhotography from '$lib/assets/content/home/12-apostles-photography.png';
 	import brewHope from '$lib/assets/content/home/brew-hope.png';
 	import coffeeAtTheBeach from '$lib/assets/content/home/coffee-at-the-beach.png';
@@ -13,6 +22,7 @@
 	import * as HoverCard from '$lib/components/ui/hover-card';
 	import * as Popover from '$lib/components/ui/popover';
 	import * as Sheet from '$lib/components/ui/sheet';
+	import ProjectMap from '$lib/components/ProjectMap.svelte';
 
 	type SeedbedItem = {
 		projectTitle: string;
@@ -26,6 +36,8 @@
 				'Creating space for natural, Christ-centred conversations with people already lingering by the water.',
 			image: coffeeAtTheBeach,
 			location: 'Gold Coast, QLD',
+			longitude: 153.43,
+			latitude: -28.02,
 			fundingRaised: 5000,
 			fundingGoal: 20000,
 			milestones: [
@@ -55,6 +67,8 @@
 				'Launching a mobile coffee and chats van that offers hospitality, prayer, and gospel conversations.',
 			image: brewHope,
 			location: 'Melbourne, VIC',
+			longitude: 144.96,
+			latitude: -37.81,
 			fundingRaised: 15000,
 			fundingGoal: 20000,
 			milestones: [
@@ -84,6 +98,8 @@
 				'Running regional gatherings that combine food, music, and a clear gospel invitation.',
 			image: uluru,
 			location: 'Alice Springs, NT',
+			longitude: 133.88,
+			latitude: -23.7,
 			fundingRaised: 12500,
 			fundingGoal: 20000,
 			milestones: [
@@ -115,6 +131,8 @@
 				'Making short gospel films and testimony stories that can travel online and open real conversations.',
 			image: twelveApostlesPhotography,
 			location: 'South-West, VIC',
+			longitude: 142.52,
+			latitude: -38.39,
 			fundingRaised: 9000,
 			fundingGoal: 20000,
 			milestones: [
@@ -149,6 +167,8 @@
 				'Hosting shared meals that create a warm space to ask life’s big questions around the table.',
 			image: largeBanquet,
 			location: 'Adelaide, SA',
+			longitude: 138.6,
+			latitude: -34.93,
 			fundingRaised: 11000,
 			fundingGoal: 20000,
 			milestones: [
@@ -183,6 +203,8 @@
 				'Bringing acoustic worship gatherings to public spaces where faith can be heard openly.',
 			image: guitarAtTheBeach,
 			location: 'Perth, WA',
+			longitude: 115.86,
+			latitude: -31.95,
 			fundingRaised: 14000,
 			fundingGoal: 20000,
 			milestones: [
@@ -217,15 +239,15 @@
 		{ name: 'Leah T.', initials: 'LT', colour: 'bg-accent text-accent-foreground' }
 	];
 
-	const filters = [
+	const views = [
 		{ label: 'Featured', value: 'featured' },
-		{ label: 'Under $10k left', value: 'under-10k' },
-		{ label: 'Almost done', value: 'almost-done' },
-		{ label: 'Fresh ideas', value: 'fresh' }
+		{ label: 'Almost Done', value: 'almost-done' },
+		{ label: 'Fresh Ideas', value: 'fresh' },
+		{ label: 'Map', value: 'map' }
 	] as const;
 
-	type FilterValue = (typeof filters)[number]['value'];
-	let activeFilter = $state<FilterValue>('featured');
+	type ViewValue = (typeof views)[number]['value'];
+	let activeView = $state<ViewValue>('featured');
 	let amountSelections = $state<Record<string, number>>({});
 	let seedbed = $state<SeedbedItem[]>([]);
 	let seedbedOpen = $state(false);
@@ -238,11 +260,7 @@
 	const formatSowerLabel = (count: number) => `${count} other ${count === 1 ? 'sower' : 'sowers'}`;
 
 	const getFilteredProjects = () => {
-		switch (activeFilter) {
-			case 'under-10k':
-				return projects.filter(
-					(project) => getAmountLeft(project.fundingRaised, project.fundingGoal) < 10000
-				);
+		switch (activeView) {
 			case 'almost-done':
 				return projects.filter((project) => isNearGoal(project.fundingRaised, project.fundingGoal));
 			case 'fresh':
@@ -495,160 +513,181 @@
 		</Popover.Root>
 	</div>
 
-	<div class="mt-8 flex flex-wrap gap-2" aria-label="Filter featured projects">
-		{#each filters as filter (filter.value)}
+	<div class="mt-8 flex flex-wrap justify-center gap-3" aria-label="Project views">
+		{#each views as view (view.value)}
 			<button
 				type="button"
-				class={`rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-primary/40 ${activeFilter === filter.value ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-background text-muted-foreground hover:border-primary/50 hover:text-foreground'}`}
-				aria-pressed={activeFilter === filter.value}
-				onclick={() => (activeFilter = filter.value)}
+				class={`inline-flex min-w-32 items-center justify-center gap-2 rounded-lg border px-5 py-3 text-sm font-semibold transition-[background-color,color,border-color,box-shadow,transform] focus-visible:ring-2 focus-visible:ring-primary/40 ${activeView === view.value ? 'border-primary bg-primary text-primary-foreground shadow-sm' : 'border-border bg-background text-muted-foreground hover:border-primary/50 hover:bg-primary/5 hover:text-foreground'}`}
+				aria-pressed={activeView === view.value}
+				onclick={() => (activeView = view.value)}
 			>
-				{filter.label}
+				{#if view.value === 'featured'}
+					<Sparkles class="size-4" />
+				{:else if view.value === 'almost-done'}
+					<Flame class="size-4" />
+				{:else if view.value === 'fresh'}
+					<LayoutGrid class="size-4" />
+				{:else}
+					<MapIcon class="size-4" />
+				{/if}
+				{view.label}
 			</button>
 		{/each}
 	</div>
 
-	<!-- Project Grid -->
-	<div class="mt-8 grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-		{#each getFilteredProjects() as project (project.title)}
-			<Card.Root class="h-full pt-0 transition-shadow duration-300 hover:shadow-lg">
-				<div class="flex h-full flex-col">
-					<Card.Header class="relative p-0">
-						<img src={project.image} alt={project.title} class="h-52 w-full object-cover" />
-						<div
-							class="absolute bottom-4 left-4 flex items-center gap-1 rounded-full border border-border/70 bg-background px-3 py-1 text-xs font-medium text-foreground shadow-sm"
-						>
-							<MapPin />
-							{project.location}
-						</div>
-					</Card.Header>
-					<Card.Content class="mt-2 flex flex-1 flex-col">
-						<h3 class="mb-2 text-xl font-semibold">{project.title}</h3>
-						<p class="text-sm text-muted-foreground">{project.description}</p>
-						<div class="mt-auto pt-4 space-y-3">
-							<div class="flex items-center justify-between gap-3 text-xs text-muted-foreground">
-								<div
-									class={isNearGoal(project.fundingRaised, project.fundingGoal)
-										? 'font-semibold text-secondary'
-										: ''}
-								>
-									{formatCurrency(getAmountLeft(project.fundingRaised, project.fundingGoal))} left to
-									raise
-								</div>
-								<div>{formatCurrency(project.fundingGoal)} goal</div>
-							</div>
-
+	{#if activeView === 'map'}
+		<div class="mt-8">
+			<ProjectMap
+				{projects}
+				onFund={(project) => {
+					selectedProject = projects.find((item) => item.title === project.title) ?? null;
+					fundNowOpen = true;
+				}}
+			/>
+		</div>
+	{:else}
+		<!-- Project Grid -->
+		<div class="mt-8 grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+			{#each getFilteredProjects() as project (project.title)}
+				<Card.Root class="h-full pt-0 transition-shadow duration-300 hover:shadow-lg">
+					<div class="flex h-full flex-col">
+						<Card.Header class="relative p-0">
+							<img src={project.image} alt={project.title} class="h-52 w-full object-cover" />
 							<div
-								class={`relative h-2 overflow-visible rounded-full ${isNearGoal(project.fundingRaised, project.fundingGoal) ? 'bg-secondary/20' : 'bg-primary/15'}`}
-								role="progressbar"
-								aria-label={`${project.title} funding progress`}
-								aria-valuemin="0"
-								aria-valuemax={project.fundingGoal}
-								aria-valuenow={project.fundingRaised}
+								class="absolute bottom-4 left-4 flex items-center gap-1 rounded-full border border-border/70 bg-background px-3 py-1 text-xs font-medium text-foreground shadow-sm"
 							>
-								<div
-									class={`h-full rounded-full transition-[width] duration-300 ease-out ${isNearGoal(project.fundingRaised, project.fundingGoal) ? 'bg-secondary' : 'bg-primary'}`}
-									style={`width: ${(project.fundingRaised / project.fundingGoal) * 100}%`}
-								></div>
-
-								{#each project.milestones as milestone, milestoneIndex (milestone.amount)}
-									<HoverCard.Root openDelay={100} closeDelay={50}>
-										<HoverCard.Trigger
-											class={`absolute top-1/2 z-10 flex size-4 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 bg-background text-[10px] leading-none font-bold shadow-sm transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
-												project.fundingRaised >= milestone.amount
-													? isNearGoal(project.fundingRaised, project.fundingGoal)
-														? 'border-secondary bg-secondary text-secondary-foreground'
-														: 'border-primary bg-primary text-primary-foreground'
-													: isNearGoal(project.fundingRaised, project.fundingGoal) &&
-														  milestone.amount === project.fundingGoal
-														? 'border-secondary text-transparent'
-														: 'border-primary text-transparent'
-											}`}
-											style={`left: ${(milestone.amount / project.fundingGoal) * 100}%`}
-											aria-label={`${project.title} milestone at ${formatCompactCurrency(milestone.amount)}`}
-											onmouseenter={() => dismissMilestoneHint(project.title, milestoneIndex)}
-										>
-											{#if milestoneHintVisible && project.title === projects[0].title && milestoneIndex === 0}
-												<span
-													class="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border-2 border-accent/70 bg-background px-2.5 py-1 text-[10px] font-semibold text-foreground shadow-md before:absolute before:top-full before:left-1/2 before:-translate-x-1/2 before:border-x-[5px] before:border-t-[5px] before:border-x-transparent before:border-t-accent/70 before:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-x-4 after:border-t-4 after:border-x-transparent after:border-t-background after:content-['']"
-													aria-hidden="true"
-												>
-													Hover for details
-												</span>
-											{/if}
-											{#if project.fundingRaised >= milestone.amount}
-												<span>✓</span>
-											{/if}
-										</HoverCard.Trigger>
-
-										<HoverCard.Content class="w-52">
-											<div class="space-y-1.5">
-												<p class="text-sm font-semibold text-foreground">
-													{milestone.title}
-												</p>
-												<p class="text-xs text-muted-foreground">
-													{milestone.description}
-												</p>
-												<p class="text-xs text-muted-foreground">
-													{project.fundingRaised >= milestone.amount
-														? `${formatCompactCurrency(milestone.amount)} milestone reached`
-														: `Unlocks at ${formatCompactCurrency(milestone.amount)}`}
-												</p>
-											</div>
-										</HoverCard.Content>
-									</HoverCard.Root>
-								{/each}
+								<MapPin />
+								{project.location}
 							</div>
-
-							<div class="relative h-5 pt-1">
-								<div class="absolute top-0 left-0 text-[10px] font-medium text-muted-foreground">
-									$0
-								</div>
-								{#each project.milestones as milestone (milestone.amount)}
+						</Card.Header>
+						<Card.Content class="mt-2 flex flex-1 flex-col">
+							<h3 class="mb-2 text-xl font-semibold">{project.title}</h3>
+							<p class="text-sm text-muted-foreground">{project.description}</p>
+							<div class="mt-auto pt-4 space-y-3">
+								<div class="flex items-center justify-between gap-3 text-xs text-muted-foreground">
 									<div
-										class="absolute top-0 -translate-x-1/2 text-[10px] font-medium text-muted-foreground"
-										style={`left: ${(milestone.amount / project.fundingGoal) * 100}%`}
+										class={isNearGoal(project.fundingRaised, project.fundingGoal)
+											? 'font-semibold text-secondary'
+											: ''}
 									>
-										{formatCompactCurrency(milestone.amount)}
+										{formatCurrency(getAmountLeft(project.fundingRaised, project.fundingGoal))} left to
+										raise
 									</div>
-								{/each}
-							</div>
+									<div>{formatCurrency(project.fundingGoal)} goal</div>
+								</div>
 
-							<div class="mt-4 flex items-center gap-2 border-t border-border/60 pt-3">
-								<div class="flex -space-x-2">
-									{#each sowers as sower (sower.name)}
-										<span
-											class={`flex size-6 items-center justify-center rounded-full border-2 border-card text-[9px] font-bold ${sower.colour}`}
-											title={sower.name}
-										>
-											{sower.initials}
-										</span>
+								<div
+									class={`relative h-2 overflow-visible rounded-full ${isNearGoal(project.fundingRaised, project.fundingGoal) ? 'bg-secondary/20' : 'bg-primary/15'}`}
+									role="progressbar"
+									aria-label={`${project.title} funding progress`}
+									aria-valuemin="0"
+									aria-valuemax={project.fundingGoal}
+									aria-valuenow={project.fundingRaised}
+								>
+									<div
+										class={`h-full rounded-full transition-[width] duration-300 ease-out ${isNearGoal(project.fundingRaised, project.fundingGoal) ? 'bg-secondary' : 'bg-primary'}`}
+										style={`width: ${(project.fundingRaised / project.fundingGoal) * 100}%`}
+									></div>
+
+									{#each project.milestones as milestone, milestoneIndex (milestone.amount)}
+										<HoverCard.Root openDelay={100} closeDelay={50}>
+											<HoverCard.Trigger
+												class={`absolute top-1/2 z-10 flex size-4 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 bg-background text-[10px] leading-none font-bold shadow-sm transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+													project.fundingRaised >= milestone.amount
+														? isNearGoal(project.fundingRaised, project.fundingGoal)
+															? 'border-secondary bg-secondary text-secondary-foreground'
+															: 'border-primary bg-primary text-primary-foreground'
+														: isNearGoal(project.fundingRaised, project.fundingGoal) &&
+															  milestone.amount === project.fundingGoal
+															? 'border-secondary text-transparent'
+															: 'border-primary text-transparent'
+												}`}
+												style={`left: ${(milestone.amount / project.fundingGoal) * 100}%`}
+												aria-label={`${project.title} milestone at ${formatCompactCurrency(milestone.amount)}`}
+												onmouseenter={() => dismissMilestoneHint(project.title, milestoneIndex)}
+											>
+												{#if milestoneHintVisible && project.title === projects[0].title && milestoneIndex === 0}
+													<span
+														class="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border-2 border-accent/70 bg-background px-2.5 py-1 text-[10px] font-semibold text-foreground shadow-md before:absolute before:top-full before:left-1/2 before:-translate-x-1/2 before:border-x-[5px] before:border-t-[5px] before:border-x-transparent before:border-t-accent/70 before:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-x-4 after:border-t-4 after:border-x-transparent after:border-t-background after:content-['']"
+														aria-hidden="true"
+													>
+														Hover for details
+													</span>
+												{/if}
+												{#if project.fundingRaised >= milestone.amount}
+													<span>✓</span>
+												{/if}
+											</HoverCard.Trigger>
+
+											<HoverCard.Content class="w-52">
+												<div class="space-y-1.5">
+													<p class="text-sm font-semibold text-foreground">
+														{milestone.title}
+													</p>
+													<p class="text-xs text-muted-foreground">
+														{milestone.description}
+													</p>
+													<p class="text-xs text-muted-foreground">
+														{project.fundingRaised >= milestone.amount
+															? `${formatCompactCurrency(milestone.amount)} milestone reached`
+															: `Unlocks at ${formatCompactCurrency(milestone.amount)}`}
+													</p>
+												</div>
+											</HoverCard.Content>
+										</HoverCard.Root>
 									{/each}
 								</div>
-								<span class="text-xs text-muted-foreground"
-									>{formatSowerLabel(sowers.length)} are sowing here</span
-								>
+
+								<div class="relative h-5 pt-1">
+									<div class="absolute top-0 left-0 text-[10px] font-medium text-muted-foreground">
+										$0
+									</div>
+									{#each project.milestones as milestone (milestone.amount)}
+										<div
+											class="absolute top-0 -translate-x-1/2 text-[10px] font-medium text-muted-foreground"
+											style={`left: ${(milestone.amount / project.fundingGoal) * 100}%`}
+										>
+											{formatCompactCurrency(milestone.amount)}
+										</div>
+									{/each}
+								</div>
+
+								<div class="mt-4 flex items-center gap-2 border-t border-border/60 pt-3">
+									<div class="flex -space-x-2">
+										{#each sowers as sower (sower.name)}
+											<span
+												class={`flex size-6 items-center justify-center rounded-full border-2 border-card text-[9px] font-bold ${sower.colour}`}
+												title={sower.name}
+											>
+												{sower.initials}
+											</span>
+										{/each}
+									</div>
+									<span class="text-xs text-muted-foreground"
+										>{formatSowerLabel(sowers.length)} are sowing here</span
+									>
+								</div>
 							</div>
-						</div>
-					</Card.Content>
-				</div>
-				<Card.Footer class="mt-auto mx-auto flex gap-4 text-center">
-					<Button aria-label="Project details coming soon">View Project</Button>
-					<button
-						type="button"
-						class="inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-xs outline-none transition-[background-color,color,border-color,box-shadow,transform] duration-150 ease-out hover:bg-[color-mix(in_oklab,var(--color-secondary)_92%,var(--color-foreground))] hover:shadow-sm focus-visible:ring-2 focus-visible:ring-ring/50 active:translate-y-px"
-						aria-label={`Fund ${project.title} now`}
-						onclick={() => {
-							selectedProject = project;
-							fundNowOpen = true;
-						}}
-					>
-						Fund Now
-					</button>
-				</Card.Footer>
-			</Card.Root>
-		{/each}
-	</div>
+						</Card.Content>
+					</div>
+					<Card.Footer class="mt-auto mx-auto flex gap-4 text-center">
+						<Button aria-label="Project details coming soon">View Project</Button>
+						<button
+							type="button"
+							class="inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-xs outline-none transition-[background-color,color,border-color,box-shadow,transform] duration-150 ease-out hover:bg-[color-mix(in_oklab,var(--color-secondary)_92%,var(--color-foreground))] hover:shadow-sm focus-visible:ring-2 focus-visible:ring-ring/50 active:translate-y-px"
+							aria-label={`Fund ${project.title} now`}
+							onclick={() => {
+								selectedProject = project;
+								fundNowOpen = true;
+							}}
+						>
+							Fund Now
+						</button>
+					</Card.Footer>
+				</Card.Root>
+			{/each}
+		</div>
+	{/if}
 
 	<Sheet.Root bind:open={fundNowOpen}>
 		<Sheet.Content side="right" class="w-full overflow-y-auto sm:max-w-md">
