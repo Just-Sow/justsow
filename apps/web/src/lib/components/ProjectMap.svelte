@@ -2,6 +2,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import type { Map, Marker, Popup } from 'maplibre-gl';
 	import 'maplibre-gl/dist/maplibre-gl.css';
+	import { ALMOST_DONE_THRESHOLD } from '$lib/project-discovery';
 
 	type MapProject = {
 		title: string;
@@ -10,17 +11,22 @@
 		location: string;
 		fundingRaised: number;
 		fundingGoal: number;
-		longitude: number;
-		latitude: number;
+		coordinates: readonly [longitude: number, latitude: number];
 	};
 
-	let { projects, onFund }: { projects: MapProject[]; onFund: (project: MapProject) => void } =
-		$props();
+	let {
+		projects,
+		onFund
+	}: {
+		projects: MapProject[];
+		onFund: (project: MapProject) => void;
+	} = $props();
 
 	let mapContainer: HTMLDivElement;
 	let map: Map | undefined;
 	let markers: Marker[] = [];
 	let activePopup: Popup | undefined;
+	let activeMarkerElement: HTMLElement | undefined;
 	let resizeObserver: ResizeObserver | undefined;
 
 	const formatCurrency = (value: number) =>
@@ -35,6 +41,24 @@
 	const getAmountLeft = (project: MapProject) =>
 		Math.max(project.fundingGoal - project.fundingRaised, 0);
 
+	const isAlmostDone = (project: MapProject) => {
+		const amountLeft = getAmountLeft(project);
+		return amountLeft > 0 && amountLeft <= ALMOST_DONE_THRESHOLD;
+	};
+
+	const isValidCoordinates = ([longitude, latitude]: readonly [number, number]) =>
+		Number.isFinite(longitude) &&
+		Number.isFinite(latitude) &&
+		longitude >= -180 &&
+		longitude <= 180 &&
+		latitude >= -90 &&
+		latitude <= 90;
+
+	const toLngLat = (coordinates: readonly [number, number]): [number, number] => [
+		coordinates[0],
+		coordinates[1]
+	];
+
 	const escapeHtml = (value: string) =>
 		value.replace(
 			/[&<>"']/g,
@@ -43,28 +67,81 @@
 				character
 		);
 
-	const getPopupMarkup = (project: MapProject) => `
-		<div class="project-map-popup-card">
-			<img class="project-map-popup-image" src="${project.image}" alt="" />
+	const createPopupCard = (project: MapProject) => {
+		const card = document.createElement('article');
+		card.className = 'project-map-popup-card';
+		card.innerHTML = `
+			<img class="project-map-popup-image" alt="" />
 			<div class="project-map-popup-body">
-				<p class="project-map-popup-eyebrow">${escapeHtml(project.location)}</p>
-				<h3 class="project-map-popup-title">${escapeHtml(project.title)}</h3>
-				<p class="project-map-popup-description">${escapeHtml(project.description)}</p>
+				<p class="project-map-popup-eyebrow"></p>
+				<h3 class="project-map-popup-title"></h3>
+				<p class="project-map-popup-description"></p>
 				<div class="project-map-popup-progress">
-					<div class="project-map-popup-progress-track"><span style="width: ${(project.fundingRaised / project.fundingGoal) * 100}%"></span></div>
-					<span>${formatCurrency(getAmountLeft(project))} left</span>
+					<div class="project-map-popup-progress-track"><span></span></div>
+					<span class="project-map-popup-amount-left"></span>
 				</div>
 				<div class="project-map-popup-actions">
-					<button type="button" class="project-map-popup-button project-map-popup-button-outline" data-action="view">View Project</button>
+					<button type="button" class="project-map-popup-button project-map-popup-button-outline">View Project</button>
 					<button type="button" class="project-map-popup-button project-map-popup-button-primary" data-action="fund">Fund Now</button>
 				</div>
 			</div>
-		</div>
-	`;
+		`;
 
-	const closePopupSoon = (popup: Popup, timeout?: ReturnType<typeof setTimeout>) => {
-		if (timeout) clearTimeout(timeout);
-		return setTimeout(() => popup.remove(), 140);
+		const image = card.querySelector<HTMLImageElement>('.project-map-popup-image');
+		const eyebrow = card.querySelector<HTMLElement>('.project-map-popup-eyebrow');
+		const title = card.querySelector<HTMLElement>('.project-map-popup-title');
+		const description = card.querySelector<HTMLElement>('.project-map-popup-description');
+		const progressTrack = card.querySelector<HTMLElement>('.project-map-popup-progress-track');
+		const progress = card.querySelector<HTMLElement>('.project-map-popup-progress-track span');
+		const amountLeft = card.querySelector<HTMLElement>('.project-map-popup-amount-left');
+		const fundButton = card.querySelector<HTMLButtonElement>('[data-action="fund"]');
+
+		if (image) {
+			image.src = project.image;
+		}
+		if (eyebrow) eyebrow.textContent = project.location;
+		if (title) title.textContent = project.title;
+		if (description) description.textContent = project.description;
+		if (progress) {
+			progress.style.width = `${(project.fundingRaised / project.fundingGoal) * 100}%`;
+			progress.classList.toggle('is-almost-done', isAlmostDone(project));
+		}
+		progressTrack?.classList.toggle('is-almost-done', isAlmostDone(project));
+		if (amountLeft) amountLeft.textContent = `${formatCurrency(getAmountLeft(project))} left`;
+		fundButton?.addEventListener('click', () => onFund(project));
+
+		return card;
+	};
+
+	const showPopup = (
+		project: MapProject,
+		markerElement: HTMLElement,
+		maplibregl: typeof import('maplibre-gl')
+	) => {
+		if (!map) return;
+
+		activePopup?.remove();
+		activeMarkerElement?.classList.remove('is-popup-open');
+		markerElement.classList.add('is-popup-open');
+		activeMarkerElement = markerElement;
+		const popup = new maplibregl.Popup({
+			closeButton: true,
+			closeOnClick: true,
+			closeOnMove: false,
+			offset: 12,
+			maxWidth: '320px',
+			className: 'project-map-popup'
+		})
+			.setLngLat(toLngLat(project.coordinates))
+			.setDOMContent(createPopupCard(project))
+			.addTo(map);
+
+		activePopup = popup;
+		popup.on('close', () => {
+			markerElement.classList.remove('is-popup-open');
+			if (activeMarkerElement === markerElement) activeMarkerElement = undefined;
+			if (activePopup === popup) activePopup = undefined;
+		});
 	};
 
 	onMount(async () => {
@@ -72,7 +149,7 @@
 
 		map = new maplibregl.Map({
 			container: mapContainer,
-			style: 'https://openmaptiles.github.io/positron-gl-style/style-cdn.json',
+			style: 'https://tiles.openfreemap.org/styles/positron',
 			center: [135, -28],
 			zoom: 3.35
 		});
@@ -81,63 +158,41 @@
 		map.on('load', () => {
 			const currentMap = map;
 			if (!currentMap) return;
+			const mapProjects = projects.filter((project) => isValidCoordinates(project.coordinates));
 
-			markers = projects.map((project) => {
-				const markerElement = document.createElement('button');
-				markerElement.type = 'button';
+			if (mapProjects.length !== projects.length) {
+				console.warn(
+					'Some projects were excluded from the map because their coordinates are invalid.'
+				);
+			}
+
+			markers = mapProjects.map((project) => {
+				const markerElement = document.createElement('div');
 				markerElement.className = 'project-map-marker';
-				markerElement.setAttribute('aria-label', `Show ${project.title}`);
-				markerElement.innerHTML = `<img src="${project.image}" alt="" /><span></span>`;
+				markerElement.setAttribute('role', 'group');
+				markerElement.innerHTML = `
+					<button type="button" class="project-map-marker-shape" aria-label="Show ${escapeHtml(project.title)}">
+						<img src="${project.image}" alt="" />
+						${isAlmostDone(project) ? '<span class="project-map-marker-dot"></span>' : ''}
+					</button>
+				`;
 
-				const popup = new maplibregl.Popup({
-					closeButton: false,
-					closeOnClick: false,
-					offset: 30,
-					maxWidth: '320px',
-					className: 'project-map-popup'
-				})
-					.setLngLat([project.longitude, project.latitude])
-					.setHTML(getPopupMarkup(project));
-
-				let closeTimeout: ReturnType<typeof setTimeout> | undefined;
-				let popupEventsAttached = false;
-				const openPopup = () => {
-					if (!map) return;
-					if (closeTimeout) clearTimeout(closeTimeout);
-					activePopup?.remove();
-					activePopup = popup;
-					popup.addTo(map);
-
-					if (popupEventsAttached) return;
-					popupEventsAttached = true;
-					const popupElement = popup.getElement();
-					if (!popupElement) return;
-
-					popupElement.addEventListener('mouseenter', () => {
-						if (closeTimeout) clearTimeout(closeTimeout);
+				markerElement
+					.querySelector('.project-map-marker-shape')
+					?.addEventListener('click', (event) => {
+						event.stopPropagation();
+						showPopup(project, markerElement, maplibregl);
 					});
-					popupElement.addEventListener('mouseleave', () => {
-						closeTimeout = closePopupSoon(popup, closeTimeout);
-					});
-					popupElement
-						.querySelector('[data-action="fund"]')
-						?.addEventListener('click', () => onFund(project));
-				};
 
-				markerElement.addEventListener('mouseenter', openPopup);
-				markerElement.addEventListener('focus', openPopup);
-				markerElement.addEventListener('mouseleave', () => {
-					closeTimeout = closePopupSoon(popup, closeTimeout);
-				});
-				markerElement.addEventListener('blur', () => popup.remove());
-
-				return new maplibregl.Marker({ element: markerElement, anchor: 'bottom' })
-					.setLngLat([project.longitude, project.latitude])
+				return new maplibregl.Marker({ element: markerElement, anchor: 'bottom', offset: [0, 0] })
+					.setLngLat(toLngLat(project.coordinates))
 					.addTo(currentMap);
 			});
 
-			const longitudes = projects.map((project) => project.longitude);
-			const latitudes = projects.map((project) => project.latitude);
+			if (mapProjects.length === 0) return;
+
+			const longitudes = mapProjects.map((project) => project.coordinates[0]);
+			const latitudes = mapProjects.map((project) => project.coordinates[1]);
 			currentMap.fitBounds(
 				[
 					[Math.min(...longitudes), Math.min(...latitudes)],
@@ -153,6 +208,8 @@
 
 	onDestroy(() => {
 		resizeObserver?.disconnect();
+		activePopup?.remove();
+		activeMarkerElement?.classList.remove('is-popup-open');
 		markers.forEach((marker) => marker.remove());
 		map?.remove();
 	});
@@ -171,7 +228,7 @@
 		position: relative;
 		height: min(680px, 72vh);
 		min-height: 500px;
-		overflow: hidden;
+		overflow: visible;
 		border: 1px solid var(--border);
 		border-radius: 0.75rem;
 		background: var(--muted);
@@ -185,30 +242,45 @@
 
 	:global(.project-map-marker) {
 		position: relative;
+		display: block;
+		height: 0;
+		width: 0;
+		cursor: pointer;
+	}
+
+	:global(.project-map-marker-shape) {
+		position: absolute;
+		top: -63px;
+		left: -26px;
 		display: flex;
 		height: 52px;
 		width: 52px;
 		align-items: center;
 		justify-content: center;
-		cursor: pointer;
 		border: 3px solid var(--background);
 		border-radius: 999px 999px 999px 0;
 		background: var(--primary);
 		box-shadow: 0 4px 12px rgb(15 23 42 / 24%);
 		transform: rotate(-45deg);
 		transition:
+			opacity 150ms ease,
 			transform 150ms ease,
 			box-shadow 150ms ease;
 	}
 
-	:global(.project-map-marker:hover),
-	:global(.project-map-marker:focus-visible) {
+	:global(.project-map-marker.is-popup-open .project-map-marker-shape) {
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	:global(.project-map-marker:hover .project-map-marker-shape),
+	:global(.project-map-marker:focus-visible .project-map-marker-shape) {
 		z-index: 2;
 		box-shadow: 0 7px 18px rgb(15 23 42 / 30%);
 		transform: rotate(-45deg) scale(1.08);
 	}
 
-	:global(.project-map-marker img) {
+	:global(.project-map-marker-shape img) {
 		height: 40px;
 		width: 40px;
 		border-radius: 999px;
@@ -216,7 +288,7 @@
 		transform: rotate(45deg);
 	}
 
-	:global(.project-map-marker span) {
+	:global(.project-map-marker-dot) {
 		position: absolute;
 		bottom: -7px;
 		left: 11px;
@@ -229,9 +301,23 @@
 
 	:global(.project-map-popup .maplibregl-popup-content) {
 		padding: 0;
+		overflow: hidden;
 		border: 1px solid var(--border);
 		border-radius: 0.75rem;
+		background: var(--background);
 		box-shadow: 0 14px 34px rgb(15 23 42 / 18%);
+		animation: project-map-popup-rise 160ms ease-out both;
+	}
+
+	@keyframes project-map-popup-rise {
+		from {
+			opacity: 0;
+			transform: translateY(8px) scale(0.94);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+		}
 	}
 
 	:global(.project-map-popup .maplibregl-popup-tip) {
@@ -241,7 +327,7 @@
 	:global(.project-map-popup-card) {
 		width: 280px;
 		overflow: hidden;
-		border-radius: 0.75rem;
+		border-radius: 0.7rem;
 		background: var(--background);
 		color: var(--foreground);
 	}
@@ -251,6 +337,7 @@
 		height: 112px;
 		width: 100%;
 		object-fit: cover;
+		border-radius: 0.7rem 0.7rem 0 0;
 	}
 
 	:global(.project-map-popup-body) {
@@ -308,6 +395,14 @@
 		background: var(--primary);
 	}
 
+	:global(.project-map-popup-progress-track span.is-almost-done) {
+		background: var(--secondary);
+	}
+
+	:global(.project-map-popup-progress-track.is-almost-done) {
+		background: color-mix(in oklab, var(--secondary) 20%, transparent);
+	}
+
 	:global(.project-map-popup-actions) {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -329,10 +424,26 @@
 		color: var(--foreground);
 	}
 
+	:global(.project-map-popup-button-outline:hover),
+	:global(.project-map-popup-button-outline:focus-visible) {
+		border-color: var(--primary);
+		color: var(--foreground);
+	}
+
 	:global(.project-map-popup-button-primary) {
-		border: 1px solid var(--secondary);
-		background: var(--secondary);
-		color: var(--secondary-foreground);
+		border: 1px solid var(--primary);
+		background: var(--primary);
+		color: var(--primary-foreground);
+	}
+
+	:global(.project-map-popup-button-primary:hover),
+	:global(.project-map-popup-button-primary:focus-visible) {
+		background: color-mix(in oklab, var(--primary) 92%, var(--foreground));
+	}
+
+	:global(.project-map-popup-button:disabled) {
+		cursor: not-allowed;
+		opacity: 0.62;
 	}
 
 	:global(.project-map-legend) {

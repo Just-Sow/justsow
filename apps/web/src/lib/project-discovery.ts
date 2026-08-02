@@ -1,0 +1,1 @@
+export const ALMOST_DONE_THRESHOLD = 5000;

@@ -12,7 +12,7 @@
 				destructive:
 					'bg-destructive text-destructive-foreground shadow-xs hover:bg-[color-mix(in_oklab,var(--color-destructive)_88%,var(--color-foreground))] hover:text-destructive-foreground hover:shadow-sm active:translate-y-px focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40',
 				outline:
-					'border-1 border-border bg-background text-muted-foreground shadow-xs hover:border-primary hover:shadow-xs dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
+					'border-1 border-border bg-background text-muted-foreground shadow-xs hover:-m-px hover:border-primary hover:border-2 hover:shadow-xs dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
 				secondary:
 					'bg-secondary text-secondary-foreground shadow-xs hover:bg-[color-mix(in_oklab,var(--color-secondary)_92%,var(--color-foreground))] hover:text-[color-mix(in_oklab,var(--color-secondary-foreground)_97%,var(--color-foreground))] hover:shadow-sm active:translate-y-px',
 				ghost:

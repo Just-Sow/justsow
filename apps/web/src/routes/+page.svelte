@@ -23,6 +23,7 @@
 	import * as Popover from '$lib/components/ui/popover';
 	import * as Sheet from '$lib/components/ui/sheet';
 	import ProjectMap from '$lib/components/ProjectMap.svelte';
+	import { ALMOST_DONE_THRESHOLD } from '$lib/project-discovery';
 
 	type SeedbedItem = {
 		projectTitle: string;
@@ -36,8 +37,7 @@
 				'Creating space for natural, Christ-centred conversations with people already lingering by the water.',
 			image: coffeeAtTheBeach,
 			location: 'Gold Coast, QLD',
-			longitude: 153.43,
-			latitude: -28.02,
+			coordinates: [153.43, -28.02] as const,
 			fundingRaised: 5000,
 			fundingGoal: 20000,
 			milestones: [
@@ -67,8 +67,7 @@
 				'Launching a mobile coffee and chats van that offers hospitality, prayer, and gospel conversations.',
 			image: brewHope,
 			location: 'Melbourne, VIC',
-			longitude: 144.96,
-			latitude: -37.81,
+			coordinates: [144.96, -37.81] as const,
 			fundingRaised: 15000,
 			fundingGoal: 20000,
 			milestones: [
@@ -98,23 +97,22 @@
 				'Running regional gatherings that combine food, music, and a clear gospel invitation.',
 			image: uluru,
 			location: 'Alice Springs, NT',
-			longitude: 133.88,
-			latitude: -23.7,
-			fundingRaised: 12500,
+			coordinates: [133.88, -23.7] as const,
+			fundingRaised: 12000,
 			fundingGoal: 20000,
 			milestones: [
 				{
-					amount: 7500,
+					amount: 8000,
 					title: 'Pilot sessions funded',
 					description: 'Launches the first workshop run with devices, trainers, and venue costs.'
 				},
 				{
-					amount: 12500,
+					amount: 12000,
 					title: 'Second cohort opened',
 					description: 'Adds more seats and support materials for the next intake of students.'
 				},
 				{
-					amount: 17500,
+					amount: 17000,
 					title: 'Regional outreach expanded',
 					description: 'Extends the program into partner communities outside the initial hub.'
 				},
@@ -131,8 +129,7 @@
 				'Making short gospel films and testimony stories that can travel online and open real conversations.',
 			image: twelveApostlesPhotography,
 			location: 'South-West, VIC',
-			longitude: 142.52,
-			latitude: -38.39,
+			coordinates: [142.52, -38.39] as const,
 			fundingRaised: 9000,
 			fundingGoal: 20000,
 			milestones: [
@@ -167,8 +164,7 @@
 				'Hosting shared meals that create a warm space to ask life’s big questions around the table.',
 			image: largeBanquet,
 			location: 'Adelaide, SA',
-			longitude: 138.6,
-			latitude: -34.93,
+			coordinates: [138.6, -34.93] as const,
 			fundingRaised: 11000,
 			fundingGoal: 20000,
 			milestones: [
@@ -203,8 +199,7 @@
 				'Bringing acoustic worship gatherings to public spaces where faith can be heard openly.',
 			image: guitarAtTheBeach,
 			location: 'Perth, WA',
-			longitude: 115.86,
-			latitude: -31.95,
+			coordinates: [115.86, -31.95] as const,
 			fundingRaised: 14000,
 			fundingGoal: 20000,
 			milestones: [
@@ -264,7 +259,7 @@
 			case 'almost-done':
 				return projects.filter((project) => isNearGoal(project.fundingRaised, project.fundingGoal));
 			case 'fresh':
-				return projects.filter((project) => project.fundingRaised <= 5000);
+				return projects.filter((project) => project.fundingRaised <= ALMOST_DONE_THRESHOLD);
 			default:
 				return projects;
 		}
@@ -286,15 +281,19 @@
 
 	const getSeedOptions = (project: (typeof projects)[number]) => {
 		const amountRemaining = getAmountLeft(project.fundingRaised, project.fundingGoal);
+		const amountToNextMilestone = getMinimumSeedForNextMilestone(project);
 		const standardAmounts = [1000, 2000, 3000, 5000, 10000, 15000, 20000];
-		const options = standardAmounts.filter((amount) => amount <= amountRemaining);
 		const maximumWholeThousand = Math.floor(amountRemaining / 1000) * 1000;
 
-		if (maximumWholeThousand > 0 && !options.includes(maximumWholeThousand)) {
-			options.push(maximumWholeThousand);
-		}
-
-		return options;
+		return [
+			...new Set([
+				...standardAmounts.filter((amount) => amount <= amountRemaining),
+				amountToNextMilestone,
+				maximumWholeThousand
+			])
+		]
+			.filter((amount) => amount >= 1000 && amount % 1000 === 0 && amount <= amountRemaining)
+			.sort((first, second) => first - second);
 	};
 
 	const getSelectedAmount = (project: (typeof projects)[number]) => {
@@ -374,7 +373,7 @@
 	const getAmountLeft = (raised: number, goal: number) => Math.max(goal - raised, 0);
 	const isNearGoal = (raised: number, goal: number) => {
 		const amountLeft = getAmountLeft(raised, goal);
-		return amountLeft > 0 && amountLeft <= 5000;
+		return amountLeft > 0 && amountLeft <= ALMOST_DONE_THRESHOLD;
 	};
 </script>
 
@@ -671,10 +670,10 @@
 						</Card.Content>
 					</div>
 					<Card.Footer class="mt-auto mx-auto flex gap-4 text-center">
-						<Button aria-label="Project details coming soon">View Project</Button>
+						<Button variant="outline" aria-label="Project details coming soon">View Project</Button>
 						<button
 							type="button"
-							class="inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-xs outline-none transition-[background-color,color,border-color,box-shadow,transform] duration-150 ease-out hover:bg-[color-mix(in_oklab,var(--color-secondary)_92%,var(--color-foreground))] hover:shadow-sm focus-visible:ring-2 focus-visible:ring-ring/50 active:translate-y-px"
+							class="inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-xs outline-none transition-[background-color,color,border-color,box-shadow,transform] duration-150 ease-out hover:bg-[color-mix(in_oklab,var(--color-primary)_92%,var(--color-foreground))] hover:shadow-sm focus-visible:ring-2 focus-visible:ring-ring/50 active:translate-y-px"
 							aria-label={`Fund ${project.title} now`}
 							onclick={() => {
 								selectedProject = project;
@@ -695,6 +694,7 @@
 				{@const project = selectedProject}
 				{@const nextMilestone = getNextMilestone(project)}
 				{@const minimumSeed = getMinimumSeedForNextMilestone(project)}
+				{@const fullSeedAmount = getAmountLeft(project.fundingRaised, project.fundingGoal)}
 				<Sheet.Header class="border-b border-border/70 px-6 pb-5 pt-8">
 					<div class="pr-8">
 						<p class="text-xs font-semibold tracking-[0.12em] text-primary uppercase">
@@ -812,19 +812,29 @@
 						<p class="text-sm font-semibold">Choose your seed</p>
 						<div class="mt-3 grid grid-cols-3 gap-2">
 							{#each getSeedOptions(project) as amount (amount)}
+								{@const isFinalMilestone = nextMilestone?.amount === project.fundingGoal}
+								{@const isNextMilestoneSeed =
+									!isFinalMilestone && nextMilestone && amount === minimumSeed}
+								{@const isFullSeed = amount === fullSeedAmount}
 								<button
 									type="button"
-									class={`flex min-h-12 flex-col items-center justify-center rounded-md border px-2 py-2 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-primary/40 ${getSelectedAmount(project) === amount ? (nextMilestone && amount === minimumSeed ? 'border-2 border-secondary bg-secondary text-secondary-foreground' : 'border-primary bg-primary text-primary-foreground') : nextMilestone && amount === minimumSeed ? 'border-2 border-secondary bg-secondary/10 text-foreground hover:border-secondary' : 'border-border text-foreground hover:border-primary/60'}`}
+									class={`flex min-h-12 flex-col items-center justify-center rounded-md border px-2 py-2 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-primary/40 ${getSelectedAmount(project) === amount ? (isFullSeed ? 'border-2 border-accent bg-accent text-accent-foreground' : isNextMilestoneSeed ? 'border-2 border-secondary bg-secondary text-secondary-foreground' : 'border-primary bg-primary text-primary-foreground') : isFullSeed ? 'border-2 border-accent bg-accent/10 text-foreground hover:border-accent' : isNextMilestoneSeed ? 'border-2 border-secondary bg-secondary/10 text-foreground hover:border-secondary' : 'border-border text-foreground hover:border-primary/60'}`}
 									aria-pressed={getSelectedAmount(project) === amount}
 									onclick={() => (amountSelections[project.title] = amount)}
 								>
 									<span class="flex items-center gap-1">
-										{#if nextMilestone && amount === minimumSeed}<Flame class="size-3.5" />{/if}
+										{#if isFullSeed}<Check class="size-3.5" />{/if}
+										{#if isNextMilestoneSeed}<Flame class="size-3.5" />{/if}
 										{formatCompactCurrency(amount)}
 									</span>
-									{#if nextMilestone && amount === minimumSeed}
+									{#if isNextMilestoneSeed}
 										<span class="mt-0.5 text-[9px] font-semibold uppercase tracking-wide opacity-80"
 											>Next milestone</span
+										>
+									{/if}
+									{#if isFullSeed}
+										<span class="mt-0.5 text-[9px] font-semibold uppercase tracking-wide opacity-80"
+											>Fully funds project</span
 										>
 									{/if}
 								</button>
