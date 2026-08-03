@@ -6,8 +6,10 @@
 		LayoutGrid,
 		Map as MapIcon,
 		MapPin,
+		Palette,
 		ShoppingBasket,
 		Sparkles,
+		UsersRound,
 		X
 	} from '@lucide/svelte';
 	import twelveApostlesPhotography from '$lib/assets/content/home/12-apostles-photography.png';
@@ -35,6 +37,7 @@
 			title: 'Beach Conversations',
 			description:
 				'Creating space for natural, Christ-centred conversations with people already lingering by the water.',
+			tags: ['creative'],
 			image: coffeeAtTheBeach,
 			location: 'Gold Coast, QLD',
 			coordinates: [153.43, -28.02] as const,
@@ -65,6 +68,7 @@
 			title: 'Hope on the Streets',
 			description:
 				'Launching a mobile coffee and chats van that offers hospitality, prayer, and gospel conversations.',
+			tags: ['creative'],
 			image: brewHope,
 			location: 'Melbourne, VIC',
 			coordinates: [144.96, -37.81] as const,
@@ -95,6 +99,7 @@
 			title: 'Outback Youth Nights',
 			description:
 				'Running regional gatherings that combine food, music, and a clear gospel invitation.',
+			tags: ['youth'],
 			image: uluru,
 			location: 'Alice Springs, NT',
 			coordinates: [133.88, -23.7] as const,
@@ -127,6 +132,7 @@
 			title: 'Stories of Hope',
 			description:
 				'Making short gospel films and testimony stories that can travel online and open real conversations.',
+			tags: ['creative'],
 			image: twelveApostlesPhotography,
 			location: 'South-West, VIC',
 			coordinates: [142.52, -38.39] as const,
@@ -162,6 +168,7 @@
 			title: 'Neighbourhood Table',
 			description:
 				'Hosting shared meals that create a warm space to ask life’s big questions around the table.',
+			tags: ['creative'],
 			image: largeBanquet,
 			location: 'Adelaide, SA',
 			coordinates: [138.6, -34.93] as const,
@@ -197,6 +204,7 @@
 			title: 'Waves of Worship',
 			description:
 				'Bringing acoustic worship gatherings to public spaces where faith can be heard openly.',
+			tags: ['creative'],
 			image: guitarAtTheBeach,
 			location: 'Perth, WA',
 			coordinates: [115.86, -31.95] as const,
@@ -238,6 +246,8 @@
 		{ label: 'Featured', value: 'featured' },
 		{ label: 'Almost Done', value: 'almost-done' },
 		{ label: 'Fresh Ideas', value: 'fresh' },
+		{ label: 'Youth', value: 'youth' },
+		{ label: 'Creative', value: 'creative' },
 		{ label: 'Map', value: 'map' }
 	] as const;
 
@@ -260,6 +270,10 @@
 				return projects.filter((project) => isNearGoal(project.fundingRaised, project.fundingGoal));
 			case 'fresh':
 				return projects.filter((project) => project.fundingRaised <= ALMOST_DONE_THRESHOLD);
+			case 'youth':
+				return projects.filter((project) => project.tags.includes('youth'));
+			case 'creative':
+				return projects.filter((project) => project.tags.includes('creative'));
 			default:
 				return projects;
 		}
@@ -535,6 +549,10 @@
 					<Flame class="size-4" />
 				{:else if view.value === 'fresh'}
 					<LayoutGrid class="size-4" />
+				{:else if view.value === 'youth'}
+					<UsersRound class="size-4" />
+				{:else if view.value === 'creative'}
+					<Palette class="size-4" />
 				{:else}
 					<MapIcon class="size-4" />
 				{/if}
@@ -846,7 +864,7 @@
 									{/if}
 									{#if isFullSeed}
 										<span class="mt-0.5 text-3xs font-semibold uppercase tracking-wide opacity-80"
-											>Fully fund project</span
+											>Fully fund</span
 										>
 									{/if}
 								</Button>
