@@ -431,7 +431,7 @@
 			<img
 				src={hero}
 				alt="Supporters celebrating the success of a gospel project together"
-				class="h-full w-full object-cover object-center"
+				class="h-full w-full object-cover object-[75%_center] lg:object-center"
 			/>
 		</div>
 	</div>
@@ -547,7 +547,7 @@
 				type="button"
 				variant={activeView === view.value ? 'default' : 'outline'}
 				size="lg"
-				class={`min-w-32 rounded-lg py-3 ${activeView === view.value ? '' : 'text-muted-foreground hover:border-primary/50 hover:bg-primary/5 hover:text-foreground'}`}
+				class={`min-w-32 rounded-lg py-3 ${view.value === 'map' ? 'relative' : ''} ${activeView === view.value ? '' : 'text-muted-foreground hover:border-primary/50 hover:bg-primary/5 hover:text-foreground'}`}
 				aria-pressed={activeView === view.value}
 				onclick={() => (activeView = view.value)}
 			>
@@ -565,6 +565,13 @@
 					<MapIcon class="size-4" />
 				{/if}
 				{view.label}
+				{#if view.value === 'map'}
+					<span
+						class={`absolute -top-2 -right-2 rounded-full px-1.5 py-0.5 text-[0.6rem] leading-none font-bold tracking-wide uppercase shadow-sm ${activeView === view.value ? 'bg-secondary text-secondary-foreground' : 'bg-primary text-primary-foreground'}`}
+					>
+						Live
+					</span>
+				{/if}
 			</Button>
 		{/each}
 	</div>
