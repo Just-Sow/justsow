@@ -125,19 +125,19 @@
 		</Popover.Trigger>
 
 		<Popover.Content
-			class="flex w-(--bits-popover-content-available-width) max-w-none flex-col gap-8 border border-border/70 bg-background/95 p-6 shadow-lg"
+			class="flex w-(--bits-popover-content-available-width) max-w-none flex-col gap-8 border border-border/70 bg-background p-6 shadow-lg"
 		>
 			<nav class="flex flex-col gap-6 text-left">
-				<a href={resolve('/')} class="text-2xl font-semibold text-foreground/85 hover:text-primary"
+				<a href={resolve('/')} class="text-xl font-semibold text-foreground/85 hover:text-primary"
 					>Home</a
 				>
 				<a
 					href={resolve('/about')}
-					class="text-2xl font-semibold text-foreground/85 hover:text-primary">About</a
+					class="text-xl font-semibold text-foreground/85 hover:text-primary">About</a
 				>
 				<a
 					href={resolve('/contact')}
-					class="text-2xl font-semibold text-foreground/85 hover:text-primary">Contact</a
+					class="text-xl font-semibold text-foreground/85 hover:text-primary">Contact</a
 				>
 			</nav>
 

@@ -154,7 +154,9 @@
 </script>
 
 <Dialog.Root bind:open>
-	<Dialog.Content class="max-w-xl rounded-xl p-0 sm:max-w-xl">
+	<Dialog.Content
+		class="max-h-[calc(100svh-2rem)] max-w-xl overflow-y-auto rounded-xl p-0 sm:max-w-xl"
+	>
 		<div class="space-y-5 p-6">
 			<Dialog.Header>
 				<Dialog.Title>Change password</Dialog.Title>

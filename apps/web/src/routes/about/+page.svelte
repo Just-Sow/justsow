@@ -1,4 +1,5 @@
 <script lang="ts">
+	import crossTable from '$lib/assets/content/about/cross-table.png';
 	import { Button } from '$lib/components/ui/button';
 	import { Droplets, Handshake, Lightbulb, Sprout, SunMedium, TreePine } from '@lucide/svelte';
 </script>
@@ -6,7 +7,7 @@
 <!-- Our Story -->
 <section class="relative bg-amber-50 py-20">
 	<div
-		class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 sm:px-6 md:grid-cols-2 lg:px-8"
+		class="mx-auto grid max-w-7xl grid-cols-1 items-stretch gap-12 px-4 sm:px-6 md:grid-cols-2 lg:px-8"
 	>
 		<div>
 			<h2 class="mb-4 text-4xl font-bold sm:text-5xl lg:text-6xl">Our Story</h2>
@@ -38,11 +39,11 @@
 			</p>
 		</div>
 
-		<div class="relative">
+		<div class="relative h-96 overflow-hidden rounded-2xl shadow-lg md:h-auto md:min-h-0">
 			<img
-				src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=687&auto=format&fit=crop"
-				alt="Farmer sowing seeds"
-				class="w-full rounded-2xl object-cover shadow-lg"
+				src={crossTable}
+				alt="A cross on a table representing JustSow's story and mission"
+				class="absolute inset-x-0 top-[-50px] h-[calc(100%+50px)] w-full object-cover object-top md:top-[-100px] md:h-[calc(100%+100px)]"
 			/>
 		</div>
 	</div>

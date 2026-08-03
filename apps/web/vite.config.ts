@@ -10,6 +10,9 @@ export default defineConfig(({ mode }) => {
 
 	return {
 		plugins: [tailwindcss(), sveltekit(), Icons({ compiler: 'svelte', autoInstall: true })],
+		optimizeDeps: {
+			exclude: ['maplibre-gl']
+		},
 		server: {
 			allowedHosts: ['cross-gabriel-territories-reduce.trycloudflare.com'],
 			proxy: {

@@ -242,7 +242,9 @@
 </script>
 
 <Dialog.Root bind:open>
-	<Dialog.Content class="max-w-lg rounded-xl p-0 sm:max-w-lg">
+	<Dialog.Content
+		class="max-h-[calc(100svh-2rem)] max-w-lg overflow-y-auto rounded-xl p-0 sm:max-w-lg"
+	>
 		<div class="space-y-5 p-6">
 			<Dialog.Header>
 				<Dialog.Title>
@@ -334,7 +336,7 @@
 											</Button>
 										{/snippet}
 									</Popover.Trigger>
-									<Popover.Content class="w-[18rem] p-0">
+									<Popover.Content class="w-72 p-0">
 										<Command.Root>
 											<Command.Input placeholder="Search country..." />
 											<Command.List>

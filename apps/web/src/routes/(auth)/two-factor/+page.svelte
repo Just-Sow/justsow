@@ -7,6 +7,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Checkbox } from '$lib/components/ui/checkbox';
 	import * as InputOTP from '$lib/components/ui/input-otp';
+	import Input from '$lib/components/ui/input/input.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
 
 	type ChallengeMode = 'totp' | 'backup';
@@ -75,13 +76,7 @@
 					Use the code currently shown in your authenticator app.
 				</p>
 			{:else}
-				<input
-					id="two-factor-code"
-					bind:value={code}
-					class="border-border bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-					placeholder="Enter a backup code"
-					required
-				/>
+				<Input id="two-factor-code" bind:value={code} placeholder="Enter a backup code" required />
 				<p class="text-sm text-muted-foreground">Backup codes are single-use reserve codes.</p>
 			{/if}
 		</div>
@@ -113,9 +108,10 @@
 
 	{#snippet footer()}
 		<div class="w-full flex justify-between gap-3">
-			<button
+			<Button
 				type="button"
-				class="cursor-pointer hover:text-primary"
+				variant="link"
+				class="h-auto p-0 text-sm"
 				onclick={() => {
 					mode = mode === 'totp' ? 'backup' : 'totp';
 					code = '';
@@ -123,7 +119,7 @@
 				}}
 			>
 				{mode === 'totp' ? 'Use a backup code instead' : 'Back to authenticator code'}
-			</button>
+			</Button>
 			<a href={resolve('/login')} class="text-primary hover:underline">Back to login</a>
 		</div>
 	{/snippet}

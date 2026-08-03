@@ -17,7 +17,7 @@
 			<!-- Navigation Links -->
 			<div class="flex flex-col items-center text-center md:items-start md:text-left">
 				<h4
-					class="mb-3 text-sm font-semibold tracking-[0.18em] uppercase text-primary-foreground/70"
+					class="mb-3 text-sm font-semibold tracking-eyebrow uppercase text-primary-foreground/70"
 				>
 					Explore
 				</h4>
@@ -42,7 +42,7 @@
 
 			<!-- Social / Contact -->
 			<div class="flex flex-col items-center space-y-3 text-center md:items-start md:text-left">
-				<h4 class="text-sm font-semibold tracking-[0.18em] uppercase text-primary-foreground/70">
+				<h4 class="text-sm font-semibold tracking-eyebrow uppercase text-primary-foreground/70">
 					Connect
 				</h4>
 
