@@ -17,7 +17,7 @@
 	import coffeeAtTheBeach from '$lib/assets/content/home/coffee-at-the-beach.png';
 	import guitarAtTheBeach from '$lib/assets/content/home/guitar-at-the-beach.png';
 	import largeBanquet from '$lib/assets/content/home/large-banquet.png';
-	import successImages from '$lib/assets/content/home/success-images.png';
+	import hero from '$lib/assets/content/home/hero.png';
 	import uluru from '$lib/assets/content/home/uluru.png';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
@@ -244,7 +244,7 @@
 
 	const views = [
 		{ label: 'Featured', value: 'featured' },
-		{ label: 'Almost Done', value: 'almost-done' },
+		{ label: 'Almost Funded', value: 'almost-funded' },
 		{ label: 'Fresh Ideas', value: 'fresh' },
 		{ label: 'Youth', value: 'youth' },
 		{ label: 'Creative', value: 'creative' },
@@ -260,13 +260,21 @@
 	let selectedProject = $state<(typeof projects)[number] | null>(null);
 	let addedProject = $state<string | null>(null);
 	let milestoneHintVisible = $state(true);
+	let openMilestone = $state<string | null>(null);
 
 	const seedbedStorageKey = 'justsow-demo-seedbed';
 	const formatSowerLabel = (count: number) => `${count} other ${count === 1 ? 'sower' : 'sowers'}`;
+	const getMilestoneKey = (projectTitle: string, amount: number) => `${projectTitle}:${amount}`;
+	const toggleMilestone = (key: string) => {
+		openMilestone = openMilestone === key ? null : key;
+	};
+	const setMilestoneOpen = (key: string, open: boolean) => {
+		openMilestone = open ? key : openMilestone === key ? null : openMilestone;
+	};
 
 	const getFilteredProjects = () => {
 		switch (activeView) {
-			case 'almost-done':
+			case 'almost-funded':
 				return projects.filter((project) => isNearGoal(project.fundingRaised, project.fundingGoal));
 			case 'fresh':
 				return projects.filter((project) => project.fundingRaised <= ALMOST_DONE_THRESHOLD);
@@ -421,7 +429,7 @@
 				class="absolute inset-x-0 top-0 z-10 h-28 bg-linear-to-b from-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))] via-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))]/72 to-transparent lg:hidden"
 			></div>
 			<img
-				src={successImages}
+				src={hero}
 				alt="Supporters celebrating the success of a gospel project together"
 				class="h-full w-full object-cover object-center"
 			/>
@@ -545,7 +553,7 @@
 			>
 				{#if view.value === 'featured'}
 					<Sparkles class="size-4" />
-				{:else if view.value === 'almost-done'}
+				{:else if view.value === 'almost-funded'}
 					<Flame class="size-4" />
 				{:else if view.value === 'fresh'}
 					<LayoutGrid class="size-4" />
@@ -616,7 +624,13 @@
 									></div>
 
 									{#each project.milestones as milestone, milestoneIndex (milestone.amount)}
-										<HoverCard.Root openDelay={100} closeDelay={50}>
+										{@const milestoneKey = getMilestoneKey(project.title, milestone.amount)}
+										<HoverCard.Root
+											open={openMilestone === milestoneKey}
+											onOpenChange={(open) => setMilestoneOpen(milestoneKey, open)}
+											openDelay={100}
+											closeDelay={50}
+										>
 											<HoverCard.Trigger
 												class={`absolute top-1/2 z-10 flex size-4 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 bg-background text-2xs leading-none font-bold shadow-sm transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
 													project.fundingRaised >= milestone.amount
@@ -631,6 +645,7 @@
 												style={`left: ${(milestone.amount / project.fundingGoal) * 100}%`}
 												aria-label={`${project.title} milestone at ${formatCompactCurrency(milestone.amount)}`}
 												onmouseenter={() => dismissMilestoneHint(project.title, milestoneIndex)}
+												onclick={() => toggleMilestone(milestoneKey)}
 											>
 												{#if milestoneHintVisible && project.title === projects[0].title && milestoneIndex === 0}
 													<span
@@ -784,11 +799,18 @@
 							></div>
 
 							{#each project.milestones as milestone (milestone.amount)}
-								<HoverCard.Root openDelay={100} closeDelay={50}>
+								{@const milestoneKey = getMilestoneKey(project.title, milestone.amount)}
+								<HoverCard.Root
+									open={openMilestone === milestoneKey}
+									onOpenChange={(open) => setMilestoneOpen(milestoneKey, open)}
+									openDelay={100}
+									closeDelay={50}
+								>
 									<HoverCard.Trigger
 										class={`absolute top-1/2 z-10 flex size-5 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 bg-background text-2xs leading-none font-bold shadow-sm transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${project.fundingRaised >= milestone.amount ? 'border-primary bg-primary text-primary-foreground' : reachesMilestone(project, getSelectedAmount(project), milestone.amount) ? 'border-secondary bg-secondary text-secondary-foreground' : 'border-primary text-transparent'}`}
 										style={`left: ${(milestone.amount / project.fundingGoal) * 100}%`}
 										aria-label={`${project.title} milestone at ${formatCompactCurrency(milestone.amount)}`}
+										onclick={() => toggleMilestone(milestoneKey)}
 									>
 										{#if project.fundingRaised >= milestone.amount || reachesMilestone(project, getSelectedAmount(project), milestone.amount)}
 											<span>✓</span>

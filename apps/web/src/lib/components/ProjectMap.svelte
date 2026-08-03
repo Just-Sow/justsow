@@ -219,14 +219,14 @@
 </script>
 
 <div
-	class="project-map-shell relative h-[min(680px,72vh)] min-h-[500px] overflow-hidden rounded-xl border border-transparent bg-muted shadow-lg max-sm:h-[68vh] max-sm:min-h-[450px]"
+	class="project-map-shell relative isolate h-[min(680px,72vh)] min-h-[500px] overflow-hidden rounded-xl border border-transparent bg-muted shadow-lg max-sm:h-[68vh] max-sm:min-h-[450px]"
 >
 	<div
 		bind:this={mapContainer}
-		class="project-map-canvas absolute inset-0 overflow-hidden rounded-[inherit]"
+		class="project-map-canvas absolute inset-0 z-0 overflow-hidden rounded-[inherit]"
 	></div>
 	<div
-		class="project-map-legend absolute bottom-4 left-4 flex items-center gap-2 rounded-md border border-border bg-white/90 px-2.5 py-2 text-xs font-semibold text-foreground shadow-md"
+		class="project-map-legend absolute bottom-4 left-4 z-10 flex items-center gap-2 rounded-md border border-border bg-white/90 px-2.5 py-2 text-xs font-semibold text-foreground shadow-md"
 	>
 		<span class="size-[0.55rem] rounded-full bg-secondary"></span>
 		<span>Explore projects across Australia</span>
@@ -237,11 +237,17 @@
 	:global(.project-map-shell)::after {
 		position: absolute;
 		inset: 0;
-		z-index: 3;
+		z-index: 1;
 		pointer-events: none;
 		border: 1px solid var(--border);
 		border-radius: inherit;
 		content: '';
+	}
+
+	:global(.project-map-canvas) {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
 	}
 
 	:global(.project-map-marker) {
