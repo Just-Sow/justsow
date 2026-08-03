@@ -88,6 +88,16 @@
 	--color-border: var(--border);
 	--color-input: var(--input);
 	--color-ring: var(--ring);
+
+	--text-2xs: 0.625rem;
+	--text-2xs--line-height: 1.4;
+	--text-3xs: 0.5625rem;
+	--text-3xs--line-height: 1.4;
+	--tracking-meta: 0.12em;
+	--tracking-label: 0.14em;
+	--tracking-section: 0.16em;
+	--tracking-eyebrow: 0.18em;
+	--tracking-display: 0.22em;
 }
 
 @layer base {

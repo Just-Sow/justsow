@@ -73,7 +73,7 @@
 >
 	<div class="w-full max-w-2xl space-y-8">
 		<div class="space-y-2 text-center">
-			<p class="text-sm font-semibold tracking-[0.22em] text-primary uppercase">Your Account</p>
+			<p class="text-sm font-semibold tracking-display text-primary uppercase">Your Account</p>
 			<h1 class="text-4xl font-bold tracking-tight sm:text-5xl">Settings</h1>
 		</div>
 
@@ -83,16 +83,16 @@
 
 		<div class="space-y-8">
 			<div class="space-y-4">
-				<h2 class="text-sm font-semibold tracking-[0.16em] text-foreground uppercase">
+				<h2 class="text-sm font-semibold tracking-section text-foreground uppercase">
 					Account info
 				</h2>
 
 				<div
 					class="border-border/70 divide-border/70 overflow-hidden rounded-xl border bg-background/95"
 				>
-					<div class="flex items-center justify-between gap-4 px-5 py-4">
+					<div class="flex flex-col items-stretch gap-3 px-5 py-4 sm:flex-row sm:items-center">
 						<div class="min-w-0 flex-1 space-y-1">
-							<p class="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
+							<p class="text-xs font-semibold tracking-label text-muted-foreground uppercase">
 								Name
 							</p>
 							<p class="truncate text-sm text-foreground">
@@ -101,29 +101,43 @@
 							</p>
 						</div>
 
-						<Button type="button" variant="ghost" onclick={() => (nameDialogOpen = true)}>
+						<Button
+							class="self-end sm:self-auto"
+							type="button"
+							variant="ghost"
+							onclick={() => (nameDialogOpen = true)}
+						>
 							<PencilLine />
 							Edit
 						</Button>
 					</div>
 
-					<div class="border-border/70 flex items-center justify-between gap-4 border-t px-5 py-4">
+					<div
+						class="border-border/70 flex flex-col items-stretch gap-3 border-t px-5 py-4 sm:flex-row sm:items-center"
+					>
 						<div class="min-w-0 flex-1 space-y-1">
-							<p class="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
+							<p class="text-xs font-semibold tracking-label text-muted-foreground uppercase">
 								Email
 							</p>
 							<p class="truncate text-sm text-foreground">{$auth?.user.email}</p>
 						</div>
 
-						<Button type="button" variant="ghost" onclick={() => (emailDialogOpen = true)}>
+						<Button
+							class="self-end sm:self-auto"
+							type="button"
+							variant="ghost"
+							onclick={() => (emailDialogOpen = true)}
+						>
 							<PencilLine />
 							Edit
 						</Button>
 					</div>
 
-					<div class="border-border/70 flex items-center justify-between gap-4 border-t px-5 py-4">
+					<div
+						class="border-border/70 flex flex-col items-stretch gap-3 border-t px-5 py-4 sm:flex-row sm:items-center"
+					>
 						<div class="min-w-0 flex-1 space-y-1">
-							<p class="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
+							<p class="text-xs font-semibold tracking-label text-muted-foreground uppercase">
 								Phone
 							</p>
 							<p class="truncate text-sm text-foreground">
@@ -131,7 +145,12 @@
 							</p>
 						</div>
 
-						<Button type="button" variant="ghost" onclick={() => (phoneDialogOpen = true)}>
+						<Button
+							class="self-end sm:self-auto"
+							type="button"
+							variant="ghost"
+							onclick={() => (phoneDialogOpen = true)}
+						>
 							<PencilLine />
 							Edit
 						</Button>
@@ -140,16 +159,16 @@
 			</div>
 
 			<div class="space-y-4">
-				<h2 class="text-sm font-semibold tracking-[0.16em] text-foreground uppercase">
+				<h2 class="text-sm font-semibold tracking-section text-foreground uppercase">
 					Password and security
 				</h2>
 
 				<div
 					class="border-border/70 divide-border/70 overflow-hidden rounded-xl border bg-background/95"
 				>
-					<div class="flex items-center justify-between gap-4 px-5 py-4">
+					<div class="flex flex-col items-stretch gap-3 px-5 py-4 sm:flex-row sm:items-center">
 						<div class="min-w-0 flex-1 space-y-1">
-							<p class="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
+							<p class="text-xs font-semibold tracking-label text-muted-foreground uppercase">
 								Password
 							</p>
 							<Badge
@@ -161,15 +180,22 @@
 							</Badge>
 						</div>
 
-						<Button type="button" variant="ghost" onclick={() => (passwordDialogOpen = true)}>
+						<Button
+							class="self-end sm:self-auto"
+							type="button"
+							variant="ghost"
+							onclick={() => (passwordDialogOpen = true)}
+						>
 							<PencilLine />
 							Edit
 						</Button>
 					</div>
 
-					<div class="border-border/70 flex items-center justify-between gap-4 border-t px-5 py-4">
+					<div
+						class="border-border/70 flex flex-col items-stretch gap-3 border-t px-5 py-4 sm:flex-row sm:items-center"
+					>
 						<div class="min-w-0 flex-1 space-y-1">
-							<p class="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
+							<p class="text-xs font-semibold tracking-label text-muted-foreground uppercase">
 								Two-factor authentication
 							</p>
 							<Tooltip.Provider>
@@ -198,7 +224,12 @@
 							</Tooltip.Provider>
 						</div>
 
-						<Button type="button" variant="ghost" onclick={() => (twoFactorDialogOpen = true)}>
+						<Button
+							class="self-end sm:self-auto"
+							type="button"
+							variant="ghost"
+							onclick={() => (twoFactorDialogOpen = true)}
+						>
 							{#if !data.security?.twoFactor.enabled}
 								<ShieldAlert />
 							{:else}

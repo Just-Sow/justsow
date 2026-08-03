@@ -2,6 +2,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import type { Map, Marker, Popup } from 'maplibre-gl';
 	import 'maplibre-gl/dist/maplibre-gl.css';
+	import { buttonVariants } from '$lib/components/ui/button';
 	import { ALMOST_DONE_THRESHOLD } from '$lib/project-discovery';
 	import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 
@@ -82,8 +83,8 @@
 					<span class="project-map-popup-amount-left"></span>
 				</div>
 				<div class="project-map-popup-actions">
-					<button type="button" class="project-map-popup-button project-map-popup-button-outline">View Project</button>
-					<button type="button" class="project-map-popup-button project-map-popup-button-primary" data-action="fund">Fund Now</button>
+					<button type="button" class="${buttonVariants({ variant: 'outline', size: 'sm' })}">View Project</button>
+					<button type="button" class="${buttonVariants({ variant: 'default', size: 'sm' })}" data-action="fund">Fund Now</button>
 				</div>
 			</div>
 		`;
@@ -218,22 +219,21 @@
 </script>
 
 <div
-	class="project-map-shell relative overflow-hidden rounded-xl border border-transparent bg-muted shadow-[0_12px_30px_rgb(15_23_42_/_8%)]"
+	class="project-map-shell relative h-[min(680px,72vh)] min-h-[500px] overflow-hidden rounded-xl border border-transparent bg-muted shadow-lg max-sm:h-[68vh] max-sm:min-h-[450px]"
 >
-	<div bind:this={mapContainer} class="project-map-canvas"></div>
-	<div class="project-map-legend">
-		<span class="project-map-legend-pin"></span>
+	<div
+		bind:this={mapContainer}
+		class="project-map-canvas absolute inset-0 overflow-hidden rounded-[inherit]"
+	></div>
+	<div
+		class="project-map-legend absolute bottom-4 left-4 flex items-center gap-2 rounded-md border border-border bg-white/90 px-2.5 py-2 text-xs font-semibold text-foreground shadow-md"
+	>
+		<span class="size-[0.55rem] rounded-full bg-secondary"></span>
 		<span>Explore projects across Australia</span>
 	</div>
 </div>
 
 <style>
-	:global(.project-map-shell) {
-		position: relative;
-		height: min(680px, 72vh);
-		min-height: 500px;
-	}
-
 	:global(.project-map-shell)::after {
 		position: absolute;
 		inset: 0;
@@ -242,13 +242,6 @@
 		border: 1px solid var(--border);
 		border-radius: inherit;
 		content: '';
-	}
-
-	:global(.project-map-canvas) {
-		position: absolute;
-		inset: 0;
-		overflow: hidden;
-		border-radius: inherit;
 	}
 
 	:global(.project-map-marker) {
@@ -418,72 +411,5 @@
 		grid-template-columns: 1fr 1fr;
 		gap: 0.5rem;
 		margin-top: 0.9rem;
-	}
-
-	:global(.project-map-popup-button) {
-		cursor: pointer;
-		border-radius: 0.35rem;
-		padding: 0.5rem 0.4rem;
-		font-size: 0.7rem;
-		font-weight: 600;
-	}
-
-	:global(.project-map-popup-button-outline) {
-		border: 1px solid var(--border);
-		background: var(--background);
-		color: var(--foreground);
-	}
-
-	:global(.project-map-popup-button-outline:hover),
-	:global(.project-map-popup-button-outline:focus-visible) {
-		border-color: var(--primary);
-		color: var(--foreground);
-	}
-
-	:global(.project-map-popup-button-primary) {
-		border: 1px solid var(--primary);
-		background: var(--primary);
-		color: var(--primary-foreground);
-	}
-
-	:global(.project-map-popup-button-primary:hover),
-	:global(.project-map-popup-button-primary:focus-visible) {
-		background: color-mix(in oklab, var(--primary) 92%, var(--foreground));
-	}
-
-	:global(.project-map-popup-button:disabled) {
-		cursor: not-allowed;
-		opacity: 0.62;
-	}
-
-	:global(.project-map-legend) {
-		position: absolute;
-		bottom: 1rem;
-		left: 1rem;
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		border: 1px solid var(--border);
-		border-radius: 0.4rem;
-		background: rgb(255 255 255 / 90%);
-		padding: 0.5rem 0.7rem;
-		font-size: 0.7rem;
-		font-weight: 600;
-		color: var(--foreground);
-		box-shadow: 0 4px 10px rgb(15 23 42 / 8%);
-	}
-
-	:global(.project-map-legend-pin) {
-		height: 0.55rem;
-		width: 0.55rem;
-		border-radius: 999px;
-		background: var(--secondary);
-	}
-
-	@media (max-width: 640px) {
-		:global(.project-map-shell) {
-			height: 68vh;
-			min-height: 450px;
-		}
 	}
 </style>

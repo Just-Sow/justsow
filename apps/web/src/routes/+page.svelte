@@ -378,13 +378,13 @@
 </script>
 
 <!-- Hero -->
-<section class="w-full bg-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))]">
+<section class="w-full bg-primary/12">
 	<div class="grid items-stretch lg:grid-cols-12">
 		<div
 			class="relative z-10 flex flex-col justify-center px-6 py-10 sm:px-10 sm:py-14 lg:col-span-5 lg:px-14"
 		>
 			<div class="relative z-10">
-				<p class="text-sm font-semibold tracking-[0.18em] text-primary uppercase">
+				<p class="text-sm font-semibold tracking-eyebrow text-primary uppercase">
 					Back bold gospel ideas
 				</p>
 				<h1 class="mt-4 max-w-xl text-4xl font-bold text-balance sm:text-5xl lg:text-6xl">
@@ -401,10 +401,10 @@
 
 		<div class="relative min-h-70 lg:col-span-7 lg:min-h-130">
 			<div
-				class="absolute inset-y-0 left-0 z-10 hidden w-72 bg-linear-to-r from-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))] via-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))]/82 to-transparent lg:block"
+				class="absolute inset-y-0 left-0 z-10 hidden w-72 bg-linear-to-r from-primary/12 via-primary/12 to-transparent lg:block"
 			></div>
 			<div
-				class="absolute inset-x-0 top-0 z-10 h-28 bg-linear-to-b from-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))] via-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))]/72 to-transparent lg:hidden"
+				class="absolute inset-x-0 top-0 z-10 h-28 bg-linear-to-b from-primary/12 via-primary/12 to-transparent lg:hidden"
 			></div>
 			<img
 				src={successImages}
@@ -434,14 +434,18 @@
 				Seedbed
 				{#if seedbed.length > 0}
 					<span
-						class="flex size-5 items-center justify-center rounded-full bg-primary text-[11px] text-primary-foreground"
+						class="flex size-5 items-center justify-center rounded-full bg-primary text-2xs text-primary-foreground"
 					>
 						{seedbed.length}
 					</span>
 				{/if}
 			</Popover.Trigger>
 
-			<Popover.Content align="end" side="bottom" class="w-[min(24rem,calc(100vw-2rem))] p-0">
+			<Popover.Content
+				align="end"
+				side="bottom"
+				class="w-(--bits-popover-content-available-width) max-w-96 p-0"
+			>
 				<div class="flex items-center justify-between border-b border-border/70 px-5 py-4">
 					<div>
 						<p class="font-semibold">Your Seedbed</p>
@@ -480,14 +484,16 @@
 									<p class="truncate text-sm font-semibold">{item.projectTitle}</p>
 									<p class="mt-1 text-sm text-primary">{formatCurrency(item.amount)} seed</p>
 								</div>
-								<button
+								<Button
 									type="button"
-									class="self-start rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
+									variant="ghost"
+									size="icon"
+									class="self-start"
 									aria-label={`Remove ${item.projectTitle} from Seedbed`}
 									onclick={() => removeFromSeedbed(item.projectTitle)}
 								>
 									<X class="size-4" />
-								</button>
+								</Button>
 							</div>
 						{/each}
 					</div>
@@ -497,13 +503,14 @@
 							<span class="font-semibold">{formatCurrency(seedbedTotal)}</span>
 						</div>
 						<div class="mt-3 flex items-center justify-between gap-3">
-							<button
+							<Button
 								type="button"
-								class="text-xs font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+								variant="link"
+								class="h-auto p-0 text-xs text-muted-foreground"
 								onclick={clearSeedbed}
 							>
 								Clear Seedbed
-							</button>
+							</Button>
 							<Button size="sm" onclick={() => (seedbedOpen = false)}>Review Seeds</Button>
 						</div>
 					</div>
@@ -514,9 +521,11 @@
 
 	<div class="mt-8 flex flex-wrap justify-center gap-3" aria-label="Project views">
 		{#each views as view (view.value)}
-			<button
+			<Button
 				type="button"
-				class={`inline-flex min-w-32 items-center justify-center gap-2 rounded-lg border px-5 py-3 text-sm font-semibold transition-[background-color,color,border-color,box-shadow,transform] focus-visible:ring-2 focus-visible:ring-primary/40 ${activeView === view.value ? 'border-primary bg-primary text-primary-foreground shadow-sm' : 'border-border bg-background text-muted-foreground hover:border-primary/50 hover:bg-primary/5 hover:text-foreground'}`}
+				variant={activeView === view.value ? 'default' : 'outline'}
+				size="lg"
+				class={`min-w-32 rounded-lg py-3 ${activeView === view.value ? '' : 'text-muted-foreground hover:border-primary/50 hover:bg-primary/5 hover:text-foreground'}`}
 				aria-pressed={activeView === view.value}
 				onclick={() => (activeView = view.value)}
 			>
@@ -530,7 +539,7 @@
 					<MapIcon class="size-4" />
 				{/if}
 				{view.label}
-			</button>
+			</Button>
 		{/each}
 	</div>
 
@@ -591,7 +600,7 @@
 									{#each project.milestones as milestone, milestoneIndex (milestone.amount)}
 										<HoverCard.Root openDelay={100} closeDelay={50}>
 											<HoverCard.Trigger
-												class={`absolute top-1/2 z-10 flex size-4 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 bg-background text-[10px] leading-none font-bold shadow-sm transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+												class={`absolute top-1/2 z-10 flex size-4 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 bg-background text-2xs leading-none font-bold shadow-sm transition-colors duration-300 outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
 													project.fundingRaised >= milestone.amount
 														? isNearGoal(project.fundingRaised, project.fundingGoal)
 															? 'border-secondary bg-secondary text-secondary-foreground'
@@ -607,7 +616,7 @@
 											>
 												{#if milestoneHintVisible && project.title === projects[0].title && milestoneIndex === 0}
 													<span
-														class="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border-2 border-accent/70 bg-background px-2.5 py-1 text-[10px] font-semibold text-foreground shadow-md before:absolute before:top-full before:left-1/2 before:-translate-x-1/2 before:border-x-[5px] before:border-t-[5px] before:border-x-transparent before:border-t-accent/70 before:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-x-4 after:border-t-4 after:border-x-transparent after:border-t-background after:content-['']"
+														class="pointer-events-none absolute bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border-2 border-accent/70 bg-background px-2.5 py-1 text-2xs font-semibold text-foreground shadow-md before:absolute before:top-full before:left-1/2 before:-translate-x-1/2 before:border-x-[5px] before:border-t-[5px] before:border-x-transparent before:border-t-accent/70 before:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-x-4 after:border-t-4 after:border-x-transparent after:border-t-background after:content-['']"
 														aria-hidden="true"
 													>
 														Hover for details
@@ -638,12 +647,12 @@
 								</div>
 
 								<div class="relative h-5 pt-1">
-									<div class="absolute top-0 left-0 text-[10px] font-medium text-muted-foreground">
+									<div class="absolute top-0 left-0 text-2xs font-medium text-muted-foreground">
 										$0
 									</div>
 									{#each project.milestones as milestone (milestone.amount)}
 										<div
-											class="absolute top-0 -translate-x-1/2 text-[10px] font-medium text-muted-foreground"
+											class="absolute top-0 -translate-x-1/2 text-2xs font-medium text-muted-foreground"
 											style={`left: ${(milestone.amount / project.fundingGoal) * 100}%`}
 										>
 											{formatCompactCurrency(milestone.amount)}
@@ -655,7 +664,7 @@
 									<div class="flex -space-x-2">
 										{#each sowers as sower (sower.name)}
 											<span
-												class={`flex size-6 items-center justify-center rounded-full border-2 border-card text-[9px] font-bold ${sower.colour}`}
+												class={`flex size-6 items-center justify-center rounded-full border-2 border-card text-3xs font-bold ${sower.colour}`}
 												title={sower.name}
 											>
 												{sower.initials}
@@ -669,11 +678,17 @@
 							</div>
 						</Card.Content>
 					</div>
-					<Card.Footer class="mt-auto mx-auto flex gap-4 text-center">
-						<Button variant="outline" aria-label="Project details coming soon">View Project</Button>
-						<button
+					<Card.Footer
+						class="mx-auto mt-auto flex w-full flex-col gap-2 px-6 text-center sm:w-auto sm:flex-row"
+					>
+						<Button
+							class="w-full sm:w-auto"
+							variant="outline"
+							aria-label="Project details coming soon">View Project</Button
+						>
+						<Button
 							type="button"
-							class="inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-xs outline-none transition-[background-color,color,border-color,box-shadow,transform] duration-150 ease-out hover:bg-[color-mix(in_oklab,var(--color-primary)_92%,var(--color-foreground))] hover:shadow-sm focus-visible:ring-2 focus-visible:ring-ring/50 active:translate-y-px"
+							class="w-full sm:w-auto"
 							aria-label={`Fund ${project.title} now`}
 							onclick={() => {
 								selectedProject = project;
@@ -681,7 +696,7 @@
 							}}
 						>
 							Fund Now
-						</button>
+						</Button>
 					</Card.Footer>
 				</Card.Root>
 			{/each}
@@ -689,17 +704,15 @@
 	{/if}
 
 	<Sheet.Root bind:open={fundNowOpen}>
-		<Sheet.Content side="right" class="w-full overflow-y-auto sm:max-w-md">
+		<Sheet.Content side="right" class="overflow-hidden sm:max-w-md">
 			{#if selectedProject}
 				{@const project = selectedProject}
 				{@const nextMilestone = getNextMilestone(project)}
 				{@const minimumSeed = getMinimumSeedForNextMilestone(project)}
 				{@const fullSeedAmount = getAmountLeft(project.fundingRaised, project.fundingGoal)}
-				<Sheet.Header class="border-b border-border/70 px-6 pb-5 pt-8">
+				<Sheet.Header class="border-b border-border/70 px-4 pb-5 pt-8 sm:px-6">
 					<div class="pr-8">
-						<p class="text-xs font-semibold tracking-[0.12em] text-primary uppercase">
-							Fund a project
-						</p>
+						<p class="text-xs font-semibold tracking-meta text-primary uppercase">Fund a project</p>
 						<Sheet.Title class="mt-1 text-xl font-semibold">{project.title}</Sheet.Title>
 						<Sheet.Description class="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
 							<MapPin class="size-3.5" />{project.location}
@@ -707,7 +720,7 @@
 					</div>
 				</Sheet.Header>
 
-				<div class="space-y-6 px-6 py-6">
+				<div class="min-h-0 flex-1 space-y-6 overflow-y-auto px-4 py-6 sm:px-6">
 					<img
 						src={project.image}
 						alt={project.title}
@@ -755,7 +768,7 @@
 							{#each project.milestones as milestone (milestone.amount)}
 								<HoverCard.Root openDelay={100} closeDelay={50}>
 									<HoverCard.Trigger
-										class={`absolute top-1/2 z-10 flex size-5 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 bg-background text-[10px] leading-none font-bold shadow-sm transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${project.fundingRaised >= milestone.amount ? 'border-primary bg-primary text-primary-foreground' : reachesMilestone(project, getSelectedAmount(project), milestone.amount) ? 'border-secondary bg-secondary text-secondary-foreground' : 'border-primary text-transparent'}`}
+										class={`absolute top-1/2 z-10 flex size-5 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 bg-background text-2xs leading-none font-bold shadow-sm transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${project.fundingRaised >= milestone.amount ? 'border-primary bg-primary text-primary-foreground' : reachesMilestone(project, getSelectedAmount(project), milestone.amount) ? 'border-secondary bg-secondary text-secondary-foreground' : 'border-primary text-transparent'}`}
 										style={`left: ${(milestone.amount / project.fundingGoal) * 100}%`}
 										aria-label={`${project.title} milestone at ${formatCompactCurrency(milestone.amount)}`}
 									>
@@ -781,12 +794,10 @@
 						</div>
 
 						<div class="relative mt-1 h-5 pt-1">
-							<div class="absolute top-0 left-0 text-[10px] font-medium text-muted-foreground">
-								$0
-							</div>
+							<div class="absolute top-0 left-0 text-2xs font-medium text-muted-foreground">$0</div>
 							{#each project.milestones as milestone (milestone.amount)}
 								<div
-									class="absolute top-0 -translate-x-1/2 text-[10px] font-medium text-muted-foreground"
+									class="absolute top-0 -translate-x-1/2 text-2xs font-medium text-muted-foreground"
 									style={`left: ${(milestone.amount / project.fundingGoal) * 100}%`}
 								>
 									{formatCompactCurrency(milestone.amount)}
@@ -810,15 +821,16 @@
 
 					<div>
 						<p class="text-sm font-semibold">Choose your seed</p>
-						<div class="mt-3 grid grid-cols-3 gap-2">
+						<div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
 							{#each getSeedOptions(project) as amount (amount)}
 								{@const isFinalMilestone = nextMilestone?.amount === project.fundingGoal}
 								{@const isNextMilestoneSeed =
 									!isFinalMilestone && nextMilestone && amount === minimumSeed}
 								{@const isFullSeed = amount === fullSeedAmount}
-								<button
+								<Button
 									type="button"
-									class={`flex min-h-12 flex-col items-center justify-center rounded-md border px-2 py-2 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-primary/40 ${getSelectedAmount(project) === amount ? (isFullSeed ? 'border-2 border-accent bg-accent text-accent-foreground' : isNextMilestoneSeed ? 'border-2 border-secondary bg-secondary text-secondary-foreground' : 'border-primary bg-primary text-primary-foreground') : isFullSeed ? 'border-2 border-accent bg-accent/10 text-foreground hover:border-accent' : isNextMilestoneSeed ? 'border-2 border-secondary bg-secondary/10 text-foreground hover:border-secondary' : 'border-border text-foreground hover:border-primary/60'}`}
+									variant="ghost"
+									class={`flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-md border px-2 py-2 text-center text-sm leading-tight font-semibold whitespace-normal transition-colors focus-visible:ring-2 focus-visible:ring-primary/40 ${getSelectedAmount(project) === amount ? (isFullSeed ? 'border-2 border-accent bg-accent text-accent-foreground' : isNextMilestoneSeed ? 'border-2 border-secondary bg-secondary text-secondary-foreground' : 'border-primary bg-primary text-primary-foreground') : isFullSeed ? 'border-2 border-accent bg-accent/10 text-foreground hover:border-accent' : isNextMilestoneSeed ? 'border-2 border-secondary bg-secondary/10 text-foreground hover:border-secondary' : 'border-border text-foreground hover:border-primary/60'}`}
 									aria-pressed={getSelectedAmount(project) === amount}
 									onclick={() => (amountSelections[project.title] = amount)}
 								>
@@ -828,16 +840,16 @@
 										{formatCompactCurrency(amount)}
 									</span>
 									{#if isNextMilestoneSeed}
-										<span class="mt-0.5 text-[9px] font-semibold uppercase tracking-wide opacity-80"
+										<span class="mt-0.5 text-3xs font-semibold uppercase tracking-wide opacity-80"
 											>Next milestone</span
 										>
 									{/if}
 									{#if isFullSeed}
-										<span class="mt-0.5 text-[9px] font-semibold uppercase tracking-wide opacity-80"
-											>Fully funds project</span
+										<span class="mt-0.5 text-3xs font-semibold uppercase tracking-wide opacity-80"
+											>Fully fund project</span
 										>
 									{/if}
-								</button>
+								</Button>
 							{/each}
 						</div>
 					</div>
@@ -847,7 +859,7 @@
 							<div class="flex -space-x-2">
 								{#each sowers as sower (sower.name)}
 									<span
-										class={`flex size-8 items-center justify-center rounded-full border-2 border-background text-[10px] font-bold ${sower.colour}`}
+										class={`flex size-8 items-center justify-center rounded-full border-2 border-background text-2xs font-bold ${sower.colour}`}
 										title={sower.name}
 									>
 										{sower.initials}
@@ -864,7 +876,7 @@
 					</div>
 				</div>
 
-				<Sheet.Footer class="mt-auto border-t border-border/70 px-6 py-5">
+				<Sheet.Footer class="mt-auto border-t border-border/70 px-4 py-5 sm:px-6">
 					<div class="w-full space-y-3">
 						<Button
 							class="w-full"
@@ -877,7 +889,7 @@
 									class="size-4"
 								/> Add {formatCurrency(getSelectedAmount(project))} to Seedbed{/if}
 						</Button>
-						<p class="text-center text-[11px] text-muted-foreground">
+						<p class="text-center text-xs text-muted-foreground">
 							Demo only — no payment or real allocation will happen.
 						</p>
 					</div>

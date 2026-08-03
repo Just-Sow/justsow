@@ -415,7 +415,9 @@
 </script>
 
 <Dialog.Root bind:open>
-	<Dialog.Content class="max-h-[90svh] max-w-2xl overflow-y-auto rounded-xl p-0 sm:max-w-2xl">
+	<Dialog.Content
+		class="max-h-[calc(100svh-2rem)] max-w-2xl overflow-y-auto rounded-xl p-0 sm:max-w-2xl"
+	>
 		<div class="space-y-5 p-6">
 			<Dialog.Header>
 				<Dialog.Title>Two-factor authentication</Dialog.Title>
@@ -611,7 +613,7 @@
 						<Button
 							type="button"
 							variant="outline"
-							class="w-full"
+							class="w-full whitespace-normal text-center leading-tight"
 							onclick={() => (stage = 'regenerate')}
 						>
 							Generate new backup codes
@@ -619,7 +621,7 @@
 						<Button
 							type="button"
 							variant="outline"
-							class="w-full"
+							class="w-full whitespace-normal text-center leading-tight"
 							onclick={() => (stage = 'trusted-devices')}
 						>
 							Clear trusted devices

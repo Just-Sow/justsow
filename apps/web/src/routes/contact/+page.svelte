@@ -154,7 +154,7 @@
 				</div>
 
 				<div class="space-y-3">
-					<p class="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+					<p class="text-sm font-semibold uppercase tracking-eyebrow text-muted-foreground">
 						Connect on socials
 					</p>
 					<ul class="space-y-3">
