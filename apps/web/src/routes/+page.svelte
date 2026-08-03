@@ -392,7 +392,7 @@
 </script>
 
 <!-- Hero -->
-<section class="w-full bg-primary/12">
+<section class="w-full bg-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))]">
 	<div class="grid items-stretch lg:grid-cols-12">
 		<div
 			class="relative z-10 flex flex-col justify-center px-6 py-10 sm:px-10 sm:py-14 lg:col-span-5 lg:px-14"
@@ -415,10 +415,10 @@
 
 		<div class="relative min-h-70 lg:col-span-7 lg:min-h-130">
 			<div
-				class="absolute inset-y-0 left-0 z-10 hidden w-72 bg-linear-to-r from-primary/12 via-primary/12 to-transparent lg:block"
+				class="absolute inset-y-0 left-0 z-10 hidden w-72 bg-linear-to-r from-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))] via-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))]/82 to-transparent lg:block"
 			></div>
 			<div
-				class="absolute inset-x-0 top-0 z-10 h-28 bg-linear-to-b from-primary/12 via-primary/12 to-transparent lg:hidden"
+				class="absolute inset-x-0 top-0 z-10 h-28 bg-linear-to-b from-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))] via-[color-mix(in_oklab,var(--color-primary)_12%,var(--color-background))]/72 to-transparent lg:hidden"
 			></div>
 			<img
 				src={successImages}
