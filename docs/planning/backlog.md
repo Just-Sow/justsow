@@ -13,6 +13,12 @@
 - define site-wide SEO metadata conventions and clean up route metadata remnants
 - define media storage and thumbnail strategy for MVP
 - add a branded 404 page and fallback navigation treatment for placeholder public routes
+- polish responsive project discovery controls:
+	- close the mobile navigation when users click outside it
+	- make the header and mobile menu fully opaque against page content
+	- separate the Map/Card view selector from the project filters
+	- apply the active project filters to both card and map views
+	- open map pin details in a mobile drawer with the same project actions and content as desktop
 
 ## Medium-Term
 
