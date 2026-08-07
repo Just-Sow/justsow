@@ -27,7 +27,7 @@
 	import ProjectMap from '$lib/components/ProjectMap.svelte';
 	import { ALMOST_DONE_THRESHOLD } from '$lib/project-discovery';
 
-	type SeedbedItem = {
+	type BasketItem = {
 		projectTitle: string;
 		amount: number;
 	};
@@ -254,15 +254,17 @@
 	type ViewValue = (typeof views)[number]['value'];
 	let activeView = $state<ViewValue>('featured');
 	let amountSelections = $state<Record<string, number>>({});
-	let seedbed = $state<SeedbedItem[]>([]);
-	let seedbedOpen = $state(false);
+	let basket = $state<BasketItem[]>([]);
+	let basketOpen = $state(false);
 	let fundNowOpen = $state(false);
 	let selectedProject = $state<(typeof projects)[number] | null>(null);
 	let addedProject = $state<string | null>(null);
+	let mobileProjectLimit = $state(2);
 	let milestoneHintVisible = $state(true);
 	let openMilestone = $state<string | null>(null);
 
-	const seedbedStorageKey = 'justsow-demo-seedbed';
+	const basketStorageKey = 'justsow-demo-basket';
+	const legacySeedbedStorageKey = 'justsow-demo-seedbed';
 	const formatSowerLabel = (count: number) => `${count} other ${count === 1 ? 'sower' : 'sowers'}`;
 	const getMilestoneKey = (projectTitle: string, amount: number) => `${projectTitle}:${amount}`;
 	const toggleMilestone = (key: string) => {
@@ -285,6 +287,11 @@
 			default:
 				return projects;
 		}
+	};
+	const filteredProjects = $derived(getFilteredProjects());
+	const setActiveView = (view: ViewValue) => {
+		activeView = view;
+		mobileProjectLimit = 2;
 	};
 
 	const getNextMilestone = (project: (typeof projects)[number]) =>
@@ -336,42 +343,43 @@
 		}
 	};
 
-	const persistSeedbed = () => {
+	const persistBasket = () => {
 		if (typeof sessionStorage !== 'undefined') {
-			sessionStorage.setItem(seedbedStorageKey, JSON.stringify(seedbed));
+			sessionStorage.setItem(basketStorageKey, JSON.stringify(basket));
 		}
 	};
 
-	const addToSeedbed = (project: (typeof projects)[number]) => {
+	const addToBasket = (project: (typeof projects)[number]) => {
 		const amount = getSelectedAmount(project);
 		if (!amount) return;
 
-		seedbed = [
-			...seedbed.filter((item) => item.projectTitle !== project.title),
+		basket = [
+			...basket.filter((item) => item.projectTitle !== project.title),
 			{ projectTitle: project.title, amount }
 		];
 		addedProject = project.title;
-		persistSeedbed();
+		persistBasket();
 	};
 
-	const removeFromSeedbed = (projectTitle: string) => {
-		seedbed = seedbed.filter((item) => item.projectTitle !== projectTitle);
-		persistSeedbed();
+	const removeFromBasket = (projectTitle: string) => {
+		basket = basket.filter((item) => item.projectTitle !== projectTitle);
+		persistBasket();
 	};
 
-	const clearSeedbed = () => {
-		seedbed = [];
-		persistSeedbed();
+	const clearBasket = () => {
+		basket = [];
+		persistBasket();
 	};
 
-	const seedbedTotal = $derived(seedbed.reduce((total, item) => total + item.amount, 0));
+	const basketTotal = $derived(basket.reduce((total, item) => total + item.amount, 0));
 
 	onMount(() => {
 		try {
-			const storedSeedbed = sessionStorage.getItem(seedbedStorageKey);
-			if (storedSeedbed) seedbed = JSON.parse(storedSeedbed) as SeedbedItem[];
+			const storedBasket =
+				sessionStorage.getItem(basketStorageKey) ?? sessionStorage.getItem(legacySeedbedStorageKey);
+			if (storedBasket) basket = JSON.parse(storedBasket) as BasketItem[];
 		} catch {
-			seedbed = [];
+			basket = [];
 		}
 	});
 
@@ -447,18 +455,18 @@
 			<div class="mt-3 h-1 w-16 bg-primary"></div>
 		</div>
 
-		<Popover.Root bind:open={seedbedOpen}>
+		<Popover.Root bind:open={basketOpen}>
 			<Popover.Trigger
 				class="relative inline-flex h-10 items-center justify-center gap-2 rounded-md border border-primary/30 bg-primary/8 px-4 py-2 text-sm font-semibold text-primary shadow-xs outline-none transition-colors hover:bg-primary/15 focus-visible:ring-2 focus-visible:ring-primary/40"
-				aria-label="Open Seedbed"
+				aria-label="Open Basket"
 			>
 				<ShoppingBasket class="size-4" />
-				Seedbed
-				{#if seedbed.length > 0}
+				Basket
+				{#if basket.length > 0}
 					<span
 						class="flex size-5 items-center justify-center rounded-full bg-primary text-2xs text-primary-foreground"
 					>
-						{seedbed.length}
+						{basket.length}
 					</span>
 				{/if}
 			</Popover.Trigger>
@@ -470,22 +478,22 @@
 			>
 				<div class="flex items-center justify-between border-b border-border/70 px-5 py-4">
 					<div>
-						<p class="font-semibold">Your Seedbed</p>
+						<p class="font-semibold">Your Basket</p>
 						<p class="mt-1 text-xs text-muted-foreground">
-							{seedbed.length === 0
+							{basket.length === 0
 								? 'Your saved seeds will appear here.'
-								: `${seedbed.length} project${seedbed.length === 1 ? '' : 's'} ready to sow`}
+								: `${basket.length} project${basket.length === 1 ? '' : 's'} ready to sow`}
 						</p>
 					</div>
 					<Popover.Close
 						class="rounded-md p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
-						aria-label="Close Seedbed"
+						aria-label="Close Basket"
 					>
 						<X class="size-4" />
 					</Popover.Close>
 				</div>
 
-				{#if seedbed.length === 0}
+				{#if basket.length === 0}
 					<div class="px-5 py-8 text-center">
 						<ShoppingBasket class="mx-auto size-8 text-primary/50" />
 						<p class="mt-3 text-sm font-medium">A place for the projects you want to grow</p>
@@ -495,7 +503,7 @@
 					</div>
 				{:else}
 					<div class="max-h-72 divide-y divide-border/70 overflow-y-auto px-5">
-						{#each seedbed as item (item.projectTitle)}
+						{#each basket as item (item.projectTitle)}
 							<div class="flex gap-3 py-4">
 								<img
 									src={getProjectImage(item.projectTitle)}
@@ -511,8 +519,8 @@
 									variant="ghost"
 									size="icon"
 									class="self-start"
-									aria-label={`Remove ${item.projectTitle} from Seedbed`}
-									onclick={() => removeFromSeedbed(item.projectTitle)}
+									aria-label={`Remove ${item.projectTitle} from Basket`}
+									onclick={() => removeFromBasket(item.projectTitle)}
 								>
 									<X class="size-4" />
 								</Button>
@@ -522,18 +530,18 @@
 					<div class="border-t border-border/70 px-5 py-4">
 						<div class="flex items-center justify-between text-sm">
 							<span class="text-muted-foreground">Demo total</span>
-							<span class="font-semibold">{formatCurrency(seedbedTotal)}</span>
+							<span class="font-semibold">{formatCurrency(basketTotal)}</span>
 						</div>
 						<div class="mt-3 flex items-center justify-between gap-3">
 							<Button
 								type="button"
 								variant="link"
 								class="h-auto p-0 text-xs text-muted-foreground"
-								onclick={clearSeedbed}
+								onclick={clearBasket}
 							>
-								Clear Seedbed
+								Clear Basket
 							</Button>
-							<Button size="sm" onclick={() => (seedbedOpen = false)}>Review Seeds</Button>
+							<Button size="sm" onclick={() => (basketOpen = false)}>Review Basket</Button>
 						</div>
 					</div>
 				{/if}
@@ -549,7 +557,7 @@
 				size="lg"
 				class={`min-w-32 rounded-lg py-3 ${view.value === 'map' ? 'relative' : ''} ${activeView === view.value ? '' : 'text-muted-foreground hover:border-primary/50 hover:bg-primary/5 hover:text-foreground'}`}
 				aria-pressed={activeView === view.value}
-				onclick={() => (activeView = view.value)}
+				onclick={() => setActiveView(view.value)}
 			>
 				{#if view.value === 'featured'}
 					<Sparkles class="size-4" />
@@ -589,8 +597,10 @@
 	{:else}
 		<!-- Project Grid -->
 		<div class="mt-8 grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-			{#each getFilteredProjects() as project (project.title)}
-				<Card.Root class="h-full pt-0 transition-shadow duration-300 hover:shadow-lg">
+			{#each filteredProjects as project, projectIndex (project.title)}
+				<Card.Root
+					class={`h-full pt-0 transition-shadow duration-300 hover:shadow-lg ${projectIndex >= mobileProjectLimit ? 'hidden sm:block' : ''}`}
+				>
 					<div class="flex h-full flex-col">
 						<Card.Header class="relative p-0">
 							<img src={project.image} alt={project.title} class="h-52 w-full object-cover" />
@@ -741,6 +751,13 @@
 				</Card.Root>
 			{/each}
 		</div>
+		{#if filteredProjects.length > mobileProjectLimit}
+			<div class="mt-8 flex justify-center sm:hidden">
+				<Button type="button" variant="outline" onclick={() => (mobileProjectLimit = filteredProjects.length)}>
+					Load more projects
+				</Button>
+			</div>
+		{/if}
 	{/if}
 
 	<Sheet.Root bind:open={fundNowOpen}>
@@ -930,11 +947,11 @@
 							size="lg"
 							variant="secondary"
 							disabled={!getSelectedAmount(project)}
-							onclick={() => addToSeedbed(project)}
+							onclick={() => addToBasket(project)}
 						>
-							{#if addedProject === project.title}<Check class="size-4" /> Added to Seedbed{:else}<ShoppingBasket
+							{#if addedProject === project.title}<Check class="size-4" /> Added to Basket{:else}<ShoppingBasket
 									class="size-4"
-								/> Add {formatCurrency(getSelectedAmount(project))} to Seedbed{/if}
+								/> Add {formatCurrency(getSelectedAmount(project))} to Basket{/if}
 						</Button>
 						<p class="text-center text-xs text-muted-foreground">
 							Demo only — no payment or real allocation will happen.
