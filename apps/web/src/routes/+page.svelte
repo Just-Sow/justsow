@@ -753,7 +753,11 @@
 		</div>
 		{#if filteredProjects.length > mobileProjectLimit}
 			<div class="mt-8 flex justify-center sm:hidden">
-				<Button type="button" variant="outline" onclick={() => (mobileProjectLimit = filteredProjects.length)}>
+				<Button
+					type="button"
+					variant="outline"
+					onclick={() => (mobileProjectLimit = filteredProjects.length)}
+				>
 					Load more projects
 				</Button>
 			</div>
