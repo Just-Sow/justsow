@@ -19,7 +19,7 @@
     "test": "node --import tsx scripts/run-tests.ts"
   },
   "dependencies": {
-    "@better-auth/drizzle-adapter": "^1.6.0",
+    "@better-auth/drizzle-adapter": "^1.6.26",
     "@fastify/rate-limit": "^11.2.0",
     "better-auth": "^1.6.0",
     "dotenv": "^17.2.2",
