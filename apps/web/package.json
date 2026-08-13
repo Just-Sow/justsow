@@ -51,7 +51,7 @@
 		"tailwindcss": "^4.0.0",
 		"tw-animate-css": "^1.3.8",
 		"typescript": "^6.0.3",
-		"typescript-eslint": "^8.20.0",
+		"typescript-eslint": "^8.66.0",
 		"unplugin-icons": "^23.0.1",
 		"vaul-svelte": "1.0.0-next.7",
 		"vite": "^8.2.0",
