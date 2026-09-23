@@ -13,6 +13,8 @@
 - define site-wide SEO metadata conventions and clean up route metadata remnants
 - define media storage and thumbnail strategy for MVP
 - add a branded 404 page and fallback navigation treatment for placeholder public routes
+- recheck pnpm 12 multi-document lockfile support and GitHub dependency graph detection; once supported end to end, remove `pmOnFail: ignore` and this item
+- remove the esbuild override once stable `drizzle-kit` no longer depends on deprecated `@esbuild-kit/esm-loader` ([drizzle-team/drizzle-orm#5145](https://github.com/drizzle-team/drizzle-orm/issues/5145))
 - polish responsive project discovery controls:
 	- close the mobile navigation when users click outside it
 	- make the header and mobile menu fully opaque against page content

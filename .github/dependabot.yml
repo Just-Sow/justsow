@@ -4,8 +4,26 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    groups:
+      actions:
+        applies-to: version-updates
+        patterns:
+          - "*"
+      actions-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
 
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: weekly
+    groups:
+      pnpm:
+        applies-to: version-updates
+        patterns:
+          - "*"
+      pnpm-security:
+        applies-to: security-updates
+        patterns:
+          - "*"

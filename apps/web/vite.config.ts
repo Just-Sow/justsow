@@ -28,6 +28,9 @@ export default defineConfig(({ mode }) => {
 		},
 		test: {
 			expect: { requireAssertions: true },
+			api: {
+				host: '127.0.0.1'
+			},
 			projects: [
 				{
 					extends: './vite.config.ts',
@@ -36,9 +39,6 @@ export default defineConfig(({ mode }) => {
 						browser: {
 							enabled: true,
 							provider: playwright(),
-							api: {
-								host: '127.0.0.1'
-							},
 							instances: [{ browser: 'chromium' }]
 						},
 						include: ['src/**/*.svelte.{test,spec}.{js,ts}'],

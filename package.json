@@ -1,7 +1,7 @@
 {
   "name": "justsow",
   "private": true,
-  "packageManager": "pnpm@11.18.0",
+  "packageManager": "pnpm@12.6.0",
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
@@ -19,6 +19,6 @@
     "db:reset:dev": "pnpm --dir apps/api run db:reset:dev"
   },
   "devDependencies": {
-    "turbo": "^2.10.4"
+    "turbo": "^2.11.2"
   }
 }
