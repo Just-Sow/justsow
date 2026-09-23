@@ -1,0 +1,30 @@
+{
+	"name": "@justsow/studio",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "sanity dev --host 127.0.0.1 --port 3333",
+		"build": "sanity build",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write .",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@sanity/icons": "5.2.2",
+		"@sanity/vision": "6.16.0",
+		"react": "19.2.2",
+		"react-dom": "19.2.2",
+		"sanity": "6.16.0",
+		"styled-components": "^6.1.15"
+	},
+	"devDependencies": {
+		"@eslint/js": "^10.0.1",
+		"eslint": "^10.11.0",
+		"eslint-config-prettier": "^10.1.8",
+		"globals": "^17.12.0",
+		"prettier": "^3.9.8",
+		"typescript": "^6.0.3",
+		"typescript-eslint": "^8.70.1"
+	}
+}

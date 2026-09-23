@@ -3,7 +3,9 @@
   "private": true,
   "packageManager": "pnpm@12.6.0",
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --filter=@justsow/web --filter=@justsow/api",
+    "dev:cms": "turbo run dev --filter=@justsow/web --filter=@justsow/api --filter=@justsow/studio",
+    "studio:dev": "pnpm --filter @justsow/studio dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "test": "turbo run test",

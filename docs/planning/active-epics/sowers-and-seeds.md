@@ -9,14 +9,14 @@ Define and implement the MVP donor-side model where sowers can hold accounts, vi
 - sower records
 - manual sower creation by staff
 - sower account history view
-- one seed per project rule
+- multiple seed contributions per project using predefined amount options
 - seed allocation records
-- project sown state
+- funding commitment, manual-transfer, and confirmed contribution states
 
 ## Non-Goals
 
 - on-site payment processing
-- multi-seed project funding for MVP
+- online payment processing
 
 ## Dependencies
 
@@ -32,7 +32,7 @@ Define and implement the MVP donor-side model where sowers can hold accounts, vi
 
 ## Acceptance Criteria
 
-- a project can be clearly identified as unsown or sown
+- multiple contributions can be associated with the correct project and sower
 - sowers with accounts can view their own history
 - manual records can be claimed without losing continuity
 - staff workflows remain simple for MVP

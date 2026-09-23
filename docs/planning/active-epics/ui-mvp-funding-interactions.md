@@ -7,7 +7,7 @@ the donor journey before backend funding functionality is available.
 
 ## Scope
 
-- fund-now right-side sheet with project context and whole-$1,000 increment options
+- fund-now right-side sheet with project context and predefined amount options (for example $1k, $2k, $3k, $5k, $10k, and $15k)
 - centered project views for Featured, Almost Done, Fresh Ideas, and Map
 - community preview showing other sowers connected to each project
 - ephemeral Basket with an ecommerce-style summary
@@ -25,7 +25,7 @@ the donor journey before backend funding functionality is available.
 
 - a project can appear only once in the Basket
 - adding the same project again updates its selected amount
-- the maximum selectable amount is the highest whole-thousand amount that does not exceed the project’s remaining funding amount
+- visitors can choose only from the configured contribution options; arbitrary amounts such as $13k are not offered
 - Basket state is stored in `sessionStorage` and is safe to discard
 
 ## Current Demo Notes

@@ -9,6 +9,7 @@ apps/*/.turbo/
 apps/*/.pnpm-store/
 apps/*/.yarn/
 apps/*/.svelte-kit/
+apps/*/.sanity/
 
 packages/*/node_modules/
 packages/*/dist/

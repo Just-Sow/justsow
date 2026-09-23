@@ -6,7 +6,7 @@
 - sower accounts and seed history
 - manual sower creation with later account claiming
 - employee approval and publishing workflows
-- one seed per project
+- multiple seed contributions per project, selected from predefined amount options; checkout records commitments without processing payments
 - email-driven account lifecycle
 - two-factor authentication
 - media uploads and display, including thumbnails or previews where needed for usable UX

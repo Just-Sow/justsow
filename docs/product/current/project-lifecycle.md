@@ -28,13 +28,14 @@ Instead:
 
 This same rule applies to edits after a project is already published.
 
-## Seed Rule For MVP
+## Funding Contributions For MVP
 
-- one project can have at most one seed
-- one seed belongs to one project
-- a project is either unsown or sown
+- a project can receive multiple seed contributions
+- each contribution amount is selected from a predefined set of options; arbitrary amounts are not offered
+- the available options are to be agreed and may need to follow the active market's currency
+- a funding commitment and a completed bank transfer must be distinguishable in project and sower records
 
-This simplifies both public messaging and internal workflow for MVP.
+Checkout records a commitment but does not process payment. Gatekeepers coordinate the later offline transfer. The record lifecycle and how commitments become confirmed seeds still need to be defined.
 
 ## Visibility
 

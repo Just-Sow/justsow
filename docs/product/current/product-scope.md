@@ -54,8 +54,8 @@ For MVP, a sower may also exist without a self-created account. Staff can create
 
 ## MVP Simplifications
 
-- one seed per project
-- a project is either unsown or sown
+- projects can receive multiple seed contributions
+- seed contribution amounts are chosen from a predefined option set rather than entered freely
 - project discovery defaults to a local country market rather than a globally mixed listing
 - pricing and funding amounts are localized within the active market view
 - broader internal operations continue in Notion
@@ -73,6 +73,13 @@ For MVP, a sower may also exist without a self-created account. Staff can create
 - replacing the full internal operational workflow already handled in Notion
 - building a broad internal business dashboard unless a website-native need appears
 - optimizing immediately for multi-region serverless deployment
+
+## Editorial Content Boundary
+
+- Sanity is intended for static public-site pages, their marketing media, and header/footer public-content navigation.
+- Project discovery data, submissions, approvals, publishing state, forms, and account workflows remain app/API-owned.
+- Authentication, account, basket, and other functional header actions remain app-owned even when public navigation links are CMS-managed.
+- CMS content may supply page copy and presentation data, but it must not bypass app-owned workflow or authorization rules.
 
 ## Architecture Implications
 

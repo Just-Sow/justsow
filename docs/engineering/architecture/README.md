@@ -10,4 +10,5 @@ Initial expected areas:
 - auth and RBAC model
 - payment integration approach
 - media/storage approach
+- editorial content management boundary
 - infrastructure direction
