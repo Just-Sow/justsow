@@ -27,7 +27,7 @@ describe('/contact/+page.svelte', () => {
 		await page
 			.getByLabelText('Message')
 			.fill('I would like to ask about the project application flow.');
-		await page.getByRole('button', { name: 'Send message' }).click();
+		await page.getByRole('button', { name: 'Send Message' }).click();
 
 		await expect.element(page.getByText('Thanks. Your message has been sent.')).toBeInTheDocument();
 		await expect(fetchMock).toHaveBeenCalledWith(
@@ -53,7 +53,7 @@ describe('/contact/+page.svelte', () => {
 		await page
 			.getByLabelText('Message')
 			.fill('I would like to ask about the project application flow.');
-		await page.getByRole('button', { name: 'Send message' }).click();
+		await page.getByRole('button', { name: 'Send Message' }).click();
 
 		await expect.element(page.getByText('Something went wrong.')).toBeInTheDocument();
 	});
