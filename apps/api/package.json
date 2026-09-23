@@ -19,26 +19,26 @@
     "test": "node --import tsx scripts/run-tests.ts"
   },
   "dependencies": {
-    "@better-auth/drizzle-adapter": "^1.6.0",
+    "@better-auth/drizzle-adapter": "^1.7.5",
     "@fastify/rate-limit": "^11.2.0",
-    "better-auth": "^1.6.0",
-    "dotenv": "^17.2.2",
-    "drizzle-orm": "^0.45.2",
-    "fastify": "^5.6.0",
-    "pg": "^8.16.3",
-    "zod": "^4.1.5"
+    "better-auth": "^1.7.5",
+    "dotenv": "^18.0.2",
+    "drizzle-orm": "^0.45.3",
+    "fastify": "^5.12.5",
+    "pg": "^8.23.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/node": "^26.1.1",
-    "@types/pg": "^8.15.4",
-    "drizzle-kit": "0.31.10",
-    "eslint": "^10.6.0",
+    "@types/node": "^26.6.2",
+    "@types/pg": "^8.23.1",
+    "drizzle-kit": "0.31.11",
+    "eslint": "^10.11.0",
     "eslint-config-prettier": "^10.1.8",
-    "globals": "^17.7.0",
-    "prettier": "^3.6.2",
-    "tsx": "^4.20.5",
+    "globals": "^17.12.0",
+    "prettier": "^3.9.8",
+    "tsx": "^4.23.15",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.44.0"
+    "typescript-eslint": "^8.70.1"
   }
 }
