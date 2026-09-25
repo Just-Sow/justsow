@@ -59,10 +59,16 @@
 		"vitest-browser-svelte": "^3.1.0"
 	},
 	"dependencies": {
+		"@justsow/shared": "workspace:*",
 		"@iconify-json/flagpack": "^1.2.8",
 		"@iconify/svelte": "^5.2.2",
+		"@portabletext/svelte": "^4.0.0",
+		"@sanity/image-url": "^2.1.1",
+		"@sanity/sveltekit": "^2.1.0",
 		"libphonenumber-js": "^1.13.13",
 		"maplibre-gl": "^6.10.0",
-		"qrcode": "^1.5.4"
+		"qrcode": "^1.5.4",
+		"react": "19.3.0",
+		"react-dom": "19.3.0"
 	}
 }

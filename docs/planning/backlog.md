@@ -13,9 +13,10 @@
 - define employee workflow boundaries in the web app
 - select and integrate a transactional email provider/API for account, project-workflow, and future funding-commitment messages
 - define media storage and thumbnail strategy for MVP
-- add a branded 404 page and fallback navigation treatment for placeholder public routes
+- design and build a polished, branded 404 page for missing app and CMS routes, with clear navigation back to useful parts of the site
 - recheck pnpm 12 multi-document lockfile support and GitHub dependency graph detection; once supported end to end, remove `pmOnFail: ignore` and this item
 - remove the esbuild override once stable `drizzle-kit` no longer depends on deprecated `@esbuild-kit/esm-loader` ([drizzle-team/drizzle-orm#5145](https://github.com/drizzle-team/drizzle-orm/issues/5145))
+- continue the Sanity pages epic with editor-managed public navigation and responsive section improvements; see the [CMS authoring follow-up](#candidate-follow-up-cms-section-authoring-and-responsive-polish)
 - polish responsive project discovery controls:
   - close the mobile navigation when users click outside it
   - make the header and mobile menu fully opaque against page content
@@ -49,3 +50,16 @@ This is a backlog cluster, not a commitment that all items belong in the next ep
 - notify gatekeepers so staff can manually coordinate the sower, project owner, and offline bank transfer; do not collect or process bank details/payments in checkout
 - define the staff workflow and audit/status model for pending commitments and their later connection to sower/project seed records
 - use the transactional email provider/API selected in the near-term backlog item for these notifications
+
+## Candidate Follow-up: CMS Section Authoring And Responsive Polish
+
+These items follow the initial Sanity page architecture. Use the manual About migration and additional editor-authored pages to validate content needs before expanding schemas or controls.
+
+- improve section responsiveness with varied text lengths and image aspect ratios
+- define a reusable, constrained colour palette for editor selection
+- support optional and multiple calls to action where appropriate
+- expand rich text capabilities only where page migration demonstrates a need
+- evaluate native Sanity image crop controls against About and future page requirements
+- offer a choice between surfaced card and transparent section backgrounds
+- choose a manageable icon selection model and set supported icon options
+- move header and footer navigation links into the Sanity navigation document while retaining app-owned account and action controls

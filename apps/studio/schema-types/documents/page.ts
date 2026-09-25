@@ -1,21 +1,6 @@
 import { DocumentIcon } from '@sanity/icons/Document';
+import { getAppOwnedPageSlugReason } from '@justsow/shared';
 import { defineArrayMember, defineField, defineType } from 'sanity';
-
-const reservedSlugs = new Set([
-	'account',
-	'api',
-	'auth',
-	'contact',
-	'dashboard',
-	'forgot-password',
-	'login',
-	'logout',
-	'reset-password',
-	'signup',
-	'two-factor',
-	'users',
-	'verify-email'
-]);
 
 export const page = defineType({
 	name: 'page',
@@ -41,7 +26,8 @@ export const page = defineType({
 					if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
 						return 'Use one lowercase URL segment with hyphens only';
 					}
-					if (reservedSlugs.has(slug)) return 'This path is reserved by the application';
+					const owner = getAppOwnedPageSlugReason(slug);
+					if (owner) return `This path is reserved for ${owner}. Choose another URL path.`;
 					return true;
 				})
 		}),
