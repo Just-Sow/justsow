@@ -35,6 +35,8 @@ Run these from the repository root:
 - `pnpm db:setup`
 - `pnpm db:reset:dev`
 
+The root build covers the API and web app. The Sanity Studio is built and deployed separately with `pnpm --filter @justsow/studio build` or `sanity deploy` from `apps/studio`.
+
 Package-specific commands:
 
 - `pnpm --filter @justsow/web dev`

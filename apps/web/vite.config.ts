@@ -10,6 +10,21 @@ export default defineConfig(({ mode }) => {
 
 	return {
 		plugins: [tailwindcss(), sveltekit(), Icons({ compiler: 'svelte', autoInstall: true })],
+		build: {
+			rolldownOptions: {
+				onLog(level, log, defaultHandler) {
+					const reactDirectiveWarning =
+						log.message.includes('"use client"') || log.message.includes('"use no memo"');
+					const ignoredReactDirectiveWarning =
+						level === 'warn' &&
+						log.code === 'MODULE_LEVEL_DIRECTIVE' &&
+						reactDirectiveWarning &&
+						log.id?.includes('node_modules/');
+
+					if (!ignoredReactDirectiveWarning) defaultHandler(level, log);
+				}
+			}
+		},
 		optimizeDeps: {
 			exclude: ['maplibre-gl']
 		},
