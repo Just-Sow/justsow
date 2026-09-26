@@ -16,8 +16,8 @@ export const imageWithAlt = defineType({
 			name: 'alt',
 			title: 'Alternative text',
 			type: 'string',
-			description: 'Describe the image for people using a screen reader.',
-			validation: (rule) => rule.required().max(160)
+			description: 'Leave blank for decorative images.',
+			validation: (rule) => rule.max(160)
 		})
 	]
 });

@@ -1,13 +1,20 @@
 <script lang="ts">
+	import { useQuery } from '@sanity/sveltekit';
+	import { stegaClean } from '@sanity/sveltekit';
+	import type { ContactPageQueryResult } from '$lib/sanity/sanity.types';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
-	import { Mail, Send } from '@lucide/svelte';
-	import SiFacebook from '~icons/simple-icons/facebook';
-	import SiInstagram from '~icons/simple-icons/instagram';
-	import SiX from '~icons/simple-icons/x';
+	import { Send } from '@lucide/svelte';
+	import ContactPageSections from '$lib/components/cms/ContactPageSections.svelte';
+	import { sanityImageUrl } from '$lib/sanity/images.js';
+
+	let { data } = $props();
+	const query = $derived(useQuery<ContactPageQueryResult>(data));
+	const page = $derived($query.data);
+	const seoImage = $derived(sanityImageUrl(page?.seo?.socialImage?.asset, 1200));
 
 	let name = $state('');
 	let email = $state('');
@@ -50,16 +57,13 @@
 	};
 
 	const handleFieldInput = (field: keyof typeof touched) => {
-		if (touched[field]) {
-			validateField(field);
-		}
+		if (touched[field]) validateField(field);
 	};
 
 	const validateForm = () => {
 		touched.name = true;
 		touched.email = true;
 		touched.message = true;
-
 		return validateField('name') && validateField('email') && validateField('message');
 	};
 
@@ -68,37 +72,22 @@
 		email = '';
 		message = '';
 		website = '';
-		fieldErrors = {
-			name: '',
-			email: '',
-			message: ''
-		};
-		touched = {
-			name: false,
-			email: false,
-			message: false
-		};
+		fieldErrors = { name: '', email: '', message: '' };
+		touched = { name: false, email: false, message: false };
 	};
 
 	const handleSubmit = async (event: SubmitEvent) => {
 		event.preventDefault();
-
 		successMessage = '';
 		errorMessage = '';
-
-		if (!validateForm()) {
-			return;
-		}
+		if (!validateForm()) return;
 
 		isSubmitting = true;
-
 		try {
 			const response = await fetch('/api/contact', {
 				method: 'POST',
 				credentials: 'include',
-				headers: {
-					'content-type': 'application/json'
-				},
+				headers: { 'content-type': 'application/json' },
 				body: JSON.stringify({
 					name: name.trim(),
 					email: email.trim(),
@@ -108,9 +97,7 @@
 			});
 
 			if (!response.ok) {
-				const payload = (await response.json().catch(() => null)) as {
-					message?: string;
-				} | null;
+				const payload = (await response.json().catch(() => null)) as { message?: string } | null;
 				errorMessage = payload?.message ?? 'We could not send your message right now.';
 				return;
 			}
@@ -126,178 +113,89 @@
 </script>
 
 <svelte:head>
-	<title>Contact | JustSow</title>
-	<meta
-		name="description"
-		content="Contact JustSow about a question, project, or support request."
-	/>
+	<title>{stegaClean(page?.seo?.title ?? 'Contact | JustSow')}</title>
+	{#if page?.seo?.description}
+		<meta name="description" content={stegaClean(page.seo.description)} />
+		<meta property="og:description" content={stegaClean(page.seo.description)} />
+	{/if}
+	<meta property="og:title" content={stegaClean(page?.seo?.title ?? 'Contact | JustSow')} />
+	{#if seoImage}<meta property="og:image" content={seoImage} />{/if}
 </svelte:head>
 
-<section class="bg-amber-50 py-20">
-	<div
-		class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 sm:px-6 md:grid-cols-2 lg:px-8"
-	>
-		<div>
-			<h2 class="mb-4 text-4xl font-bold sm:text-5xl lg:text-6xl">Get in Touch</h2>
-			<p class="mb-6 text-lg">
-				We’d love to hear from you! Whether you have questions about applying for a seed grant, want
-				to share a new idea, or just want to connect, you can reach us using the form below or via
-				our contact info.
-			</p>
-
-			<div class="space-y-4 text-lg">
-				<div class="flex items-center space-x-3">
-					<Mail class="h-6 w-6 text-primary" />
-					<a href="mailto:info@justsow.org" class="inline-flex w-fit hover:text-primary">
-						info@justsow.org
-					</a>
-				</div>
-
-				<div class="space-y-3">
-					<p class="text-sm font-semibold uppercase tracking-eyebrow text-muted-foreground">
-						Connect on socials
-					</p>
-					<ul class="space-y-3">
-						<li class="w-fit">
-							<a
-								href="https://www.instagram.com/officialjustsow/"
-								target="_blank"
-								rel="noreferrer"
-								class="inline-flex w-fit items-center space-x-3 text-base transition-colors hover:text-primary"
-							>
-								<SiInstagram class="h-5 w-5 text-primary" />
-								<span>@officialjustsow</span>
-							</a>
-						</li>
-						<li class="w-fit">
-							<a
-								href="https://www.facebook.com/JustSowGiving/"
-								target="_blank"
-								rel="noreferrer"
-								class="inline-flex w-fit items-center space-x-3 text-base transition-colors hover:text-primary"
-							>
-								<SiFacebook class="h-5 w-5 text-primary" />
-								<span>/JustSowGiving</span>
-							</a>
-						</li>
-						<li class="w-fit">
-							<a
-								href="https://x.com/just_sow"
-								target="_blank"
-								rel="noreferrer"
-								class="inline-flex w-fit items-center space-x-3 text-base transition-colors hover:text-primary"
-							>
-								<SiX class="h-5 w-5 text-primary" />
-								<span>@just_sow</span>
-							</a>
-						</li>
-					</ul>
-				</div>
+{#snippet contactForm()}
+	<Card.Root class="rounded-2xl bg-white p-8 shadow-lg">
+		<h2 class="mb-6 text-2xl font-semibold">Send a Message</h2>
+		<form class="space-y-4" method="POST" action="/api/contact" onsubmit={handleSubmit}>
+			<div>
+				<Label class="mb-1 block font-medium" for="name">Name</Label>
+				<Input
+					id="name"
+					name="name"
+					type="text"
+					bind:value={name}
+					aria-invalid={fieldErrors.name ? 'true' : undefined}
+					onblur={() => touchField('name')}
+					oninput={() => handleFieldInput('name')}
+					required
+				/>
+				{#if fieldErrors.name}<p class="mt-1 text-sm text-destructive">{fieldErrors.name}</p>{/if}
 			</div>
-		</div>
+			<div>
+				<Label class="mb-1 block font-medium" for="email">Email</Label>
+				<Input
+					id="email"
+					name="email"
+					type="email"
+					bind:value={email}
+					aria-invalid={fieldErrors.email ? 'true' : undefined}
+					onblur={() => touchField('email')}
+					oninput={() => handleFieldInput('email')}
+					required
+				/>
+				{#if fieldErrors.email}<p class="mt-1 text-sm text-destructive">{fieldErrors.email}</p>{/if}
+			</div>
+			<div>
+				<Label class="mb-1 block font-medium" for="message">Message</Label>
+				<Textarea
+					id="message"
+					name="message"
+					rows={5}
+					bind:value={message}
+					aria-invalid={fieldErrors.message ? 'true' : undefined}
+					onblur={() => touchField('message')}
+					oninput={() => handleFieldInput('message')}
+					required
+				/>
+				{#if fieldErrors.message}<p class="mt-1 text-sm text-destructive">
+						{fieldErrors.message}
+					</p>{/if}
+			</div>
+			<div class="sr-only">
+				<Label for="website">Website</Label>
+				<Input id="website" name="website" bind:value={website} tabindex={-1} autocomplete="off" />
+			</div>
+			{#if successMessage}
+				<p
+					class="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-800"
+				>
+					{successMessage}
+				</p>
+			{/if}
+			{#if errorMessage}
+				<p
+					class="rounded-lg border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive"
+				>
+					{errorMessage}
+				</p>
+			{/if}
+			<Button type="submit" size="lg" class="mt-2 w-full gap-2" disabled={isSubmitting}>
+				<Send class="size-4" />
+				{isSubmitting ? 'Sending...' : 'Send Message'}
+			</Button>
+		</form>
+	</Card.Root>
+{/snippet}
 
-		<div>
-			<Card.Root class="rounded-2xl bg-white p-8 shadow-lg">
-				<h3 class="mb-6 text-2xl font-semibold">Send a Message</h3>
-				<form class="space-y-4" method="POST" action="/api/contact" onsubmit={handleSubmit}>
-					<div>
-						<Label class="mb-1 block font-medium" for="name">Name</Label>
-						<Input
-							id="name"
-							name="name"
-							type="text"
-							bind:value={name}
-							aria-invalid={fieldErrors.name ? 'true' : undefined}
-							onblur={() => touchField('name')}
-							oninput={() => handleFieldInput('name')}
-							required
-						/>
-						{#if fieldErrors.name}
-							<p class="mt-1 text-sm text-destructive">{fieldErrors.name}</p>
-						{/if}
-					</div>
-					<div>
-						<Label class="mb-1 block font-medium" for="email">Email</Label>
-						<Input
-							id="email"
-							name="email"
-							type="email"
-							bind:value={email}
-							aria-invalid={fieldErrors.email ? 'true' : undefined}
-							onblur={() => touchField('email')}
-							oninput={() => handleFieldInput('email')}
-							required
-						/>
-						{#if fieldErrors.email}
-							<p class="mt-1 text-sm text-destructive">{fieldErrors.email}</p>
-						{/if}
-					</div>
-					<div>
-						<Label class="mb-1 block font-medium" for="message">Message</Label>
-						<Textarea
-							id="message"
-							name="message"
-							rows={5}
-							bind:value={message}
-							aria-invalid={fieldErrors.message ? 'true' : undefined}
-							onblur={() => touchField('message')}
-							oninput={() => handleFieldInput('message')}
-							required
-						/>
-						{#if fieldErrors.message}
-							<p class="mt-1 text-sm text-destructive">{fieldErrors.message}</p>
-						{/if}
-					</div>
-					<div class="sr-only">
-						<Label for="website">Website</Label>
-						<Input
-							id="website"
-							name="website"
-							bind:value={website}
-							tabindex={-1}
-							autocomplete="off"
-						/>
-					</div>
-
-					{#if successMessage}
-						<p
-							class="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-800"
-						>
-							{successMessage}
-						</p>
-					{/if}
-
-					{#if errorMessage}
-						<p
-							class="rounded-lg border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive"
-						>
-							{errorMessage}
-						</p>
-					{/if}
-
-					<Button type="submit" size="lg" class="mt-2 w-full gap-2" disabled={isSubmitting}>
-						<Send class="size-4" />
-						{isSubmitting ? 'Sending...' : 'Send Message'}
-					</Button>
-				</form>
-			</Card.Root>
-		</div>
-	</div>
-</section>
-
-<!-- Optional Map / Background Image -->
-<section class="relative py-20">
-	<img
-		src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1470&auto=format&fit=crop"
-		alt="Global mission map"
-		class="absolute inset-0 h-full w-full object-cover brightness-40"
-	/>
-	<div class="relative mx-auto max-w-7xl px-4 text-center text-white sm:px-6 lg:px-8">
-		<h2 class="mb-6 text-4xl font-bold sm:text-5xl lg:text-6xl">Join Our Mission</h2>
-		<p class="mx-auto mb-8 max-w-2xl text-lg">
-			We’re always looking to connect with creative evangelists, supporters, and friends of JustSow.
-			Reach out and help us scatter seeds of hope across the nations.
-		</p>
-		<Button size="lg" variant="secondary" href="/apply">Apply for a Seed Grant</Button>
-	</div>
-</section>
+{#if page}
+	<ContactPageSections sections={page.sections} {contactForm} />
+{/if}

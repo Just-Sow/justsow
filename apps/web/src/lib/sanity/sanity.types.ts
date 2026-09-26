@@ -15,9 +15,40 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: .sanity/schema.json
+export type ContactPanelSection = {
+	_type: 'contactPanelSection';
+	foregroundColour?: 'primary' | 'secondary' | 'accent';
+	backgroundColour?: 'background' | 'muted' | 'warm' | 'primaryTint';
+	heading?: HeadingText;
+	body?: string;
+	email?: string;
+};
+
+export type ProjectDiscoveryModule = {
+	_type: 'projectDiscoveryModule';
+	foregroundColour?: 'primary' | 'secondary' | 'accent';
+	backgroundColour?: 'background' | 'muted' | 'warm' | 'primaryTint';
+	heading?: HeadingText;
+	intro?: string;
+};
+
+export type HomeHeroSection = {
+	_type: 'homeHeroSection';
+	eyebrow?: string;
+	foregroundColour?: 'primary' | 'secondary' | 'accent';
+	backgroundColour?: 'background' | 'muted' | 'warm' | 'primaryTint';
+	heading?: HeadingText;
+	body?: string;
+	image?: ImageWithAlt;
+};
+
 export type FeaturesSection = {
 	_type: 'featuresSection';
-	heading?: string;
+	foregroundColour?: 'primary' | 'secondary' | 'accent';
+	backgroundColour?: 'background' | 'muted' | 'warm' | 'primaryTint';
+	eyebrow?: string;
+	heading?: HeadingText;
+	intro?: string;
 	textAlignment?: 'left' | 'center' | 'right';
 	features?: Array<
 		{
@@ -28,28 +59,42 @@ export type FeaturesSection = {
 
 export type ImageTextSection = {
 	_type: 'imageTextSection';
-	heading?: string;
+	foregroundColour?: 'primary' | 'secondary' | 'accent';
+	backgroundColour?: 'background' | 'muted' | 'warm' | 'primaryTint';
+	eyebrow?: string;
+	heading?: HeadingText;
 	body?: RichText;
 	image?: ImageWithAlt;
 	imagePosition?: 'left' | 'right';
 	textAlignment?: 'left' | 'center' | 'right';
-	callToAction?: SiteLink;
+	callToActions?: Array<
+		{
+			_key: string;
+		} & SectionCallToAction
+	>;
 };
 
 export type ImageBackgroundSection = {
 	_type: 'imageBackgroundSection';
-	heading?: string;
+	foregroundColour?: 'primary' | 'secondary' | 'accent';
+	eyebrow?: string;
+	heading?: HeadingText;
 	body?: RichText;
 	backgroundImage?: ImageWithAlt;
 	textAlignment?: 'left' | 'center' | 'right';
-	callToAction?: SiteLink;
+	callToActions?: Array<
+		{
+			_key: string;
+		} & SectionCallToAction
+	>;
 };
 
 export type FeatureItem = {
 	_type: 'featureItem';
 	title?: string;
 	description?: string;
-	icon?: 'sprout' | 'water' | 'sun' | 'idea' | 'partnership' | 'tree';
+	icon?: LucideIcon;
+	iconColor?: 'primary' | 'secondary' | 'accent';
 };
 
 export type SanityImageAssetReference = {
@@ -71,6 +116,20 @@ export type ImageWithAlt = {
 	alt?: string;
 };
 
+export type HomePageReference = {
+	_ref: string;
+	_type: 'reference';
+	_weak?: boolean;
+	[internalGroqTypeReferenceTo]?: 'homePage';
+};
+
+export type ContactPageReference = {
+	_ref: string;
+	_type: 'reference';
+	_weak?: boolean;
+	[internalGroqTypeReferenceTo]?: 'contactPage';
+};
+
 export type PageReference = {
 	_ref: string;
 	_type: 'reference';
@@ -78,15 +137,43 @@ export type PageReference = {
 	[internalGroqTypeReferenceTo]?: 'page';
 };
 
+export type SectionCallToAction = {
+	_type: 'sectionCallToAction';
+	label?: string;
+	destinationType?: 'internal' | 'external';
+	page?: HomePageReference | ContactPageReference | PageReference;
+	externalUrl?: string;
+	openInNewTab?: boolean;
+	style?: 'match' | 'primary' | 'secondary' | 'outline';
+};
+
 export type SiteLink = {
 	_type: 'siteLink';
 	label?: string;
-	destinationType?: 'page' | 'route' | 'external';
-	page?: PageReference;
-	route?: '/' | '/contact';
+	destinationType?: 'internal' | 'external';
+	page?: HomePageReference | ContactPageReference | PageReference;
 	externalUrl?: string;
 	openInNewTab?: boolean;
 };
+
+export type HeadingText = Array<{
+	children?: Array<{
+		marks?: Array<string>;
+		text?: string;
+		_type: 'span';
+		_key: string;
+	}>;
+	style?: 'normal';
+	listItem?: never;
+	markDefs?: Array<{
+		source?: string;
+		_type: 'foregroundColour';
+		_key: string;
+	}>;
+	level?: number;
+	_type: 'block';
+	_key: string;
+}>;
 
 export type RichText = Array<{
 	children?: Array<{
@@ -126,6 +213,91 @@ export type SiteNavigation = {
 	}>;
 };
 
+export type ContactPage = {
+	_id: string;
+	_type: 'contactPage';
+	_createdAt: string;
+	_updatedAt: string;
+	_rev: string;
+	seo?: {
+		title?: string;
+		description?: string;
+		socialImage?: {
+			asset?: SanityImageAssetReference;
+			media?: unknown;
+			hotspot?: SanityImageHotspot;
+			crop?: SanityImageCrop;
+			_type: 'image';
+		};
+	};
+	sections?: Array<
+		| ({
+				_key: string;
+		  } & ContactPanelSection)
+		| ({
+				_key: string;
+		  } & ImageBackgroundSection)
+		| ({
+				_key: string;
+		  } & ImageTextSection)
+		| ({
+				_key: string;
+		  } & FeaturesSection)
+	>;
+};
+
+export type SanityImageCrop = {
+	_type: 'sanity.imageCrop';
+	top?: number;
+	bottom?: number;
+	left?: number;
+	right?: number;
+};
+
+export type SanityImageHotspot = {
+	_type: 'sanity.imageHotspot';
+	x?: number;
+	y?: number;
+	height?: number;
+	width?: number;
+};
+
+export type HomePage = {
+	_id: string;
+	_type: 'homePage';
+	_createdAt: string;
+	_updatedAt: string;
+	_rev: string;
+	seo?: {
+		title?: string;
+		description?: string;
+		socialImage?: {
+			asset?: SanityImageAssetReference;
+			media?: unknown;
+			hotspot?: SanityImageHotspot;
+			crop?: SanityImageCrop;
+			_type: 'image';
+		};
+	};
+	sections?: Array<
+		| ({
+				_key: string;
+		  } & HomeHeroSection)
+		| ({
+				_key: string;
+		  } & ImageBackgroundSection)
+		| ({
+				_key: string;
+		  } & ImageTextSection)
+		| ({
+				_key: string;
+		  } & FeaturesSection)
+		| ({
+				_key: string;
+		  } & ProjectDiscoveryModule)
+	>;
+};
+
 export type Page = {
 	_id: string;
 	_type: 'page';
@@ -158,21 +330,7 @@ export type Page = {
 	>;
 };
 
-export type SanityImageCrop = {
-	_type: 'sanity.imageCrop';
-	top?: number;
-	bottom?: number;
-	left?: number;
-	right?: number;
-};
-
-export type SanityImageHotspot = {
-	_type: 'sanity.imageHotspot';
-	x?: number;
-	y?: number;
-	height?: number;
-	width?: number;
-};
+export type LucideIcon = string;
 
 export type Slug = {
 	_type: 'slug';
@@ -278,19 +436,29 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+	| ContactPanelSection
+	| ProjectDiscoveryModule
+	| HomeHeroSection
 	| FeaturesSection
 	| ImageTextSection
 	| ImageBackgroundSection
 	| FeatureItem
 	| SanityImageAssetReference
 	| ImageWithAlt
+	| HomePageReference
+	| ContactPageReference
 	| PageReference
+	| SectionCallToAction
 	| SiteLink
+	| HeadingText
 	| RichText
 	| SiteNavigation
-	| Page
+	| ContactPage
 	| SanityImageCrop
 	| SanityImageHotspot
+	| HomePage
+	| Page
+	| LucideIcon
 	| Slug
 	| SanityImagePaletteSwatch
 	| SanityImagePalette
@@ -303,7 +471,7 @@ export type AllSanitySchemaTypes =
 
 // Source: ../web/src/lib/sanity/queries.ts
 // Variable: cmsPageQuery
-// Query: *[_type == "page" && slug.current == $slug][0] {		_id,		_type,		title,		slug,		seo {			title,			description,			socialImage		},		sections[] {			_key,			_type,			_type == "imageBackgroundSection" => {				heading,				body,				textAlignment,				backgroundImage {					alt,					asset {						asset,						crop,						hotspot					}				},				callToAction {					label,					destinationType,					route,					externalUrl,					openInNewTab,					"pageSlug": page->slug.current				}			},			_type == "imageTextSection" => {				heading,				body,				imagePosition,				textAlignment,				image {					alt,					asset {						asset,						crop,						hotspot					}				},				callToAction {					label,					destinationType,					route,					externalUrl,					openInNewTab,					"pageSlug": page->slug.current				}			},			_type == "featuresSection" => {				heading,				textAlignment,				features[] {					_key,					title,					description,					icon				}			}		}	}
+// Query: *[_type == "page" && slug.current == $slug][0] {		_id,		_type,		title,		slug,		seo {			title,			description,			socialImage		},		sections[] {			_key,			_type,			_type == "imageBackgroundSection" => {				foregroundColour,				eyebrow,				heading,				body,				textAlignment,				backgroundImage {					alt,					asset {						asset,						crop,						hotspot					}				},								callToActions[] {					_key,					label,					style,					destinationType,					externalUrl,					openInNewTab,					"pageSlug": page->slug.current,					"internalPageType": page->_type				}			},			_type == "imageTextSection" => {				foregroundColour,				backgroundColour,				eyebrow,				heading,				body,				imagePosition,				textAlignment,				image {					alt,					asset {						asset,						crop,						hotspot					}				},								callToActions[] {					_key,					label,					style,					destinationType,					externalUrl,					openInNewTab,					"pageSlug": page->slug.current,					"internalPageType": page->_type				}			},			_type == "featuresSection" => {				foregroundColour,				backgroundColour,				eyebrow,				heading,				intro,				textAlignment,				features[] {					_key,					title,					description,					icon,					iconColor				}			}		}	}
 export type CmsPageQueryResult = {
 	_id: string;
 	_type: 'page';
@@ -324,19 +492,26 @@ export type CmsPageQueryResult = {
 		| {
 				_key: string;
 				_type: 'featuresSection';
-				heading: string | null;
+				foregroundColour: 'accent' | 'primary' | 'secondary' | null;
+				backgroundColour: 'background' | 'muted' | 'primaryTint' | 'warm' | null;
+				eyebrow: string | null;
+				heading: HeadingText | null;
+				intro: string | null;
 				textAlignment: 'center' | 'left' | 'right' | null;
 				features: Array<{
 					_key: string;
 					title: string | null;
 					description: string | null;
-					icon: 'idea' | 'partnership' | 'sprout' | 'sun' | 'tree' | 'water' | null;
+					icon: LucideIcon | null;
+					iconColor: 'accent' | 'primary' | 'secondary' | null;
 				}> | null;
 		  }
 		| {
 				_key: string;
 				_type: 'imageBackgroundSection';
-				heading: string | null;
+				foregroundColour: 'accent' | 'primary' | 'secondary' | null;
+				eyebrow: string | null;
+				heading: HeadingText | null;
 				body: RichText | null;
 				textAlignment: 'center' | 'left' | 'right' | null;
 				backgroundImage: {
@@ -347,19 +522,24 @@ export type CmsPageQueryResult = {
 						hotspot: SanityImageHotspot | null;
 					} | null;
 				} | null;
-				callToAction: {
+				callToActions: Array<{
+					_key: string;
 					label: string | null;
-					destinationType: 'external' | 'page' | 'route' | null;
-					route: '/' | '/contact' | null;
+					style: 'match' | 'outline' | 'primary' | 'secondary' | null;
+					destinationType: 'external' | 'internal' | null;
 					externalUrl: string | null;
 					openInNewTab: boolean | null;
 					pageSlug: string | null;
-				} | null;
+					internalPageType: 'contactPage' | 'homePage' | 'page' | null;
+				}> | null;
 		  }
 		| {
 				_key: string;
 				_type: 'imageTextSection';
-				heading: string | null;
+				foregroundColour: 'accent' | 'primary' | 'secondary' | null;
+				backgroundColour: 'background' | 'muted' | 'primaryTint' | 'warm' | null;
+				eyebrow: string | null;
+				heading: HeadingText | null;
 				body: RichText | null;
 				imagePosition: 'left' | 'right' | null;
 				textAlignment: 'center' | 'left' | 'right' | null;
@@ -371,14 +551,262 @@ export type CmsPageQueryResult = {
 						hotspot: SanityImageHotspot | null;
 					} | null;
 				} | null;
-				callToAction: {
+				callToActions: Array<{
+					_key: string;
 					label: string | null;
-					destinationType: 'external' | 'page' | 'route' | null;
-					route: '/' | '/contact' | null;
+					style: 'match' | 'outline' | 'primary' | 'secondary' | null;
+					destinationType: 'external' | 'internal' | null;
 					externalUrl: string | null;
 					openInNewTab: boolean | null;
 					pageSlug: string | null;
+					internalPageType: 'contactPage' | 'homePage' | 'page' | null;
+				}> | null;
+		  }
+	> | null;
+} | null;
+
+// Source: ../web/src/lib/sanity/queries.ts
+// Variable: siteNavigationQuery
+// Query: *[_type == "siteNavigation" && _id == "siteNavigation"][0] {		headerLinks[] {			_key,			label,			destinationType,			externalUrl,			openInNewTab,			"pageSlug": page->slug.current,			"internalPageType": page->_type		},		footerGroups[] {			_key,			heading,			links[] {				_key,				label,				destinationType,				externalUrl,				openInNewTab,				"pageSlug": page->slug.current,				"internalPageType": page->_type			}		}	}
+export type SiteNavigationQueryResult = {
+	headerLinks: Array<{
+		_key: string;
+		label: string | null;
+		destinationType: 'external' | 'internal' | null;
+		externalUrl: string | null;
+		openInNewTab: boolean | null;
+		pageSlug: string | null;
+		internalPageType: 'contactPage' | 'homePage' | 'page' | null;
+	}> | null;
+	footerGroups: Array<{
+		_key: string;
+		heading: string | null;
+		links: Array<{
+			_key: string;
+			label: string | null;
+			destinationType: 'external' | 'internal' | null;
+			externalUrl: string | null;
+			openInNewTab: boolean | null;
+			pageSlug: string | null;
+			internalPageType: 'contactPage' | 'homePage' | 'page' | null;
+		}> | null;
+	}> | null;
+} | null;
+
+// Source: ../web/src/lib/sanity/queries.ts
+// Variable: homePageQuery
+// Query: *[_type == "homePage" && _id == "homePage"][0] {		seo { title, description, socialImage { asset { asset, crop, hotspot } } },		sections[] {			_key,			_type,			_type == "homeHeroSection" => {				eyebrow,				foregroundColour,				backgroundColour,				heading,				body,				image { alt, asset { asset, crop, hotspot } }			},			_type == "projectDiscoveryModule" => { foregroundColour, backgroundColour, heading, intro },						_type == "imageBackgroundSection" => {				foregroundColour,				eyebrow,				heading,				body,				textAlignment,				backgroundImage { alt, asset { asset, crop, hotspot } },								callToActions[] {					_key,					label,					style,					destinationType,					externalUrl,					openInNewTab,					"pageSlug": page->slug.current,					"internalPageType": page->_type				}			},			_type == "imageTextSection" => {				foregroundColour,				backgroundColour,				eyebrow,				heading,				body,				imagePosition,				textAlignment,				image { alt, asset { asset, crop, hotspot } },								callToActions[] {					_key,					label,					style,					destinationType,					externalUrl,					openInNewTab,					"pageSlug": page->slug.current,					"internalPageType": page->_type				}			},			_type == "featuresSection" => {				foregroundColour,				backgroundColour,				eyebrow,				heading,				intro,				textAlignment,				features[] { _key, title, description, icon, iconColor }			}		}	}
+export type HomePageQueryResult = {
+	seo: {
+		title: string | null;
+		description: string | null;
+		socialImage: {
+			asset: {
+				asset: null;
+				crop: null;
+				hotspot: null;
+			} | null;
+		} | null;
+	} | null;
+	sections: Array<
+		| {
+				_key: string;
+				_type: 'featuresSection';
+				foregroundColour: 'accent' | 'primary' | 'secondary' | null;
+				backgroundColour: 'background' | 'muted' | 'primaryTint' | 'warm' | null;
+				eyebrow: string | null;
+				heading: HeadingText | null;
+				intro: string | null;
+				textAlignment: 'center' | 'left' | 'right' | null;
+				features: Array<{
+					_key: string;
+					title: string | null;
+					description: string | null;
+					icon: LucideIcon | null;
+					iconColor: 'accent' | 'primary' | 'secondary' | null;
+				}> | null;
+		  }
+		| {
+				_key: string;
+				_type: 'homeHeroSection';
+				eyebrow: string | null;
+				foregroundColour: 'accent' | 'primary' | 'secondary' | null;
+				backgroundColour: 'background' | 'muted' | 'primaryTint' | 'warm' | null;
+				heading: HeadingText | null;
+				body: string | null;
+				image: {
+					alt: string | null;
+					asset: {
+						asset: SanityImageAssetReference | null;
+						crop: SanityImageCrop | null;
+						hotspot: SanityImageHotspot | null;
+					} | null;
 				} | null;
+		  }
+		| {
+				_key: string;
+				_type: 'imageBackgroundSection';
+				foregroundColour: 'accent' | 'primary' | 'secondary' | null;
+				eyebrow: string | null;
+				heading: HeadingText | null;
+				body: RichText | null;
+				textAlignment: 'center' | 'left' | 'right' | null;
+				backgroundImage: {
+					alt: string | null;
+					asset: {
+						asset: SanityImageAssetReference | null;
+						crop: SanityImageCrop | null;
+						hotspot: SanityImageHotspot | null;
+					} | null;
+				} | null;
+				callToActions: Array<{
+					_key: string;
+					label: string | null;
+					style: 'match' | 'outline' | 'primary' | 'secondary' | null;
+					destinationType: 'external' | 'internal' | null;
+					externalUrl: string | null;
+					openInNewTab: boolean | null;
+					pageSlug: string | null;
+					internalPageType: 'contactPage' | 'homePage' | 'page' | null;
+				}> | null;
+		  }
+		| {
+				_key: string;
+				_type: 'imageTextSection';
+				foregroundColour: 'accent' | 'primary' | 'secondary' | null;
+				backgroundColour: 'background' | 'muted' | 'primaryTint' | 'warm' | null;
+				eyebrow: string | null;
+				heading: HeadingText | null;
+				body: RichText | null;
+				imagePosition: 'left' | 'right' | null;
+				textAlignment: 'center' | 'left' | 'right' | null;
+				image: {
+					alt: string | null;
+					asset: {
+						asset: SanityImageAssetReference | null;
+						crop: SanityImageCrop | null;
+						hotspot: SanityImageHotspot | null;
+					} | null;
+				} | null;
+				callToActions: Array<{
+					_key: string;
+					label: string | null;
+					style: 'match' | 'outline' | 'primary' | 'secondary' | null;
+					destinationType: 'external' | 'internal' | null;
+					externalUrl: string | null;
+					openInNewTab: boolean | null;
+					pageSlug: string | null;
+					internalPageType: 'contactPage' | 'homePage' | 'page' | null;
+				}> | null;
+		  }
+		| {
+				_key: string;
+				_type: 'projectDiscoveryModule';
+				foregroundColour: 'accent' | 'primary' | 'secondary' | null;
+				backgroundColour: 'background' | 'muted' | 'primaryTint' | 'warm' | null;
+				heading: HeadingText | null;
+				intro: string | null;
+		  }
+	> | null;
+} | null;
+
+// Source: ../web/src/lib/sanity/queries.ts
+// Variable: contactPageQuery
+// Query: *[_type == "contactPage" && _id == "contactPage"][0] {		seo { title, description, socialImage { asset { asset, crop, hotspot } } },		sections[] {			_key,			_type,			_type == "contactPanelSection" => {				foregroundColour,				backgroundColour,				heading,				body,				email,			},						_type == "imageBackgroundSection" => {				foregroundColour,				eyebrow,				heading,				body,				textAlignment,				backgroundImage { alt, asset { asset, crop, hotspot } },								callToActions[] {					_key,					label,					style,					destinationType,					externalUrl,					openInNewTab,					"pageSlug": page->slug.current,					"internalPageType": page->_type				}			},			_type == "imageTextSection" => {				foregroundColour,				backgroundColour,				eyebrow,				heading,				body,				imagePosition,				textAlignment,				image { alt, asset { asset, crop, hotspot } },								callToActions[] {					_key,					label,					style,					destinationType,					externalUrl,					openInNewTab,					"pageSlug": page->slug.current,					"internalPageType": page->_type				}			},			_type == "featuresSection" => {				foregroundColour,				backgroundColour,				eyebrow,				heading,				intro,				textAlignment,				features[] { _key, title, description, icon, iconColor }			}		}	}
+export type ContactPageQueryResult = {
+	seo: {
+		title: string | null;
+		description: string | null;
+		socialImage: {
+			asset: {
+				asset: null;
+				crop: null;
+				hotspot: null;
+			} | null;
+		} | null;
+	} | null;
+	sections: Array<
+		| {
+				_key: string;
+				_type: 'contactPanelSection';
+				foregroundColour: 'accent' | 'primary' | 'secondary' | null;
+				backgroundColour: 'background' | 'muted' | 'primaryTint' | 'warm' | null;
+				heading: HeadingText | null;
+				body: string | null;
+				email: string | null;
+		  }
+		| {
+				_key: string;
+				_type: 'featuresSection';
+				foregroundColour: 'accent' | 'primary' | 'secondary' | null;
+				backgroundColour: 'background' | 'muted' | 'primaryTint' | 'warm' | null;
+				eyebrow: string | null;
+				heading: HeadingText | null;
+				intro: string | null;
+				textAlignment: 'center' | 'left' | 'right' | null;
+				features: Array<{
+					_key: string;
+					title: string | null;
+					description: string | null;
+					icon: LucideIcon | null;
+					iconColor: 'accent' | 'primary' | 'secondary' | null;
+				}> | null;
+		  }
+		| {
+				_key: string;
+				_type: 'imageBackgroundSection';
+				foregroundColour: 'accent' | 'primary' | 'secondary' | null;
+				eyebrow: string | null;
+				heading: HeadingText | null;
+				body: RichText | null;
+				textAlignment: 'center' | 'left' | 'right' | null;
+				backgroundImage: {
+					alt: string | null;
+					asset: {
+						asset: SanityImageAssetReference | null;
+						crop: SanityImageCrop | null;
+						hotspot: SanityImageHotspot | null;
+					} | null;
+				} | null;
+				callToActions: Array<{
+					_key: string;
+					label: string | null;
+					style: 'match' | 'outline' | 'primary' | 'secondary' | null;
+					destinationType: 'external' | 'internal' | null;
+					externalUrl: string | null;
+					openInNewTab: boolean | null;
+					pageSlug: string | null;
+					internalPageType: 'contactPage' | 'homePage' | 'page' | null;
+				}> | null;
+		  }
+		| {
+				_key: string;
+				_type: 'imageTextSection';
+				foregroundColour: 'accent' | 'primary' | 'secondary' | null;
+				backgroundColour: 'background' | 'muted' | 'primaryTint' | 'warm' | null;
+				eyebrow: string | null;
+				heading: HeadingText | null;
+				body: RichText | null;
+				imagePosition: 'left' | 'right' | null;
+				textAlignment: 'center' | 'left' | 'right' | null;
+				image: {
+					alt: string | null;
+					asset: {
+						asset: SanityImageAssetReference | null;
+						crop: SanityImageCrop | null;
+						hotspot: SanityImageHotspot | null;
+					} | null;
+				} | null;
+				callToActions: Array<{
+					_key: string;
+					label: string | null;
+					style: 'match' | 'outline' | 'primary' | 'secondary' | null;
+					destinationType: 'external' | 'internal' | null;
+					externalUrl: string | null;
+					openInNewTab: boolean | null;
+					pageSlug: string | null;
+					internalPageType: 'contactPage' | 'homePage' | 'page' | null;
+				}> | null;
 		  }
 	> | null;
 } | null;

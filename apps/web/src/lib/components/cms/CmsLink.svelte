@@ -1,17 +1,26 @@
 <script lang="ts">
-	import type { CmsPageQueryResult } from '$lib/sanity/sanity.types';
-	import { Button } from '$lib/components/ui/button';
+	import { Button, type ButtonSize, type ButtonVariant } from '$lib/components/ui/button';
 	import { stegaClean } from '@sanity/sveltekit';
+	import type { SectionCallToAction } from './call-to-actions';
 
-	type PageSection = NonNullable<NonNullable<CmsPageQueryResult>['sections']>[number];
-	type Link = NonNullable<Extract<PageSection, { _type: 'imageTextSection' }>['callToAction']>;
-
-	let { link, class: className = '' }: { link: Link; class?: string } = $props();
+	let {
+		link,
+		class: className = '',
+		variant = 'default',
+		size = 'default'
+	}: {
+		link: SectionCallToAction;
+		class?: string;
+		variant?: ButtonVariant;
+		size?: ButtonSize;
+	} = $props();
 
 	const href = $derived.by(() => {
-		const destinationType = stegaClean(link.destinationType ?? '');
-		if (destinationType === 'route') return stegaClean(link.route ?? '');
+		const destinationType = stegaClean(String(link.destinationType ?? ''));
 		if (destinationType === 'external') return stegaClean(link.externalUrl ?? '');
+		const internalPageType = stegaClean(link.internalPageType ?? '');
+		if (internalPageType === 'homePage') return '/';
+		if (internalPageType === 'contactPage') return '/contact';
 		const pageSlug = stegaClean(link.pageSlug ?? '');
 		return pageSlug ? `/${pageSlug}` : undefined;
 	});
@@ -21,10 +30,12 @@
 	);
 </script>
 
-{#if href}
+{#if href && stegaClean(link.label ?? '').trim()}
 	<Button
 		{href}
 		class={className}
+		{variant}
+		{size}
 		target={isExternal ? '_blank' : undefined}
 		rel={isExternal ? 'noopener noreferrer' : undefined}
 	>

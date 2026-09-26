@@ -13,6 +13,7 @@
 	},
 	"dependencies": {
 		"@justsow/shared": "workspace:*",
+		"@kodamera/sanity-plugin-lucide-icon-picker": "^2.0.0",
 		"@portabletext/react": "^8.0.1",
 		"@sanity/icons": "5.2.2",
 		"@sanity/vision": "6.16.0",

@@ -41,5 +41,13 @@ export const siteNavigation = defineType({
 			],
 			validation: (rule) => rule.max(4)
 		})
-	]
+	],
+	preview: {
+		prepare() {
+			return {
+				title: 'Public site navigation',
+				subtitle: 'Header links and footer groups'
+			};
+		}
+	}
 });

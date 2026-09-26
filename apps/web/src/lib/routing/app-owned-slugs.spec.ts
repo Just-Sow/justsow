@@ -34,8 +34,8 @@ describe('CMS page slug reservations', () => {
 		expect(missingReservations).toEqual([]);
 	});
 
-	it('blocks the current About slug but leaves a temporary CMS slug available', () => {
-		expect(getAppOwnedPageSlugReason('about')).toContain('About page');
+	it('allows the migrated About slug and reserves app-owned routes', () => {
+		expect(getAppOwnedPageSlugReason('about')).toBeUndefined();
 		expect(getAppOwnedPageSlugReason('contact')).toContain('Contact page');
 		expect(getAppOwnedPageSlugReason('new-about')).toBeUndefined();
 	});

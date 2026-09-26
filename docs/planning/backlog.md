@@ -13,7 +13,6 @@
 - define employee workflow boundaries in the web app
 - select and integrate a transactional email provider/API for account, project-workflow, and future funding-commitment messages
 - define media storage and thumbnail strategy for MVP
-- design and build a polished, branded 404 page for missing app and CMS routes, with clear navigation back to useful parts of the site
 - recheck pnpm 12 multi-document lockfile support and GitHub dependency graph detection; once supported end to end, remove `pmOnFail: ignore` and this item
 - remove the esbuild override once stable `drizzle-kit` no longer depends on deprecated `@esbuild-kit/esm-loader` ([drizzle-team/drizzle-orm#5145](https://github.com/drizzle-team/drizzle-orm/issues/5145))
 - continue the Sanity pages epic with editor-managed public navigation and responsive section improvements; see the [CMS authoring follow-up](#candidate-follow-up-cms-section-authoring-and-responsive-polish)
@@ -63,3 +62,13 @@ These items follow the initial Sanity page architecture. Use the manual About mi
 - offer a choice between surfaced card and transparent section backgrounds
 - choose a manageable icon selection model and set supported icon options
 - move header and footer navigation links into the Sanity navigation document while retaining app-owned account and action controls
+
+## Candidate Future Epic: Full-Site Deployment, Security, And Best-Practice Audit
+
+Schedule this after the Static Pages CMS epic and its hosted Sanity/Vercel preview setup are complete.
+
+- audit deployment architecture and configuration for the backend API, SvelteKit frontend, Sanity Studio, datasets, and preview integration
+- review environment separation, secret and token storage/rotation, access scopes, CORS, cookies, security headers, and public/private data boundaries
+- compare each service and integration with current official platform and framework recommendations
+- verify production builds, deployment settings, migrations, backups, rollback procedures, monitoring, and error reporting
+- produce a prioritized remediation list and update the durable deployment and security runbooks

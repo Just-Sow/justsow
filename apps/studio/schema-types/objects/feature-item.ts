@@ -21,18 +21,22 @@ export const featureItem = defineType({
 		defineField({
 			name: 'icon',
 			title: 'Icon',
+			type: 'lucide-icon',
+			validation: (rule) => rule.required()
+		}),
+		defineField({
+			name: 'iconColor',
+			title: 'Icon color',
 			type: 'string',
 			options: {
 				list: [
-					{ title: 'Sprout', value: 'sprout' },
-					{ title: 'Water', value: 'water' },
-					{ title: 'Sun', value: 'sun' },
-					{ title: 'Idea', value: 'idea' },
-					{ title: 'Partnership', value: 'partnership' },
-					{ title: 'Tree', value: 'tree' }
+					{ title: 'Primary', value: 'primary' },
+					{ title: 'Secondary', value: 'secondary' },
+					{ title: 'Accent', value: 'accent' }
 				],
-				layout: 'dropdown'
+				layout: 'radio'
 			},
+			initialValue: 'primary',
 			validation: (rule) => rule.required()
 		})
 	]

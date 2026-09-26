@@ -8,10 +8,11 @@
 	let {
 		image,
 		width = 1200,
+		height,
 		class: className = ''
-	}: { image: ImageWithAlt; width?: number; class?: string } = $props();
+	}: { image: ImageWithAlt; width?: number; height?: number; class?: string } = $props();
 
-	const src = $derived(sanityImageUrl(image?.asset, width));
+	const src = $derived(sanityImageUrl(image?.asset, width, height));
 </script>
 
 {#if src}

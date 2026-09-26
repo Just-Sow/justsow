@@ -12,11 +12,11 @@ This standalone Studio contains the editorial schemas for static pages, reusable
 
 ## Content model
 
-- **Pages** have a single-segment slug, SEO fields, and an ordered list of sections.
+- **Static Pages** have a single-segment slug, SEO fields, and an ordered list of sections.
 - **Sections** currently include image-background, image-and-text, and features layouts. Alignment, image placement, and feature icons are constrained to supported options.
-- **Site navigation** is a singleton document for header links and grouped footer links. Links can target a CMS page, an approved public app route, or an HTTP(S) URL.
+- **Site navigation** is a singleton document for header links and grouped footer links. Links can target an internal page or an HTTP(S) external website.
 
-During the transition, keep the existing app-owned `/about` page. To try the generated pages route, create a **Page** document, set its slug to `new-about`, add one or more reusable sections, and publish it. The web app serves it at `/new-about` without a route-specific code change. Do not create an `about` CMS page yet: that slug is reserved while the existing route remains app-owned. Studio validation also rejects other registered app routes to prevent collisions.
+Home and Contact use dedicated singleton documents because they contain app-owned interactive modules. About and other editor-managed pages use **Static Pages** and are served by the generated page route. Studio validation rejects slugs reserved for app-owned routes.
 
 Each page section has its own schema file under `schema-types/sections/` and its own Svelte renderer in the web app. The Presentation Tool opens the configured SvelteKit URL and activates the app's `/preview/enable` endpoint. For draft preview, configure `SANITY_VIEWER_TOKEN` and a stable `SANITY_PREVIEW_SECRET` in the web app's server environment, and allow the web origin with credentials in the Sanity CORS settings. The token stays server-side; React and React DOM are peer dependencies used by Sanity's Visual Editing overlay implementation, while the site UI and renderers remain Svelte.
 

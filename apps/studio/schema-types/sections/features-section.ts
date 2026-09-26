@@ -1,15 +1,30 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
+import { backgroundColourField, foregroundColourField } from '../objects/section-colour';
 
 export const featuresSection = defineType({
 	name: 'featuresSection',
-	title: 'Features',
+	title: 'Icon grid',
 	type: 'object',
 	fields: [
+		foregroundColourField(),
+		backgroundColourField(),
+		defineField({
+			name: 'eyebrow',
+			title: 'Eyebrow',
+			type: 'string',
+			validation: (rule) => rule.max(80)
+		}),
 		defineField({
 			name: 'heading',
 			title: 'Heading',
-			type: 'string',
+			type: 'headingText',
 			validation: (rule) => rule.required()
+		}),
+		defineField({
+			name: 'intro',
+			title: 'Intro',
+			type: 'text',
+			rows: 3
 		}),
 		defineField({
 			name: 'textAlignment',
@@ -24,7 +39,13 @@ export const featuresSection = defineType({
 			title: 'Features',
 			type: 'array',
 			of: [defineArrayMember({ type: 'featureItem' })],
-			validation: (rule) => rule.min(1).max(4).required()
+			validation: (rule) => rule.min(1).required()
 		})
-	]
+	],
+	preview: {
+		select: { title: 'heading.0.children.0.text' },
+		prepare({ title }) {
+			return { title: title || 'Icon grid', subtitle: 'Icon grid section' };
+		}
+	}
 });

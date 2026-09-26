@@ -1,15 +1,47 @@
 import { page } from 'vitest/browser';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { readable } from 'svelte/store';
 
 const fetchMock = vi.fn();
+const sanityMocks = vi.hoisted(() => ({ useQuery: vi.fn() }));
 
 vi.stubGlobal('fetch', fetchMock);
+vi.mock('@sanity/sveltekit', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@sanity/sveltekit')>();
+	return { ...actual, useQuery: sanityMocks.useQuery };
+});
+
+const contactPageContent = {
+	seo: { title: 'Contact | JustSow', description: 'Get in touch with JustSow.' },
+	sections: [
+		{
+			_key: 'contact-panel',
+			_type: 'contactPanelSection',
+			foregroundColour: 'primary',
+			backgroundColour: 'white',
+			heading: [
+				{
+					_type: 'block',
+					_key: 'contact-heading',
+					style: 'normal',
+					markDefs: [],
+					children: [
+						{ _type: 'span', _key: 'contact-heading-span', text: 'Get in touch', marks: [] }
+					]
+				}
+			],
+			body: 'We would love to hear from you.',
+			email: 'hello@example.org'
+		}
+	]
+};
 
 import Page from '../routes/contact/+page.svelte';
 
 beforeEach(() => {
 	fetchMock.mockReset();
+	sanityMocks.useQuery.mockReturnValue(readable({ data: contactPageContent }));
 });
 
 describe('/contact/+page.svelte', () => {
@@ -20,7 +52,7 @@ describe('/contact/+page.svelte', () => {
 			json: async () => ({ status: true, submissionId: 'submission-test' })
 		});
 
-		render(Page);
+		await render(Page, { props: { data: {} as never } });
 
 		await page.getByLabelText('Name').fill('Ada Lovelace');
 		await page.getByLabelText('Email').fill('ada@example.com');
@@ -46,7 +78,7 @@ describe('/contact/+page.svelte', () => {
 			json: async () => ({ message: 'Something went wrong.' })
 		});
 
-		render(Page);
+		await render(Page, { props: { data: {} as never } });
 
 		await page.getByLabelText('Name').fill('Ada Lovelace');
 		await page.getByLabelText('Email').fill('ada@example.com');

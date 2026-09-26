@@ -3,7 +3,6 @@
  * Keep this list in sync with SvelteKit's static routes; the web suite checks coverage.
  */
 export const APP_OWNED_PAGE_SLUGS = {
-  about: "the current About page during CMS migration",
   account: "the account area",
   api: "application API endpoints",
   auth: "authentication endpoints",

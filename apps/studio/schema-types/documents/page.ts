@@ -1,12 +1,12 @@
-import { DocumentIcon } from '@sanity/icons/Document';
+import { DocumentsIcon } from '@sanity/icons/Documents';
 import { getAppOwnedPageSlugReason } from '@justsow/shared';
 import { defineArrayMember, defineField, defineType } from 'sanity';
 
 export const page = defineType({
 	name: 'page',
-	title: 'Page',
+	title: 'Static page',
 	type: 'document',
-	icon: DocumentIcon,
+	icon: DocumentsIcon,
 	fields: [
 		defineField({
 			name: 'title',
@@ -72,7 +72,7 @@ export const page = defineType({
 	preview: {
 		select: { title: 'title', subtitle: 'slug.current' },
 		prepare({ title, subtitle }) {
-			return { title, subtitle: subtitle ? `/${subtitle}` : 'Page' };
+			return { title, subtitle: subtitle ? `/${subtitle}` : 'Static page' };
 		}
 	}
 });

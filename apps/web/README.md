@@ -32,7 +32,7 @@ Use root workspace commands where possible:
 
 ## Sanity pages
 
-The CMS page route is `src/routes/[slug]`; it resolves any published, non-reserved slug from Sanity. `/about` remains app-owned during the transition, so use a temporary page such as `/new-about` to exercise the CMS route. Create and publish that page in Studio; it is not defined in app code.
+The CMS page route is `src/routes/[slug]`; it resolves any published, non-reserved slug from Sanity. About and other editor-managed pages are served from Sanity. Home and Contact retain dedicated routes for their app-owned interactive modules.
 
 Each CMS section has its own Svelte component under `src/lib/components/cms/sections`. Shared Portable Text, image, and link components live under `src/lib/components/cms`. App-owned route slugs are maintained in `@justsow/shared` and validated by Studio; tests check that static single-segment SvelteKit routes are reserved.
 
