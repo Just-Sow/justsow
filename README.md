@@ -6,6 +6,7 @@ It currently contains:
 
 - `apps/web/` for the SvelteKit web app
 - `apps/api/` for the Fastify API
+- `apps/studio/` for the Sanity Studio
 - `packages/shared/` for shared contracts and domain helpers
 - `docs/` for product and engineering documentation
 - `LICENSE` for the proprietary license terms
@@ -18,6 +19,8 @@ Run these from the repository root:
 
 - `pnpm install`
 - `pnpm dev`
+- `pnpm dev:cms` (web, API, and Sanity Studio; requires Studio environment configuration)
+- `pnpm studio:dev` (Sanity Studio only)
 - `pnpm build`
 - `pnpm lint`
 - `pnpm test`
@@ -31,6 +34,8 @@ Run these from the repository root:
 - `pnpm db:prepare`
 - `pnpm db:setup`
 - `pnpm db:reset:dev`
+
+The root build covers the API and web app. The Sanity Studio is built and deployed separately with `pnpm --filter @justsow/studio build` or `sanity deploy` from `apps/studio`.
 
 Package-specific commands:
 

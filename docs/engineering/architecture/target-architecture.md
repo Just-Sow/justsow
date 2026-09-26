@@ -66,6 +66,15 @@ The first shared package should likely hold:
 - role and status definitions
 - API DTOs
 
+### Editorial Content
+
+- Sanity is planned to manage static public-page content, its editorial media, and header/footer public-content navigation.
+- The web app remains responsible for page rendering, route behavior, and interactive forms.
+- CMS-authored pages use a finite set of reusable, typed section renderers rather than arbitrary layout or styling instructions.
+- Authentication, account, basket, and other functional header actions remain app-owned.
+- Project submissions, approvals, publishing state, user data, and other workflow records remain owned by the app/API; Sanity is not their source of truth.
+- CMS-backed SEO metadata should follow the public-site conventions defined by the static-pages CMS workstream.
+
 ## Workflow Design Consequences
 
 The requirement that all owner edits require approval means the backend should support a distinction between:

@@ -1,6 +1,7 @@
 node_modules/
 .pnpm-store/
 .turbo/
+.vercel
 
 apps/*/node_modules/
 apps/*/dist/
@@ -9,6 +10,7 @@ apps/*/.turbo/
 apps/*/.pnpm-store/
 apps/*/.yarn/
 apps/*/.svelte-kit/
+apps/*/.sanity/
 
 packages/*/node_modules/
 packages/*/dist/

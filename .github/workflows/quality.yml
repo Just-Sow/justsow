@@ -3,6 +3,13 @@ name: Quality
 on:
   pull_request:
 
+# SvelteKit resolves $env/static/public imports during typecheck and tests.
+# CI only needs stable placeholders; it never connects to Sanity.
+env:
+  PUBLIC_SANITY_PROJECT_ID: ci-project-id
+  PUBLIC_SANITY_DATASET: production
+  PUBLIC_SANITY_STUDIO_URL: https://ci.sanity.studio
+
 concurrency:
   group: quality-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true

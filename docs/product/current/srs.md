@@ -18,7 +18,7 @@ The MVP will:
 - allow Creative Evangelists to propose edits to existing projects, with all edits requiring gatekeeper approval before going live
 - allow sowers to have accounts and view their seed history
 - allow staff to create manual sower records that a sower can later claim as an account
-- allow seed allocators to link a single seed to a single project
+- allow a project to receive multiple seed contributions selected from predefined amount options
 - include email-based account flows and two-factor authentication
 - include branded HTML email notifications for account and project workflow events
 
@@ -87,10 +87,10 @@ Users may hold multiple roles at once.
 
 ### 5.5 Seeds And Sowers
 
-- **FR-16**: For MVP, each project can have at most one seed.
-- **FR-17**: A project is either unsown or sown.
-- **FR-18**: Seed allocation is performed by seed allocators.
-- **FR-19**: The system tracks seed history, project association, sower identity, and allocation date.
+- **FR-16**: A project can receive multiple seed funding commitments.
+- **FR-17**: Sowers choose a contribution amount from the configured options; arbitrary amounts are not offered.
+- **FR-18**: Checkout records a funding commitment without processing payment; gatekeepers coordinate bank transfers manually.
+- **FR-19**: The system tracks each commitment, its project, selected amount, sower, and status through confirmation or cancellation.
 - **FR-20**: Staff can create sower records without requiring immediate self-service registration.
 - **FR-21**: A sower can later claim a manually created record and access their history.
 

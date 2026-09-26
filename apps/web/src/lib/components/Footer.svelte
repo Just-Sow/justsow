@@ -1,5 +1,8 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
+	import CmsNavigationLink from '$lib/components/cms/CmsNavigationLink.svelte';
+	import type { SiteNavigationQueryResult } from '$lib/sanity/sanity.types';
+
+	let { navigation }: { navigation: SiteNavigationQueryResult } = $props();
 </script>
 
 <footer class="border-t border-border/70 bg-primary text-primary-foreground">
@@ -14,31 +17,22 @@
 				</p>
 			</div>
 
-			<!-- Navigation Links -->
-			<div class="flex flex-col items-center text-center md:items-start md:text-left">
-				<h4
-					class="mb-3 text-sm font-semibold tracking-eyebrow uppercase text-primary-foreground/70"
-				>
-					Explore
-				</h4>
-				<ul class="space-y-2">
-					<li>
-						<a href={resolve('/')} class="text-primary-foreground/90 hover:text-white">Home</a>
-					</li>
-					<li>
-						<span class="text-primary-foreground/65">Projects</span>
-					</li>
-					<li>
-						<a href={resolve('/about')} class="text-primary-foreground/90 hover:text-white">About</a
-						>
-					</li>
-					<li>
-						<a href={resolve('/contact')} class="text-primary-foreground/90 hover:text-white"
-							>Contact</a
-						>
-					</li>
-				</ul>
-			</div>
+			{#each navigation?.footerGroups ?? [] as group (group._key)}
+				<div class="flex flex-col items-center text-center md:items-start md:text-left">
+					<h4
+						class="mb-3 text-sm leading-5 font-semibold tracking-eyebrow text-primary-foreground/70 uppercase whitespace-nowrap"
+					>
+						{group.heading}
+					</h4>
+					<ul class="space-y-2">
+						{#each group.links ?? [] as link (link._key)}
+							<li>
+								<CmsNavigationLink {link} class="text-primary-foreground/90 hover:text-white" />
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/each}
 
 			<!-- Social / Contact -->
 			<div class="flex flex-col items-center space-y-3 text-center md:items-start md:text-left">

@@ -29,11 +29,12 @@ Completed as part of the monorepo and Turbo workflow rollout.
 
 - implement sower accounts and history views
 - implement manual sower creation by staff
-- implement one-seed-per-project workflow
+- implement multi-contribution funding commitments with predefined amount options
 - implement seed allocation and audit records
 
 ## Phase 5: Production Readiness
 
+- move agreed static public-page content into Sanity Studio while keeping project and workflow data in the app/API
 - finalize deployment workflow
 - establish monitoring and error tracking
 - finalize infrastructure for early production

@@ -4,7 +4,7 @@
 	import { type VariantProps, tv } from 'tailwind-variants';
 
 	export const buttonVariants = tv({
-		base: "focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md border border-transparent text-sm font-medium outline-none transition-[background-color,color,border-color,box-shadow,transform] duration-150 ease-out focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+		base: "focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md border border-transparent text-sm font-medium outline-none transition-[background-color,color,border-color,box-shadow,transform,border-width] duration-100 ease-out focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
 		variants: {
 			variant: {
 				default:
@@ -12,7 +12,7 @@
 				destructive:
 					'bg-destructive text-destructive-foreground shadow-xs hover:bg-[color-mix(in_oklab,var(--color-destructive)_88%,var(--color-foreground))] hover:text-destructive-foreground hover:shadow-sm active:translate-y-px focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40',
 				outline:
-					'border-1 border-border bg-background text-muted-foreground shadow-xs hover:-m-px hover:border-primary hover:border-2 hover:shadow-xs dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
+					'border border-border bg-background text-muted-foreground shadow-xs hover:border-primary hover:ring-1 hover:ring-inset hover:ring-primary hover:shadow-xs dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
 				secondary:
 					'bg-secondary text-secondary-foreground shadow-xs hover:bg-[color-mix(in_oklab,var(--color-secondary)_92%,var(--color-foreground))] hover:text-[color-mix(in_oklab,var(--color-secondary-foreground)_97%,var(--color-foreground))] hover:shadow-sm active:translate-y-px',
 				ghost:

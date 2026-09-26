@@ -1,0 +1,36 @@
+{
+	"name": "@justsow/studio",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "sanity dev --host 127.0.0.1 --port 3333",
+		"typegen": "sanity schema extract --force --path .sanity/schema.json && sanity typegen generate",
+		"build": "sanity build",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write .",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@justsow/shared": "workspace:*",
+		"@kodamera/sanity-plugin-lucide-icon-picker": "^2.0.0",
+		"@portabletext/react": "^8.0.1",
+		"@sanity/icons": "5.2.2",
+		"@sanity/vision": "6.16.0",
+		"react": "19.3.0",
+		"react-dom": "19.3.0",
+		"sanity": "6.16.0",
+		"styled-components": "^6.1.15"
+	},
+	"devDependencies": {
+		"@eslint/js": "^10.0.1",
+		"eslint": "^10.11.0",
+		"eslint-config-prettier": "^10.1.8",
+		"globals": "^17.12.0",
+		"prettier": "^3.9.8",
+		"prettier-plugin-svelte": "^4.1.1",
+		"prettier-plugin-tailwindcss": "^0.8.1",
+		"typescript": "^6.0.3",
+		"typescript-eslint": "^8.70.1"
+	}
+}

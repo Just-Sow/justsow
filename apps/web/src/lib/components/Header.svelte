@@ -4,11 +4,14 @@
 	import { ChevronDown, LogOut, Menu, Settings, UserRound, X } from '@lucide/svelte';
 	import { authRequest } from '$lib/auth/client.js';
 	import { getAuthStore } from '$lib/auth/store.js';
+	import CmsNavigationLink from '$lib/components/cms/CmsNavigationLink.svelte';
+	import type { SiteNavigationQueryResult } from '$lib/sanity/sanity.types';
 	import logo from '$lib/assets/branding/logo.svg';
 	import { Button } from '$lib/components/ui/button';
 	import * as Popover from '$lib/components/ui/popover';
 
 	const auth = getAuthStore();
+	let { navigation }: { navigation: SiteNavigationQueryResult } = $props();
 	let open = $state(false);
 	let accountOpen = $state(false);
 	let isSigningOut = $state(false);
@@ -45,16 +48,12 @@
 		</a>
 
 		<nav class="absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 gap-6 md:flex">
-			<a href={resolve('/')} class="text-sm font-medium text-foreground/80 hover:text-primary"
-				>Home</a
-			>
-			<a href={resolve('/about')} class="text-sm font-medium text-foreground/80 hover:text-primary"
-				>About</a
-			>
-			<a
-				href={resolve('/contact')}
-				class="text-sm font-medium text-foreground/80 hover:text-primary">Contact</a
-			>
+			{#each navigation?.headerLinks ?? [] as link (link._key)}
+				<CmsNavigationLink
+					{link}
+					class="text-sm font-medium text-foreground/80 hover:text-primary"
+				/>
+			{/each}
 		</nav>
 
 		<div class="z-10 flex items-center gap-3">
@@ -128,17 +127,13 @@
 			class="flex w-(--bits-popover-content-available-width) max-w-none flex-col gap-8 border border-border/70 bg-background p-6 shadow-lg"
 		>
 			<nav class="flex flex-col gap-6 text-left">
-				<a href={resolve('/')} class="text-xl font-semibold text-foreground/85 hover:text-primary"
-					>Home</a
-				>
-				<a
-					href={resolve('/about')}
-					class="text-xl font-semibold text-foreground/85 hover:text-primary">About</a
-				>
-				<a
-					href={resolve('/contact')}
-					class="text-xl font-semibold text-foreground/85 hover:text-primary">Contact</a
-				>
+				{#each navigation?.headerLinks ?? [] as link (link._key)}
+					<CmsNavigationLink
+						{link}
+						class="text-xl font-semibold text-foreground/85 hover:text-primary"
+						onclick={() => (open = false)}
+					/>
+				{/each}
 			</nav>
 
 			<div class="mt-8 flex flex-col items-center gap-4">

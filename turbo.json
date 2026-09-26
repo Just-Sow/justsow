@@ -6,8 +6,16 @@
       "persistent": true
     },
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".svelte-kit/output/**", ".svelte-kit/generated/**"]
+      "env": [
+        "PUBLIC_SANITY_PROJECT_ID",
+        "PUBLIC_SANITY_DATASET",
+        "PUBLIC_SANITY_STUDIO_URL"
+      ],
+      "outputs": [
+        "dist/**",
+        ".svelte-kit/output/**",
+        ".svelte-kit/generated/**"
+      ]
     },
     "lint": {
       "dependsOn": ["^lint"]

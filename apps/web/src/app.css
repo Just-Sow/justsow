@@ -7,7 +7,7 @@
 :root {
 	--radius: 0.5rem;
 
-	--background: oklch(1 0 0);
+	--background: oklch(0.995 0.003 100);
 	--foreground: oklch(0.141 0.005 285.823);
 	--card: oklch(1 0 0);
 	--card-foreground: oklch(0.141 0.005 285.823);
@@ -22,6 +22,8 @@
 
 	--accent: oklch(0.8659 0.1127 74.34);
 	--accent-foreground: oklch(0.15 0.01 74.34);
+	--warm-surface: oklch(0.987 0.022 95.3);
+	--primary-tint: color-mix(in oklab, var(--primary) 12%, var(--background));
 
 	--muted: oklch(0.95 0.01 285.823);
 	--muted-foreground: oklch(0.45 0.01 285.823);
@@ -51,6 +53,8 @@
 
 	--accent: oklch(0.8659 0.1127 74.34);
 	--accent-foreground: oklch(0.15 0.01 74.34);
+	--warm-surface: oklch(0.25 0.025 80);
+	--primary-tint: color-mix(in oklab, var(--primary) 12%, var(--background));
 
 	--muted: oklch(0.25 0.005 285.823);
 	--muted-foreground: oklch(0.75 0.01 285.823);
@@ -81,6 +85,8 @@
 	--color-secondary-foreground: var(--secondary-foreground);
 	--color-accent: var(--accent);
 	--color-accent-foreground: var(--accent-foreground);
+	--color-warm: var(--warm-surface);
+	--color-primary-tint: var(--primary-tint);
 	--color-muted: var(--muted);
 	--color-muted-foreground: var(--muted-foreground);
 	--color-destructive: var(--destructive);
