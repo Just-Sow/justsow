@@ -1,6 +1,7 @@
 node_modules/
 .pnpm-store/
 .turbo/
+.vercel
 
 apps/*/node_modules/
 apps/*/dist/
